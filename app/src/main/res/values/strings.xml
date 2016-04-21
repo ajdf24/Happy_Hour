@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Happy Hour</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_location_detail">LocationDetail</string>
 </resources>
