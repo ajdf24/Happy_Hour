@@ -1,4 +1,4 @@
-package it.rieger.happyhour;
+package it.rieger.happyhour.view;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import it.rieger.happyhour.R;
 
 public class Maps extends FragmentActivity implements OnMapReadyCallback {
 
