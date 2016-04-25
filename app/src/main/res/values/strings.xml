@@ -4,4 +4,6 @@
     <string name="title_activity_location_detail">LocationDetail</string>
 
     <string name="activity_maps_main_text">Main Text der Activity</string>
+
+    <string name="facebook_app_id">2027885040770872</string>
 </resources>
