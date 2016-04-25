@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import java.io.Serializable;
 import java.util.List;
 
+import it.rieger.happyhour.controller.BitmapLRUCache;
+
 /**
  * Model class, which represents a Location, which all the data which are came from the the database.
  *
