@@ -1,4 +1,4 @@
-package it.rieger.happyhour.controller;
+package it.rieger.happyhour.controller.cache;
 
 import android.graphics.Bitmap;
 import android.util.LruCache;

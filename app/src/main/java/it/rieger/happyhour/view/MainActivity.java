@@ -7,7 +7,7 @@ import android.util.Log;
 import com.facebook.FacebookSdk;
 
 import it.rieger.happyhour.R;
-import it.rieger.happyhour.controller.BitmapLRUCache;
+import it.rieger.happyhour.controller.cache.BitmapLRUCache;
 
 public class MainActivity extends AppCompatActivity {
 

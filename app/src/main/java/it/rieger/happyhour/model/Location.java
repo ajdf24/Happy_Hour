@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.rieger.happyhour.controller.BitmapLRUCache;
+import it.rieger.happyhour.controller.cache.BitmapLRUCache;
 
 /**
  * Model class, which represents a Location, which all the data which are came from the the database.
