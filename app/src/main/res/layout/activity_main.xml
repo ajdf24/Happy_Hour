@@ -9,7 +9,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".view.MainActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/info" />
 
+    <com.facebook.login.widget.LoginButton
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        tools:conext=".view.MainActivity"
+        android:layout_alignParentBottom="true"
+        />
 
 </RelativeLayout>
 
