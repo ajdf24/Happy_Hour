@@ -3,6 +3,9 @@ package it.rieger.happyhour.controller.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import it.rieger.happyhour.model.Locationtab;
 
 /**
  * This is a helper class for the database.
@@ -21,11 +24,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     //TODO: anpasse
-    public static final String TABLE_XXX = "XXX";
+    public static final String TABLE_LocationTabs = "locationtabs";
     public static final String COLUMN_ID = "_id";
 
     //TODO: anpassen ggf. weitere
-    public static final String COLUMN_XXX = "XXX";
+    public static final String COLUMN_LocationTab = "locationtab";
 
     private static final String DATABASE_NAME = "internal.db";
     private static final int DATABASE_VERSION = 1;
@@ -33,8 +36,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Database creation sql statement
     // TODO: Dieses statement muss entprechend angepasst werden
     private static final String DATABASE_CREATE = "create table "
-            + TABLE_XXX + "(" + COLUMN_ID
-            + " integer primary key autoincrement, " + COLUMN_XXX
+            + TABLE_LocationTabs + "(" + COLUMN_ID
+            + " integer primary key autoincrement, " + COLUMN_LocationTab
             + " text not null);";
 
     /**
@@ -51,6 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(DATABASE_CREATE);
     }
 
@@ -64,6 +68,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //TODO: implementieren sollte ein Uodate fällig sein
-        throw new UnsupportedOperationException("Methode nicht implementiert!!!");
+        //throw new UnsupportedOperationException("Methode nicht implementiert!!!");
+        Log.w(DatabaseHelper.class.getName(),
+                "Upgrading database from version " + oldVersion + " to "
+                        + newVersion + ", which will destroy all old data");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LocationTabs);
+        onCreate(db);
     }
 }
