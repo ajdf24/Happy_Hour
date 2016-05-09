@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bottomBarItemOne"
+        android:icon="@mipmap-xxhdpi/"
+        android:title="Map"/>
+
+        android:id="@+id/bottomBarItemTwo"
+        android:icon="@mipmap-xxhdpi/"
+        android:title="Favoriten"/>
+
+        android:id="@+id/bottomBarItemThree"
+        android:icon="@mipmap-xxhdpi/"
+        android:title="Aktuell"/>
+</menu>

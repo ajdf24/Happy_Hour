@@ -5,8 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import it.rieger.happyhour.model.Locationtab;
-
 /**
  * This is a helper class for the database.
  *
@@ -24,11 +22,12 @@ import it.rieger.happyhour.model.Locationtab;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     //TODO: anpasse
-    public static final String TABLE_LocationTabs = "locationtabs";
+    public static final String TABLE_FACEBOOK_LOGIN = "facebooklogin";
     public static final String COLUMN_ID = "_id";
 
     //TODO: anpassen ggf. weitere
-    public static final String COLUMN_LocationTab = "locationtab";
+    public static final String COLUMN_FACEBOOK_ID = "facebookid";
+    public static final String COLUMN_FACEBOOK_TOKEN = "facebooktoken";
 
     private static final String DATABASE_NAME = "internal.db";
     private static final int DATABASE_VERSION = 1;
@@ -36,8 +35,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Database creation sql statement
     // TODO: Dieses statement muss entprechend angepasst werden
     private static final String DATABASE_CREATE = "create table "
-            + TABLE_LocationTabs + "(" + COLUMN_ID
-            + " integer primary key autoincrement, " + COLUMN_LocationTab
+            + TABLE_FACEBOOK_LOGIN + "("
+            + COLUMN_ID
+            + " integer primary key autoincrement, "
+            + COLUMN_FACEBOOK_ID
+            + " text not null,"
+            + COLUMN_FACEBOOK_TOKEN
             + " text not null);";
 
     /**
@@ -72,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.w(DatabaseHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LocationTabs);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FACEBOOK_LOGIN);
         onCreate(db);
     }
 }
