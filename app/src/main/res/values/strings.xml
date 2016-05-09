@@ -7,4 +7,7 @@
 
     <string name="facebook_app_id">2027885040770872</string>
     <string name="friends_button">Friends</string>
+    <string name="locationtab">Locationtab</string>
+
+    <string name="message_permission_location_denied">Keine Berechtigung den Aktuellen Standort abzufragen.</string>
 </resources>
