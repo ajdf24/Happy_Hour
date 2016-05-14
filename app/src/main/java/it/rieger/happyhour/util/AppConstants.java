@@ -12,4 +12,8 @@ public interface AppConstants {
     interface PermissionsIDs {
         int PERMISSION_ID_FOR_ACCESS_LOCATION = 1;
     }
+
+    public interface SharedPreferencesKeys {
+        String FIRST_START = "First Start";
+    }
 }

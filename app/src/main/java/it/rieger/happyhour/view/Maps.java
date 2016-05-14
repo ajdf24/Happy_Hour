@@ -1,16 +1,19 @@
 package it.rieger.happyhour.view;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -22,6 +25,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnMenuTabClickListener;
 
 import java.util.ArrayList;
 
@@ -34,6 +39,8 @@ import it.rieger.happyhour.util.AppConstants;
  * This class can view {@link it.rieger.happyhour.model.Location} which are in a ArrayList with the key {@link AppConstants#BUNDLE_CONTEXT_LOCATIONS}
  */
 public class Maps extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+
+    private BottomBar mBottomBar;
 
     private SupportMapFragment mapFragment;
 
@@ -48,6 +55,47 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         mapFragment.getMapAsync(this);
 
         loadLocationsFromBundle();
+
+        //TODO implementieren der Bottombar
+        mBottomBar = BottomBar.attach(this, savedInstanceState);
+
+        mBottomBar.setItemsFromMenu(R.menu.bottombar, new OnMenuTabClickListener() {
+            @Override
+            public void onMenuTabSelected(@IdRes int menuItemId) {
+                if (menuItemId == R.id.bottomBarItemOne) {
+
+                }
+                if (menuItemId == R.id.bottomBarItemTwo){
+
+                }
+                if (menuItemId == R.id.bottomBarItemThree) {
+
+                }
+            }
+
+            @Override
+            public void onMenuTabReSelected(@IdRes int menuItemId) {
+                if (menuItemId == R.id.bottomBarItemOne) {
+                    // The user reselected item number one, scroll your content to top.
+                }
+                if (menuItemId == R.id.bottomBarItemTwo) {
+
+                }
+                if (menuItemId == R.id.bottomBarItemThree) {
+
+                }
+            }
+        });
+
+        // Setting colors for different tabs when there's more than three of them.
+        // You can set colors for tabs in three different ways as shown below.
+        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
+        mBottomBar.mapColorForTab(1, 0xFF5D4037);
+        mBottomBar.mapColorForTab(2, "#7B1FA2");
+
+        //Aktiven Button setzen
+        mBottomBar.selectTabAtPosition(0, false);
+
     }
 
     /**
