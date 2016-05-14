@@ -14,7 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -40,11 +39,13 @@ import it.rieger.happyhour.util.AppConstants;
  */
 public class Maps extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-    private BottomBar mBottomBar;
+    private BottomBar bottomBar;
 
     private SupportMapFragment mapFragment;
 
     private ArrayList<it.rieger.happyhour.model.Location> locations;
+
+    private boolean start = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,20 +57,32 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
 
         loadLocationsFromBundle();
 
-        //TODO implementieren der Bottombar
-        mBottomBar = BottomBar.attach(this, savedInstanceState);
+        createBottomBar(savedInstanceState);
 
-        mBottomBar.setItemsFromMenu(R.menu.bottombar, new OnMenuTabClickListener() {
+    }
+
+    /**
+     * create the bottom bar for this activity
+     * @param savedInstanceState the last activity state
+     */
+    private void createBottomBar(Bundle savedInstanceState){
+        bottomBar = BottomBar.attach(this, savedInstanceState);
+
+        bottomBar.setItemsFromMenu(R.menu.bottombar, new OnMenuTabClickListener() {
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
-                if (menuItemId == R.id.bottomBarItemOne) {
+                if (!start) {
+                    if (menuItemId == R.id.bottomBarItemOne) {
 
-                }
-                if (menuItemId == R.id.bottomBarItemTwo){
+                    }
+                    if (menuItemId == R.id.bottomBarItemTwo) {
 
-                }
-                if (menuItemId == R.id.bottomBarItemThree) {
-
+                    }
+                    if (menuItemId == R.id.bottomBarItemThree) {
+                        startActivity(new Intent(Maps.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                    }
+                }else{
+                    start = false;
                 }
             }
 
@@ -89,13 +102,12 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
 
         // Setting colors for different tabs when there's more than three of them.
         // You can set colors for tabs in three different ways as shown below.
-        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
-        mBottomBar.mapColorForTab(1, 0xFF5D4037);
-        mBottomBar.mapColorForTab(2, "#7B1FA2");
+        bottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
+        bottomBar.mapColorForTab(1, 0xFF5D4037);
+        bottomBar.mapColorForTab(2, "#7B1FA2");
 
         //Aktiven Button setzen
-        mBottomBar.selectTabAtPosition(0, false);
-
+        bottomBar.selectTabAtPosition(0, false);
     }
 
     /**
@@ -193,5 +205,15 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Necessary to restore the BottomBar's state, otherwise we would
+        // lose the current tab on orientation change.
+        bottomBar.onSaveInstanceState(outState);
+
     }
 }

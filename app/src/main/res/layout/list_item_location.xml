@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -7,12 +7,30 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-    <TextView
-        android:id="@+id/list_item_location_name"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="Name" />
+        android:id="@+id/location_card">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+            <TextView
+                android:id="@+id/list_item_location_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="Name" />
+
+            <it.rieger.happyhour.controller.widget.DynamicImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_below="@+id/list_item_location_name"
+                android:layout_marginTop="5dp"
+                android:id="@+id/list_item_picture" />
 
     <TextView
 
@@ -20,10 +38,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="(9p.m. - 02 a.m.)"
-        android:layout_marginLeft="5dp"
-        android:layout_above="@+id/list_item_drink"
-        android:layout_toRightOf="@+id/list_item_drink"
-        android:layout_toEndOf="@+id/list_item_drink" />
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/list_item_drink"
+        android:layout_alignStart="@+id/list_item_drink" />
 
     <TextView
         android:id="@+id/list_item_distance"
@@ -37,15 +54,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_below="@+id/list_item_location_name"
+        android:layout_toRightOf="@id/list_item_picture"
         android:text="Drinks" />
 
     <RatingBar
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/list_item_distance"
+        android:layout_alignBottom="@+id/list_item_picture"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-</RelativeLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

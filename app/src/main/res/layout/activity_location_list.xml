@@ -17,11 +17,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/activity_location_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/activity_location_list_searchView"></ListView>
+        android:layout_below="@+id/activity_location_list_searchView"/>
 
 
 

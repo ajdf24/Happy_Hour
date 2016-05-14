@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -49,6 +50,13 @@ public class StartActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         // Show only the first time
         prefs = PreferenceManager.getDefaultSharedPreferences(StartActivity.this);
         if(prefs.getBoolean(AppConstants.SharedPreferencesKeys.FIRST_START, true)){
@@ -58,8 +66,7 @@ public class StartActivity extends AppCompatActivity {
         }else {
             goToMainActivity();
         }
-
-
+        Log.e("Test", "TEst");
     }
 
     /**
@@ -164,6 +171,10 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void goToMainActivity(){
-        startActivity(new Intent(StartActivity.this, Maps.class));
+        Intent intent = new Intent();
+
+        intent.setClass(StartActivity.this, Maps.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
     }
 }
