@@ -1,6 +1,7 @@
 package it.rieger.happyhour.controller.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder>{
 
     @Override
     public LocationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.e("Auch","Hier");
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_location, parent, false);
         return new LocationViewHolder(itemView);
     }
@@ -35,7 +37,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder>{
 
         holder.getLocationName().setText(location.getName());
         //TODO: sre Hier muss die Zeit noch eingetragen werden
-        holder.getLocationName().setText("");
+        holder.getOpeningTime().setText("");
 
         //TODO: sre Distanz berechnen
         holder.getDistance().setText("");
