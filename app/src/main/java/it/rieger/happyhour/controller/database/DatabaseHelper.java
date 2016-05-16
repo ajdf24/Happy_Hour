@@ -12,11 +12,6 @@ import android.util.Log;
  *
  * <b>Note:</b> This class is not ready to use jet.
  *
- * TODO: Hier soll später mal die Facebook id des nutzers usw. gespeichert werden.
- *
- * TODO: Zusätzlich kann man noch weitere Daten usw. zwischen speichern. z.B. Lieblings Locations etc.
- * TODO: Einfach mal abwarten was noch so kommt
- *
  * Created by sebastian on 25.04.16.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -26,19 +21,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_FACEBOOK_ID = "facebookid";
     public static final String COLUMN_FACEBOOK_TOKEN = "facebooktoken";
 
+    public static final String TABLE_FAVORITE_LOCATIONS = "favoritelocations";
+    public static final String COLUMN_LOCATION_ID = "locationid";
 
+    public static final String TABLE_LOCATION_IMAGES = "locationimages";
+    public static final String COLUMN_IMAGE_KEY = "imagekey";
 
     private static final String DATABASE_NAME = "internal.db";
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "create table "
+    private static final String CREATE_TABLEFACEBOOK_LOGIN = "create table "
             + TABLE_FACEBOOK_LOGIN + "("
             + COLUMN_ID
             + " integer primary key autoincrement, "
             + COLUMN_FACEBOOK_ID
             + " text not null,"
             + COLUMN_FACEBOOK_TOKEN
+            + " text not null);";
+
+    private static final String CREATE_TABLE_FAVORITE_LOCATIONS = "create table "
+            + TABLE_FAVORITE_LOCATIONS + "("
+            + COLUMN_ID
+            + " integer primary key autoincrement, "
+            + COLUMN_LOCATION_ID
+            + " integer not null);";
+
+    private static final String CREATE_TABLE_LOCATION_IMAGES = "create table"
+            + TABLE_LOCATION_IMAGES + "("
+            + COLUMN_LOCATION_ID
+            + " integer primary key, "
+            + COLUMN_IMAGE_KEY
             + " text not null);";
 
     /**
@@ -56,7 +69,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(DATABASE_CREATE);
+        db.execSQL(CREATE_TABLEFACEBOOK_LOGIN);
+        db.execSQL(CREATE_TABLE_FAVORITE_LOCATIONS);
+        db.execSQL(CREATE_TABLE_LOCATION_IMAGES);
     }
 
     /**
@@ -74,6 +89,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FACEBOOK_LOGIN);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_FAVORITE_LOCATIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_LOCATION_IMAGES);
         onCreate(db);
     }
 }

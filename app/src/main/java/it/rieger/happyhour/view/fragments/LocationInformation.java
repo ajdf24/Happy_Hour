@@ -4,13 +4,16 @@ import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -22,6 +25,7 @@ import java.util.HashMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.widget.FavoriteButton;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
@@ -39,6 +43,9 @@ public class LocationInformation extends Fragment {
 
     @Bind(R.id.fragment_information_button)
     ImageButton infoButton;
+
+    @Bind(R.id.fragment_button_favorite)
+    FavoriteButton favoriteButton;
 
     static Location currentLocation;
 
@@ -107,6 +114,7 @@ public class LocationInformation extends Fragment {
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
         mDemoSlider.setDuration(4000);
 
+        infoButton.setColorFilter(Color.parseColor(CreateContextForResource.getStringFromID(R.color.colorAccent)));
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +126,8 @@ public class LocationInformation extends Fragment {
                 startActivity(intent);
             }
         });
+
+        favoriteButton.setLocation(currentLocation);
 
         return view;
     }
