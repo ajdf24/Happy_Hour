@@ -1,38 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".view.LocationDetail">
 
-    <android.support.design.widget.AppBarLayout
-    android:id="@+id/activity_location_details_appbarlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <ListView
+    <com.daimajia.slider.library.SliderLayout
         android:id="@+id/activity_location_details_pictures_list_view"
-        android:layout_below="@+id/activity_location_details_appbarlayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"></ListView>
+        android:layout_height="200dp"
+        />
 
     <TextView
         android:id="@+id/activity_location_details_opening_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/activity_location_details_pictures_list_view"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
         android:text="Öffnungszeiten:" />
 
     <TextView
@@ -40,14 +27,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/activity_location_details_opening_time"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
         android:text="Happy Hours:" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/activity_location_details_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
         android:layout_gravity="bottom|end"
-        android:src="@android:drawable/ic_dialog_email"
+        android:src="@android:drawable/ic_menu_edit"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

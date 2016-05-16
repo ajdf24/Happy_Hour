@@ -8,6 +8,7 @@ public interface AppConstants {
     String konst = "Das ist eine Konstante";
 
     String BUNDLE_CONTEXT_LOCATIONS = "Locations";
+    String BUNDLE_CONTEXT_LOCATION = "Location";
 
     interface PermissionsIDs {
         int PERMISSION_ID_FOR_ACCESS_LOCATION = 1;

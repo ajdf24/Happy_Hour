@@ -34,11 +34,14 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.list_item_picture)
     DynamicImageView picture;
 
+    View itemView;
+
     public LocationViewHolder(View itemView) {
         super(itemView);
 
         ButterKnife.bind(this, itemView);
 
+        this.itemView = itemView;
     }
 
     public TextView getLocationName() {
@@ -64,4 +67,9 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
     public DynamicImageView getPicture() {
         return picture;
     }
+
+    public View getView(){
+        return itemView;
+    }
+
 }

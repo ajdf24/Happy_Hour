@@ -1,12 +1,15 @@
 package it.rieger.happyhour.view;
 
 import android.Manifest;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -14,13 +17,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -37,7 +43,7 @@ import it.rieger.happyhour.util.AppConstants;
  *
  * This class can view {@link it.rieger.happyhour.model.Location} which are in a ArrayList with the key {@link AppConstants#BUNDLE_CONTEXT_LOCATIONS}
  */
-public class Maps extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class Maps extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, LocationInformation.OnFragmentInteractionListener {
 
     private BottomBar bottomBar;
 
@@ -108,6 +114,21 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
 
         //Aktiven Button setzen
         bottomBar.selectTabAtPosition(0, false);
+
+        mapFragment.getMap().setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+//                RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
+//                relativeLayout.setVisibility(View.INVISIBLE);
+//
+//                FragmentManager fragmentManager = getFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                final LocationInformation welcomeFragment = new LocationInformation();
+//                fragmentTransaction.remove(welcomeFragment);
+//                fragmentTransaction.commit();
+//                Log.e("Click", "OnMap");
+            }
+        });
     }
 
     /**
@@ -147,7 +168,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         String provider = locationManager.getBestProvider(criteria, true);
 
 
-        if(provider != null) {
+
+        try{
             Location myLocation = locationManager.getLastKnownLocation(provider);
 
             //set map type
@@ -167,6 +189,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
 
             // Zoom in the Google Map
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        }catch (NullPointerException e){
+            Log.w("Log", "Can not load current position");
         }
 
         //TODO: C1 Marker entfernen Locations laden
@@ -183,6 +207,16 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
 
         if (marker.getTitle().toString().equals("Clubeins"))
         {
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            final LocationInformation welcomeFragment = new LocationInformation();
+            fragmentTransaction.add(R.id.fragment_container, welcomeFragment, "WelcomeFragment");
+            fragmentTransaction.commit();
+            Log.e("Test","TEst");
+            RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
+            relativeLayout.setVisibility(View.VISIBLE);
+
             //TODO: show Location informations
         }
         return false;
@@ -216,4 +250,15 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         bottomBar.onSaveInstanceState(outState);
 
     }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+//    @Override
+    public void onMapClick(LatLng latLng) {
+
+    }
+
 }
