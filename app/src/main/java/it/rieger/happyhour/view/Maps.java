@@ -19,6 +19,9 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -196,9 +199,12 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         //TODO: C1 Marker entfernen Locations laden
         googleMap.addMarker(new MarkerOptions().position(new LatLng(50.962497, 11.018132)).title("Clubeins")).showInfoWindow();
 
-        for(String key : locations.keySet()){
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(locations.get(key).getAddressLatitude(),locations.get(key).getAddressLongitude())).title(locations.get(key).getName())).showInfoWindow();
+        if(locations != null) {
+            for (String key : locations.keySet()) {
+                googleMap.addMarker(new MarkerOptions().position(new LatLng(locations.get(key).getAddressLatitude(), locations.get(key).getAddressLongitude())).title(locations.get(key).getName())).showInfoWindow();
+            }
         }
+
 
         // Activate Callback
         googleMap.setOnMarkerClickListener(this);
@@ -213,28 +219,65 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
     @Override
     public boolean onMarkerClick(Marker marker) {
 
-        for(String key : locations.keySet()){
-            if(marker.getTitle().toString().equals(key)){
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                final LocationInformation information = LocationInformation.newInstance(locations.get(key));
-                fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
-                fragmentTransaction.commit();
-                RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
-                relativeLayout.setVisibility(View.VISIBLE);
+        if(locations != null) {
+            for (String key : locations.keySet()) {
+                if (marker.getTitle().toString().equals(key)) {
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    final LocationInformation information = LocationInformation.newInstance(locations.get(key));
+                    fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
+                    fragmentTransaction.commit();
+                    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.fragment_container);
+                    relativeLayout.setVisibility(View.VISIBLE);
+                }
             }
         }
 
         //TODO: Entfernen
         if (marker.getTitle().toString().equals("Clubeins"))
         {
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            final LocationInformation information = new LocationInformation();
-            fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
-            fragmentTransaction.commit();
-            RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
-            relativeLayout.setVisibility(View.VISIBLE);
+            final RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
+
+
+            if(relativeLayout.getVisibility() == View.VISIBLE){
+                Animation slideDown = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_up);
+                relativeLayout.startAnimation(slideDown);
+                slideDown.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        FragmentManager fragmentManager = getFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        final LocationInformation information = new LocationInformation();
+                        fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
+                        fragmentTransaction.commit();
+
+                        Animation slideDown = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_down);
+                        relativeLayout.startAnimation(slideDown);
+                        relativeLayout.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+            }else{
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                final LocationInformation information = new LocationInformation();
+                fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
+                fragmentTransaction.commit();
+
+                Animation slideDown = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_down);
+                relativeLayout.startAnimation(slideDown);
+                relativeLayout.setVisibility(View.VISIBLE);
+            }
+
 
         }
 

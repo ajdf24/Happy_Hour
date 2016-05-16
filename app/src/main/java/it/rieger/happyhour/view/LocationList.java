@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.SearchView;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -37,6 +38,9 @@ public class LocationList extends AppCompatActivity {
     @Bind(R.id.activity_location_list_recycler_view)
     RecyclerView locationListView;
 
+    @Bind(R.id.activity_location_list_searchView)
+    SearchView searchView;
+
     List<Location> locationList;
 
     private BottomBar bottomBar;
@@ -60,6 +64,8 @@ public class LocationList extends AppCompatActivity {
         createLocationList();
 
         createBottomBar(savedInstanceState);
+
+
     }
 
     /**
@@ -71,8 +77,22 @@ public class LocationList extends AppCompatActivity {
         locationListView.setLayoutManager(linearLayoutManager);
 
         //TODO: Liste muss mit Serverdaten gefüllt werden
-        LocationAdapter locationAdapter = new LocationAdapter(locationList);
+        final LocationAdapter locationAdapter = new LocationAdapter(locationList);
         locationListView.setAdapter(locationAdapter);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                locationAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+
     }
 
     /**

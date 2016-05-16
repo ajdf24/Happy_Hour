@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -23,6 +22,7 @@ import com.facebook.login.widget.LoginButton;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.database.DataSource;
 import it.rieger.happyhour.controller.widget.DynamicImageView;
 import it.rieger.happyhour.util.AppConstants;
 
@@ -151,6 +151,10 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 //TODO: write to database
+
+                DataSource db = new DataSource(StartActivity.this);
+                db.open();
+                db.close();
 //                info.setText(
 //                        "User ID: "
 //                                + loginResult.getAccessToken().getUserId()
@@ -178,6 +182,9 @@ public class StartActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * jump to the next activity after start
+     */
     private void goToMainActivity(){
         Intent intent = new Intent();
 

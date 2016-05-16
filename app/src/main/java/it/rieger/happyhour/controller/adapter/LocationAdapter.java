@@ -7,10 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
@@ -21,7 +25,7 @@ import it.rieger.happyhour.view.viewholder.LocationViewHolder;
  * Adapter for the location list.
  * Created by sebastian on 14.05.16.
  */
-public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder>{
+public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> implements Filterable{
 
     /**
      * List of all locations
@@ -29,11 +33,18 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder>{
     private List<Location> locationList;
 
     /**
+     * List of all locations for filtering
+     */
+    private List<Location> locationListswap;
+
+
+    /**
      * constructor
      * @param locations list of the locations which should be shown
      */
     public LocationAdapter(List<Location> locations) {
         locationList = locations;
+        locationListswap = locations;
     }
 
     /**
@@ -102,5 +113,54 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder>{
     @Override
     public int getItemCount() {
         return locationList.size();
+    }
+
+
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                locationList = (List<Location>) results.values;
+                notifyDataSetChanged();
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                FilterResults results = new FilterResults();
+                List<Location> FilteredArrayNames = new ArrayList<>();
+
+                // perform your search here using the searchConstraint String.
+
+                constraint = constraint.toString().toLowerCase();
+                for (int i = 0; i < locationListswap.size(); i++) {
+                    Location dataNames = locationListswap.get(i);
+
+                    if(dataNames.getName().contains(constraint)){
+                        FilteredArrayNames.add(dataNames);
+                    }else{
+                        for (HappyHour happyHour : dataNames.getHappyHours()){
+                            if(happyHour.drink.contains(constraint)){
+                                FilteredArrayNames.add(dataNames);
+                                break;
+                            }
+                        }
+                    }
+
+                }
+
+                results.count = FilteredArrayNames.size();
+                results.values = FilteredArrayNames;
+                Log.e("VALUES", results.values.toString());
+
+                return results;
+            }
+        };
+
+        return filter;
     }
 }

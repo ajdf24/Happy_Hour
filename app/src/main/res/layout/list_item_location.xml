@@ -60,6 +60,7 @@
         android:text="Drinks" />
 
     <RatingBar
+        style="?android:attr/ratingBarStyleSmall"
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
