@@ -48,7 +48,10 @@ import it.rieger.happyhour.util.AppConstants;
  *
  * This class can view {@link it.rieger.happyhour.model.Location} which are in a ArrayList with the key {@link AppConstants#BUNDLE_CONTEXT_LOCATIONS}
  */
-public class Maps extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, LocationInformation.OnFragmentInteractionListener {
+public class Maps extends FragmentActivity implements OnMapReadyCallback,
+                                                        GoogleMap.OnMarkerClickListener,
+                                                        GoogleMap.OnMapClickListener,
+                                                        LocationInformation.OnFragmentInteractionListener {
 
     private BottomBar bottomBar;
 
@@ -70,6 +73,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        mapFragment.getMap().setOnMapClickListener(this);
 
         loadLocationsFromBundle();
 
@@ -233,16 +237,15 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
             }
         }
 
-        //TODO: Entfernen
+        //TODO: Entfernen bzw oben einbauen
         if (marker.getTitle().toString().equals("Clubeins"))
         {
             final RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
 
-
             if(relativeLayout.getVisibility() == View.VISIBLE){
-                Animation slideDown = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_up);
-                relativeLayout.startAnimation(slideDown);
-                slideDown.setAnimationListener(new Animation.AnimationListener() {
+                Animation slideUp = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_up);
+                relativeLayout.startAnimation(slideUp);
+                slideUp.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
 
@@ -250,15 +253,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        FragmentManager fragmentManager = getFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        final LocationInformation information = new LocationInformation();
-                        fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
-                        fragmentTransaction.commit();
-
-                        Animation slideDown = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_down);
-                        relativeLayout.startAnimation(slideDown);
-                        relativeLayout.setVisibility(View.VISIBLE);
+                        showInfoFragment(relativeLayout);
                     }
 
                     @Override
@@ -267,21 +262,33 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
                     }
                 });
             }else{
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                final LocationInformation information = new LocationInformation();
-                fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
-                fragmentTransaction.commit();
-
-                Animation slideDown = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_down);
-                relativeLayout.startAnimation(slideDown);
-                relativeLayout.setVisibility(View.VISIBLE);
+                showInfoFragment(relativeLayout);
             }
 
 
         }
 
         return false;
+    }
+
+    private void showInfoFragment(RelativeLayout relativeLayout){
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        final LocationInformation information = new LocationInformation();
+        fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
+        fragmentTransaction.commit();
+
+        Animation slideDown = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_down);
+        relativeLayout.startAnimation(slideDown);
+        relativeLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void removeInfoFragment(){
+        final RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
+
+        Animation slideUp = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_up);
+        relativeLayout.startAnimation(slideUp);
+        relativeLayout.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -330,5 +337,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        removeInfoFragment();
     }
 }
