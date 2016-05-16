@@ -19,6 +19,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 
+/**
+ * Activity which shows the details for the location
+ * TODO: Bundle einarbeiten, welches die location beinhaltet
+ */
 public class LocationDetail extends AppCompatActivity {
 
     @Bind(R.id.activity_location_details_fab)
@@ -27,6 +31,11 @@ public class LocationDetail extends AppCompatActivity {
     @Bind(R.id.activity_location_details_pictures_list_view)
     SliderLayout mDemoSlider;
 
+    /**
+     * {@inheritDoc}
+     * create the view
+     * @param savedInstanceState the saved instance of the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +43,13 @@ public class LocationDetail extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        initializeGUI();
+    }
+
+    /**
+     * fill the ui with information
+     */
+    private void initializeGUI(){
         HashMap<String,String> file_maps = new HashMap<String, String>();
         file_maps.put("Clubeins 1", "http://www.eventsofa.de/venue-images/534/ef0/534ef027b7605368076c4eeb-7262.jpg");
         file_maps.put("Clubeins 2", "http://www.afterworkclub-erfurt.de/wp-content/uploads/2014/11/IMG_6385-705x476.jpg");
@@ -46,7 +62,6 @@ public class LocationDetail extends AppCompatActivity {
                     .description(name)
                     .image(file_maps.get(name))
                     .setScaleType(BaseSliderView.ScaleType.Fit);
-//                    .setOnSliderClickListener(this);
 
 
             mDemoSlider.addSlider(textSliderView);
@@ -56,7 +71,6 @@ public class LocationDetail extends AppCompatActivity {
         mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
         mDemoSlider.setDuration(4000);
-//        mDemoSlider.addOnPageChangeListener(this);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,5 +80,4 @@ public class LocationDetail extends AppCompatActivity {
             }
         });
     }
-
 }

@@ -21,11 +21,9 @@ import android.util.Log;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    //TODO: anpasse
     public static final String TABLE_FACEBOOK_LOGIN = "facebooklogin";
     public static final String COLUMN_ID = "_id";
 
-    //TODO: anpassen ggf. weitere
     public static final String COLUMN_FACEBOOK_ID = "facebookid";
     public static final String COLUMN_FACEBOOK_TOKEN = "facebooktoken";
 
@@ -33,7 +31,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    // TODO: Dieses statement muss entprechend angepasst werden
     private static final String DATABASE_CREATE = "create table "
             + TABLE_FACEBOOK_LOGIN + "("
             + COLUMN_ID

@@ -19,9 +19,6 @@ import it.rieger.happyhour.model.FacebookLoginData;
  *
  * With this class you can read and write the offline data of the app.
  *
- * TODO: Diese klasse muss zusammen mit dem {@link DatabaseHelper} fertig gestellt werden.
- * TODO: Hierfür wird ein Datenbank Model benötigt, welches noch abgesprochen werden muss.
- *
  * Created by sebastian on 25.04.16.
  */
 public class DataSource {
@@ -32,22 +29,35 @@ public class DataSource {
     private String[] allColumns = { DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_FACEBOOK_ID, DatabaseHelper.COLUMN_FACEBOOK_TOKEN};
 
+    /**
+     * constructor
+     * @param context the context under which the db should be opened
+     */
     public DataSource(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
 
+    /**
+     * open a db connection
+     * @throws SQLException if a error occurs
+     */
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
 
+    /**
+     * close the db connection
+     */
     public void close() {
 
         dbHelper.close();
     }
-    //create new FacebookLoginData instance;
-   // @param FacebookLoginData
-    //@return
 
+    /**
+     * create a new database entry
+     * @param facebooklogindata the data for the entry
+     * @return the entry which was saved in the database
+     */
     public FacebookLoginData createFacebookLoginData(String facebooklogindata) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_FACEBOOK_ID, facebooklogindata);
@@ -62,6 +72,10 @@ public class DataSource {
         return newComment;
     }
 
+    /**
+     * delete a db entry
+     * @param facebookLoginData the entry which should be deleted
+     */
     public void deleteFacebookLoginData(FacebookLoginData facebookLoginData) {
         long id = facebookLoginData.getId();
         System.out.println("FacebookLoginData deleted with id: " + id);
@@ -69,6 +83,10 @@ public class DataSource {
                 + " = " + id, null);
     }
 
+    /**
+     * get all entries from the db
+     * @return a list of all entries
+     */
     public List<FacebookLoginData> getAllFacebookLoginData() {
         List<FacebookLoginData> facebookLoginDatas = new ArrayList<FacebookLoginData>();
 
@@ -86,6 +104,11 @@ public class DataSource {
         return facebookLoginDatas;
     }
 
+    /**
+     * Cursor for the fb login data in the database
+     * @param cursor
+     * @return
+     */
     private FacebookLoginData cursorToFacebookLoginData(Cursor cursor) {
         FacebookLoginData FacebookLoginData = new FacebookLoginData();
         FacebookLoginData.setId(cursor.getLong(0));
@@ -96,35 +119,3 @@ public class DataSource {
 }
 
 
-//    /**
-//     * TODO: Fertig implementieren
-//     * create new xxx instance
-//     * @param xxx
-//     * @return
-//     */
-//    public XXX createXXX(String xxx) {
-//        ContentValues values = new ContentValues();
-//        values.put(DatabaseHelper.COLUMN_XXX, xxx);
-//        long insertId = database.insert(DatabaseHelper.TABLE_XXX, null,
-//                values);
-//        Cursor cursor = database.query(DatabaseHelper.TABLE_XXX,
-//                allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null,
-//                null, null, null);
-//        cursor.moveToFirst();
-//        XXX newComment = cursorToComment(cursor);
-//        cursor.close();
-//        return newComment;
-//    }
-
-//    /**
-//     *
-//     * @param cursor cursor for the query XXX
-//     * @return instance of {@link xxx}
-//     */
-//    private XXX cursorToXXX(Cursor cursor) {
-//        XXX XXX = new XXX();
-//        XXX.setId(cursor.getLong(0));
-//        XXX.setXXX(cursor.getString(1));
-//        return XXX;
-//    }
-//}

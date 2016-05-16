@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.util.LruCache;
 
 /**
- * Cache für images which are be loaded from the server.
+ * Cache for images which are be loaded from the server.
  *
  * The cache was build as a singleton and is thread save.
  *

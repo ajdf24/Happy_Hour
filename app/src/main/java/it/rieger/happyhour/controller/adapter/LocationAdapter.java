@@ -23,23 +23,46 @@ import it.rieger.happyhour.view.viewholder.LocationViewHolder;
  */
 public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder>{
 
+    /**
+     * List of all locations
+     */
     private List<Location> locationList;
 
+    /**
+     * constructor
+     * @param locations list of the locations which should be shown
+     */
     public LocationAdapter(List<Location> locations) {
         locationList = locations;
     }
 
+    /**
+     * {@inheritDoc}
+     * create a {@link LocationViewHolder}
+     * @param parent parent view
+     * @param viewType type of the view
+     * @return a view holder
+     */
     @Override
     public LocationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_location, parent, false);
         return new LocationViewHolder(itemView);
     }
 
+    /**
+     * bind a view holder with the data
+     * @param holder holder
+     * @param position position of the viewholder
+     */
     @Override
     public void onBindViewHolder(LocationViewHolder holder, final int position) {
         Location location = locationList.get(position);
 
         holder.getView().setOnClickListener(new View.OnClickListener() {
+            /**
+             * {@inheritDoc}
+             * Clicklistener which opens the detail view of the location
+             */
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -72,6 +95,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder>{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @return the count of the items
+     */
     @Override
     public int getItemCount() {
         return locationList.size();

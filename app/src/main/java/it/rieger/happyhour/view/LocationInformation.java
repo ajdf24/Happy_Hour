@@ -22,12 +22,7 @@ import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
- * A simple {@link android.app.Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link LocationInformation.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link LocationInformation#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment which is overlaying the map with information of a specific location
  */
 public class LocationInformation extends Fragment {
 
@@ -36,27 +31,39 @@ public class LocationInformation extends Fragment {
     @Bind(R.id.activity_location_details_pictures_list_view)
     SliderLayout mDemoSlider;
 
+    /**
+     * constructor, which is required
+     */
     public LocationInformation() {
-        // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment location_information_fragment.
+     *  create a new instance of this fragment
+     * @return A new instance of fragment {@link LocationInformation}.
      */
     public static LocationInformation newInstance(Location location) {
         LocationInformation fragment = new LocationInformation();
         return fragment;
     }
 
+    /**
+     * {@inheritDoc}
+     * create the ui
+     * @param savedInstanceState saved instance of the fragment
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * create the view of the fragment
+     * @param inflater the inflater
+     * @param container the container
+     * @param savedInstanceState saved instance of the fragment
+     * @return the created view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,13 +98,10 @@ public class LocationInformation extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
+    /**
+     * {@inheritDoc}
+     * @param context the called context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -111,6 +115,9 @@ public class LocationInformation extends Fragment {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -118,14 +125,7 @@ public class LocationInformation extends Fragment {
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * fragment listener
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);

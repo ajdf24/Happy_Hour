@@ -12,7 +12,7 @@ import it.rieger.happyhour.controller.widget.DynamicImageView;
 
 /**
  * Created by sebastian on 14.05.16.
- * Viewholder for the items in one card
+ * View holder for the items in one card
  */
 public class LocationViewHolder extends RecyclerView.ViewHolder {
 
@@ -36,6 +36,11 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
 
     View itemView;
 
+    /**
+     * constructor
+     * initializes all fields for the view
+     * @param itemView the item view for the holder
+     */
     public LocationViewHolder(View itemView) {
         super(itemView);
 

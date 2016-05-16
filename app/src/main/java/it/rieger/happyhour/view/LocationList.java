@@ -29,6 +29,9 @@ import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.OpeningTimes;
 import it.rieger.happyhour.model.Time;
 
+/**
+ * activity which shows a list of locations
+ */
 public class LocationList extends AppCompatActivity {
 
     @Bind(R.id.activity_location_list_recycler_view)
@@ -40,6 +43,11 @@ public class LocationList extends AppCompatActivity {
 
     private boolean start = true;
 
+    /**
+     * {@inheritDoc}
+     * create the activity
+     * @param savedInstanceState saved instance of the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,41 +55,45 @@ public class LocationList extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        Log.e("Hier", "hier");
-
-        locationList = new ArrayList<>();
-        Time timefriday = new Time();
-        timefriday.setDay(Day.FRIDAY);
-        timefriday.setStartTime("23:00");
-        timefriday.setEndTime("05:00");
-        Time timesaturday = new Time();
-        timesaturday.setDay(Day.SATURDAY);
-        timesaturday.setStartTime("23:00");
-        timesaturday.setEndTime("05:00");
-
-        List<Time> times = new ArrayList<>();
-        times.add(timefriday);
-        times.add(timesaturday);
-
-        HappyHourTime happyHourTime = new HappyHourTime(times);
-
-        HappyHour happyHour = new HappyHour("Cuba Libre Doppeldecker", "5€", happyHourTime);
-        List<HappyHour> happyHours = new ArrayList<>();
-        happyHours.add(happyHour);
-
-        BitmapLRUCache.getInstance().addBitmapToMemoryCache("C1", BitmapFactory.decodeResource(this.getResources(), R.mipmap.c1));
-
-
-        List<String> imageKeys = new ArrayList<>();
-        imageKeys.add("C1");
-
-        OpeningTimes openingTimes = new OpeningTimes(times);
-        Location location = new Location("Clubeins", 4.3f, "Steigerstraße 18", 11.0181322f, 50.9624967f, openingTimes, happyHours, imageKeys);
-
-        locationList.add(location);
+        createSampeData();
 
         createLocationList();
 
+        createBottomBar(savedInstanceState);
+    }
+
+    /**
+     * create the list of the locations
+     */
+    private void createLocationList(){
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        locationListView.setLayoutManager(linearLayoutManager);
+
+        //TODO: Liste muss mit Serverdaten gefüllt werden
+        LocationAdapter locationAdapter = new LocationAdapter(locationList);
+        locationListView.setAdapter(locationAdapter);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param outState the state which should be saved
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Necessary to restore the BottomBar's state, otherwise we would
+        // lose the current tab on orientation change.
+        bottomBar.onSaveInstanceState(outState);
+
+    }
+
+    /**
+     * create the bottom bar for this activity
+     * @param savedInstanceState
+     */
+    private void createBottomBar(Bundle savedInstanceState){
         bottomBar = BottomBar.attach(this, savedInstanceState);
 
         bottomBar.setItemsFromMenu(R.menu.bottombar, new OnMenuTabClickListener() {
@@ -91,7 +103,7 @@ public class LocationList extends AppCompatActivity {
                     switch (menuItemId) {
                         case R.id.bottomBarItemOne:
                             startActivity(new Intent(LocationList.this, Maps.class).
-                                                        addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                    addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             break;
                         case R.id.bottomBarItemTwo:
                             break;
@@ -130,24 +142,39 @@ public class LocationList extends AppCompatActivity {
         bottomBar.selectTabAtPosition(2, false);
     }
 
-    private void createLocationList(){
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        locationListView.setLayoutManager(linearLayoutManager);
+    /**
+     * TODO: remove
+     */
+    private void createSampeData(){
+        locationList = new ArrayList<>();
+        Time timefriday = new Time();
+        timefriday.setDay(Day.FRIDAY);
+        timefriday.setStartTime("23:00");
+        timefriday.setEndTime("05:00");
+        Time timesaturday = new Time();
+        timesaturday.setDay(Day.SATURDAY);
+        timesaturday.setStartTime("23:00");
+        timesaturday.setEndTime("05:00");
 
-        //TODO: Liste muss mit Serverdaten gefüllt werden
-//        List<Location> locationList = new ArrayList<>();
-        LocationAdapter locationAdapter = new LocationAdapter(locationList);
-        locationListView.setAdapter(locationAdapter);
-    }
+        List<Time> times = new ArrayList<>();
+        times.add(timefriday);
+        times.add(timesaturday);
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+        HappyHourTime happyHourTime = new HappyHourTime(times);
 
-        // Necessary to restore the BottomBar's state, otherwise we would
-        // lose the current tab on orientation change.
-        bottomBar.onSaveInstanceState(outState);
+        HappyHour happyHour = new HappyHour("Cuba Libre Doppeldecker", "5€", happyHourTime);
+        List<HappyHour> happyHours = new ArrayList<>();
+        happyHours.add(happyHour);
 
+        BitmapLRUCache.getInstance().addBitmapToMemoryCache("C1", BitmapFactory.decodeResource(this.getResources(), R.mipmap.c1));
+
+
+        List<String> imageKeys = new ArrayList<>();
+        imageKeys.add("C1");
+
+        OpeningTimes openingTimes = new OpeningTimes(times);
+        Location location = new Location("Clubeins", 4.3f, "Steigerstraße 18", 11.0181322f, 50.9624967f, openingTimes, happyHours, imageKeys);
+
+        locationList.add(location);
     }
 }

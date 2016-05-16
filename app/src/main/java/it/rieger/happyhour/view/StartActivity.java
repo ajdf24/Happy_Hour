@@ -41,6 +41,11 @@ public class StartActivity extends AppCompatActivity {
     @Bind(R.id.start_activity_button_next)
     Button next;
 
+    /**
+     * {@inheritDoc}
+     * create ui
+     * @param savedInstanceState the saved state of the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,10 @@ public class StartActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * {@inheritDoc}
+     * load the login or go the next activity
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -66,7 +75,6 @@ public class StartActivity extends AppCompatActivity {
         }else {
             goToMainActivity();
         }
-        Log.e("Test", "TEst");
     }
 
     /**

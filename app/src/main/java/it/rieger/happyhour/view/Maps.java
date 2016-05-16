@@ -55,6 +55,11 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
 
     private boolean start = true;
 
+    /**
+     * {@inheritDoc}
+     * load the ui
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +117,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         // You can set colors for tabs in three different ways as shown below.
         bottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
         bottomBar.mapColorForTab(1, 0xFF5D4037);
-        bottomBar.mapColorForTab(2, "#7B1FA2");
+        bottomBar.mapColorForTab(2, 0xFF5D4037);
 
         //Aktiven Button setzen
         bottomBar.selectTabAtPosition(0, false);
@@ -143,15 +148,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         }
     }
 
-
     /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * {@inheritDoc}
+     * set map to the current position and add marker
+     * @param googleMap
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -205,7 +205,11 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
 
     }
 
-
+    /**
+     * show the information for the marker when it is clicked
+     * @param marker
+     * @return
+     */
     @Override
     public boolean onMarkerClick(Marker marker) {
 
@@ -237,6 +241,12 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param requestCode the request code
+     * @param permissions the permissions
+     * @param grantResults the granted results
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -256,6 +266,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param outState the activity state which should be saved
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -266,14 +280,12 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
 
     }
 
+    /**
+     * {@inheritDoc}
+     * @param uri the uri for interaction
+     */
     @Override
     public void onFragmentInteraction(Uri uri) {
 
     }
-
-//    @Override
-    public void onMapClick(LatLng latLng) {
-
-    }
-
 }
