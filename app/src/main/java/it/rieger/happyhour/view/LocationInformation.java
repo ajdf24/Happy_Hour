@@ -18,6 +18,7 @@ import java.util.HashMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
@@ -45,7 +46,7 @@ public class LocationInformation extends Fragment {
      *
      * @return A new instance of fragment location_information_fragment.
      */
-    public static LocationInformation newInstance() {
+    public static LocationInformation newInstance(Location location) {
         LocationInformation fragment = new LocationInformation();
         return fragment;
     }

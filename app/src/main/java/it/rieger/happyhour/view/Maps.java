@@ -34,6 +34,8 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.util.AppConstants;
@@ -49,7 +51,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
 
     private SupportMapFragment mapFragment;
 
-    private ArrayList<it.rieger.happyhour.model.Location> locations;
+    private HashMap<String,it.rieger.happyhour.model.Location> locations;
 
     private boolean start = true;
 
@@ -137,7 +139,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
     private void loadLocationsFromBundle(){
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
-            locations =(ArrayList<it.rieger.happyhour.model.Location>) bundle.getSerializable(AppConstants.BUNDLE_CONTEXT_LOCATIONS);
+            locations =(HashMap<String,it.rieger.happyhour.model.Location>) bundle.getSerializable(AppConstants.BUNDLE_CONTEXT_LOCATIONS);
         }
     }
 
@@ -167,8 +169,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         // Get the name of the best provider
         String provider = locationManager.getBestProvider(criteria, true);
 
-
-
         try{
             Location myLocation = locationManager.getLastKnownLocation(provider);
 
@@ -196,6 +196,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
         //TODO: C1 Marker entfernen Locations laden
         googleMap.addMarker(new MarkerOptions().position(new LatLng(50.962497, 11.018132)).title("Clubeins")).showInfoWindow();
 
+        for(String key : locations.keySet()){
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(locations.get(key).getAddressLatitude(),locations.get(key).getAddressLongitude())).title(locations.get(key).getName())).showInfoWindow();
+        }
+
         // Activate Callback
         googleMap.setOnMarkerClickListener(this);
 
@@ -205,20 +209,31 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback, Google
     @Override
     public boolean onMarkerClick(Marker marker) {
 
+        for(String key : locations.keySet()){
+            if(marker.getTitle().toString().equals(key)){
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                final LocationInformation information = LocationInformation.newInstance(locations.get(key));
+                fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
+                fragmentTransaction.commit();
+                RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
+                relativeLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
+        //TODO: Entfernen
         if (marker.getTitle().toString().equals("Clubeins"))
         {
-
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            final LocationInformation welcomeFragment = new LocationInformation();
-            fragmentTransaction.add(R.id.fragment_container, welcomeFragment, "WelcomeFragment");
+            final LocationInformation information = new LocationInformation();
+            fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
             fragmentTransaction.commit();
-            Log.e("Test","TEst");
             RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
             relativeLayout.setVisibility(View.VISIBLE);
 
-            //TODO: show Location informations
         }
+
         return false;
     }
 

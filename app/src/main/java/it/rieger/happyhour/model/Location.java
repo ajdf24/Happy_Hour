@@ -17,6 +17,11 @@ import it.rieger.happyhour.controller.cache.BitmapLRUCache;
 public class Location implements Serializable{
 
     /**
+     * database id of this location
+     */
+    public int id;
+
+    /**
      * name of the locaton
      */
     public String name;
