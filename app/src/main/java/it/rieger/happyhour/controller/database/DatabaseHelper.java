@@ -23,9 +23,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_FACEBOOK_LOGIN = "facebooklogin";
     public static final String COLUMN_ID = "_id";
-
     public static final String COLUMN_FACEBOOK_ID = "facebookid";
     public static final String COLUMN_FACEBOOK_TOKEN = "facebooktoken";
+
+
 
     private static final String DATABASE_NAME = "internal.db";
     private static final int DATABASE_VERSION = 1;

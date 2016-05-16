@@ -1,12 +1,16 @@
-package it.rieger.happyhour.view;
+package it.rieger.happyhour.view.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -19,7 +23,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
+import it.rieger.happyhour.view.LocationDetail;
 
 /**
  * Fragment which is overlaying the map with information of a specific location
@@ -28,8 +34,13 @@ public class LocationInformation extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    @Bind(R.id.activity_location_details_pictures_list_view)
+    @Bind(R.id.fragment_location_details_pictures_list_view)
     SliderLayout mDemoSlider;
+
+    @Bind(R.id.fragment_information_button)
+    ImageButton infoButton;
+
+    static Location currentLocation;
 
     /**
      * constructor, which is required
@@ -43,6 +54,7 @@ public class LocationInformation extends Fragment {
      */
     public static LocationInformation newInstance(Location location) {
         LocationInformation fragment = new LocationInformation();
+        currentLocation = location;
         return fragment;
     }
 
@@ -94,6 +106,18 @@ public class LocationInformation extends Fragment {
         mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
         mDemoSlider.setDuration(4000);
+
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+
+                bundle.putSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION, currentLocation);
+                intent.setClass(CreateContextForResource.getContext(), LocationDetail.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

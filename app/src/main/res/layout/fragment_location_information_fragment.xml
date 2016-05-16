@@ -2,13 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.LocationInformation">
+    tools:context=".view.fragments.LocationInformation">
 
 
     <com.daimajia.slider.library.SliderLayout
-        android:id="@+id/activity_location_details_pictures_list_view"
+        android:id="@+id/fragment_location_details_pictures_list_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         />
+
+    <ImageButton
+        android:id="@+id/fragment_information_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/ic_info_black"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>

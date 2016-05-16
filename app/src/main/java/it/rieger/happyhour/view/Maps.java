@@ -21,7 +21,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,12 +35,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.view.fragments.LocationInformation;
 
 /**
  * This activity shows a google map, with all locations which are in the intent.
