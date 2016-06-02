@@ -57,7 +57,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignLeft="@+id/activity_location_details_fab"
         android:layout_alignStart="@+id/activity_location_details_fab"
-        android:layout_below="@+id/textView" />
+        android:layout_alignParentTop="true" />
 
 
 </RelativeLayout>
