@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 /**
@@ -17,7 +18,7 @@ import android.util.Log;
  * @author sebastian
  *
  */
-public class CreateContextForResource extends Application{
+public class CreateContextForResource extends MultiDexApplication{
 
     private static final String LOG_TAG = CreateContextForResource.class.getSimpleName();
 
