@@ -71,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_TABLEFACEBOOK_LOGIN);
         db.execSQL(CREATE_TABLE_FAVORITE_LOCATIONS);
-        db.execSQL(CREATE_TABLE_LOCATION_IMAGES);
+        //db.execSQL(CREATE_TABLE_LOCATION_IMAGES);
     }
 
     /**
