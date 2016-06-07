@@ -14,7 +14,7 @@
 
     <item
         android:id="@+id/bottomBarItemThree"
-        android:icon="@mipmap/ic_explore_black"
+        android:icon="@mipmap/ic_clock"
         android:title="Aktuell"
         />
 </menu>
