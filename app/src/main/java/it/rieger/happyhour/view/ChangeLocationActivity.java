@@ -1,5 +1,6 @@
 package it.rieger.happyhour.view;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
@@ -20,15 +21,20 @@ import butterknife.Bind;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.view.fragments.changelocation.GeneralFragment;
+import it.rieger.happyhour.view.fragments.changelocation.OpeningFragment;
 
 public class ChangeLocationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GeneralFragment.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        GeneralFragment.OnFragmentInteractionListener,
+        OpeningFragment.OnFragmentInteractionListener{
 
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+
+    Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +73,24 @@ public class ChangeLocationActivity extends AppCompatActivity
 
         Location location = new Location();
 
-        final GeneralFragment generalFragment = GeneralFragment.newInstance(location);
+
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_general) {
+            if(currentFragment != null)
+                fragmentTransaction.remove(currentFragment);
+            final GeneralFragment generalFragment = GeneralFragment.newInstance(location);
             fragmentTransaction.add(R.id.fragment_container, generalFragment, "GeneralFragment");
             fragmentTransaction.commit();
+            currentFragment = generalFragment;
         } else if (id == R.id.nav_open) {
-
+            if(currentFragment != null)
+                fragmentTransaction.remove(currentFragment);
+            final OpeningFragment openingFragment = OpeningFragment.newInstance(location);
+            fragmentTransaction.add(R.id.fragment_container, openingFragment, "OpeningFragment");
+            fragmentTransaction.commit();
+            currentFragment = openingFragment;
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
