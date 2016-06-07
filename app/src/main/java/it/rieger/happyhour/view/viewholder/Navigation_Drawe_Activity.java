@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import it.rieger.happyhour.R;
+
 public class Navigation_Drawe_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
