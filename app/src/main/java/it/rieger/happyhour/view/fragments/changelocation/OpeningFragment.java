@@ -1,9 +1,9 @@
 package it.rieger.happyhour.view.fragments.changelocation;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,27 +11,27 @@ import android.view.ViewGroup;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Location;
 
-public class GeneralFragment extends Fragment {
-
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link OpeningFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link OpeningFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class OpeningFragment extends Fragment {
     private static final String ARG_PARAM1 = "Location";
 
     private String location;
 
-
     private OnFragmentInteractionListener mListener;
 
-    public GeneralFragment() {
+    public OpeningFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment GeneralFragment.
-     */
-    public static GeneralFragment newInstance(Location param1) {
-        GeneralFragment fragment = new GeneralFragment();
+    public static OpeningFragment newInstance(Location param1, String param2) {
+        OpeningFragment fragment = new OpeningFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, param1);
         fragment.setArguments(args);
@@ -41,14 +41,16 @@ public class GeneralFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        location = getArguments().getString(ARG_PARAM1);
+        if (getArguments() != null) {
+            location = getArguments().getString(ARG_PARAM1);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_general, container, false);
+        return inflater.inflate(R.layout.fragment_opening, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -73,7 +73,7 @@ public class ChangeLocationActivity extends AppCompatActivity
         } else if (id == R.id.nav_general) {
             fragmentTransaction.add(R.id.fragment_container, generalFragment, "GeneralFragment");
             fragmentTransaction.commit();
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_open) {
 
         } else if (id == R.id.nav_manage) {
 
