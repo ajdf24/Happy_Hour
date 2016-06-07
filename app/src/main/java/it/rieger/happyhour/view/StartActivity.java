@@ -19,7 +19,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.database.DataSource;
@@ -35,10 +35,10 @@ public class StartActivity extends AppCompatActivity {
 
     CallbackManager callbackManager;
 
-    @Bind(R.id.login_button)
+    @BindView(R.id.login_button)
     LoginButton loginButton;
 
-    @Bind(R.id.start_activity_button_next)
+    @BindView(R.id.start_activity_button_next)
     Button next;
 
     /**

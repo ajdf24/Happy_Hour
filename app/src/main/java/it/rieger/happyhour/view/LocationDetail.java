@@ -14,7 +14,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import java.util.HashMap;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 
@@ -24,10 +24,10 @@ import it.rieger.happyhour.R;
  */
 public class LocationDetail extends AppCompatActivity {
 
-    @Bind(R.id.activity_location_details_fab)
+    @BindView(R.id.activity_location_details_fab)
     public FloatingActionButton fab;
 
-    @Bind(R.id.activity_location_details_pictures_list_view)
+    @BindView(R.id.activity_location_details_pictures_list_view)
     SliderLayout mDemoSlider;
 
     /**

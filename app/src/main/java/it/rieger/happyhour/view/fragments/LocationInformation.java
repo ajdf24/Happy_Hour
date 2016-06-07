@@ -22,7 +22,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import java.util.HashMap;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.widget.FavoriteButton;
@@ -38,13 +38,13 @@ public class LocationInformation extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    @Bind(R.id.fragment_location_details_pictures_list_view)
+    @BindView(R.id.fragment_location_details_pictures_list_view)
     SliderLayout mDemoSlider;
 
-    @Bind(R.id.fragment_information_button)
+    @BindView(R.id.fragment_information_button)
     ImageButton infoButton;
 
-    @Bind(R.id.fragment_button_favorite)
+    @BindView(R.id.fragment_button_favorite)
     FavoriteButton favoriteButton;
 
     static Location currentLocation;

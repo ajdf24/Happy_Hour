@@ -2,6 +2,7 @@ package it.rieger.happyhour.view;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,18 +16,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.view.fragments.changelocation.GeneralFragment;
 
 public class ChangeLocationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GeneralFragment.OnFragmentInteractionListener{
 
-    @Bind(R.id.fab)
+    @BindView(R.id.fab)
     FloatingActionButton floatingActionButton;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @Override
@@ -75,8 +76,6 @@ public class ChangeLocationActivity extends AppCompatActivity
             fragmentTransaction.commit();
         } else if (id == R.id.nav_open) {
 
-        } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -86,5 +85,10 @@ public class ChangeLocationActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
