@@ -18,7 +18,7 @@ import com.roughike.bottombar.OnMenuTabClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.LocationAdapter;
@@ -35,10 +35,10 @@ import it.rieger.happyhour.model.Time;
  */
 public class LocationList extends AppCompatActivity {
 
-    @BindView(R.id.activity_location_list_recycler_view)
+    @Bind(R.id.activity_location_list_recycler_view)
     RecyclerView locationListView;
 
-    @BindView(R.id.activity_location_list_searchView)
+    @Bind(R.id.activity_location_list_searchView)
     SearchView searchView;
 
     List<Location> locationList;

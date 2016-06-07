@@ -16,7 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.view.fragments.changelocation.GeneralFragment;
@@ -24,10 +24,10 @@ import it.rieger.happyhour.view.fragments.changelocation.GeneralFragment;
 public class ChangeLocationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GeneralFragment.OnFragmentInteractionListener{
 
-    @BindView(R.id.fab)
+    @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
 
-    @BindView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
 
     @Override

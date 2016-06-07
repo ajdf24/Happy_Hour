@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import butterknife.BindView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.widget.DynamicImageView;
@@ -16,22 +16,22 @@ import it.rieger.happyhour.controller.widget.DynamicImageView;
  */
 public class LocationViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.list_item_location_name)
+    @Bind(R.id.list_item_location_name)
     TextView locationName;
 
-    @BindView(R.id.list_item_opening_time)
+    @Bind(R.id.list_item_opening_time)
     TextView openingTime;
 
-    @BindView(R.id.list_item_distance)
+    @Bind(R.id.list_item_distance)
     TextView distance;
 
-    @BindView(R.id.list_item_drink)
+    @Bind(R.id.list_item_drink)
     TextView drinks;
 
-    @BindView(R.id.ratingBar)
+    @Bind(R.id.ratingBar)
     RatingBar rating;
 
-    @BindView(R.id.list_item_picture)
+    @Bind(R.id.list_item_picture)
     DynamicImageView picture;
 
     View itemView;
