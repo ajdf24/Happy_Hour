@@ -1,13 +1,177 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="it.rieger.happyhour.view.fragments.changelocation.OpeningFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Öffnungszeiten"
+        android:id="@+id/fragment_opening_title"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:focusableInTouchMode="false"
+        android:ems="10"
+        android:id="@+id/fragment_opening_monday_text"
+        android:layout_below="@+id/fragment_opening_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/fragment_opening_title"
+        android:layout_alignStart="@+id/fragment_opening_title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Montag"
+        android:id="@+id/fragment_opening_monday_label"
+        android:layout_alignBottom="@+id/fragment_opening_monday_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Mittwoch"
+        android:id="@+id/fragment_opening_wensday_label"
+        android:layout_alignBottom="@+id/fragment_opening_wensday_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Dienstag"
+        android:id="@+id/fragment_opening_thuseday_label"
+        android:layout_alignBottom="@+id/fragment_opening_thuseday_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Donnerstag"
+        android:id="@+id/fragment_opening_thursday_label"
+        android:layout_alignBottom="@+id/fragment_opening_thursday_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Freitag"
+        android:id="@+id/fragment_opening_firday_label"
+        android:layout_alignBottom="@+id/fragment_opening_friday_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Samstag"
+        android:id="@+id/fragment_opening_saturday_label"
+        android:layout_alignBottom="@+id/fragment_opening_saturday_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Sonntag"
+        android:id="@+id/fragment_opening_sunday_label"
+        android:layout_alignBottom="@+id/fragment_opening_sunday_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:focusableInTouchMode="false"
+        android:ems="10"
+        android:id="@+id/fragment_opening_thuseday_text"
+        android:layout_below="@+id/fragment_opening_monday_text"
+        android:layout_alignLeft="@+id/fragment_opening_monday_text"
+        android:layout_alignStart="@+id/fragment_opening_monday_text"
+        android:layout_alignRight="@+id/fragment_opening_monday_text"
+        android:layout_alignEnd="@+id/fragment_opening_monday_text" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:focusableInTouchMode="false"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/fragment_opening_wensday_text"
+        android:layout_below="@+id/fragment_opening_thuseday_text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/fragment_opening_thuseday_text"
+        android:layout_alignStart="@+id/fragment_opening_thuseday_text" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="false"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/fragment_opening_thursday_text"
+        android:layout_below="@+id/fragment_opening_wensday_text"
+        android:layout_alignLeft="@+id/fragment_opening_wensday_text"
+        android:layout_alignStart="@+id/fragment_opening_wensday_text"
+        android:layout_alignRight="@+id/fragment_opening_wensday_text"
+        android:layout_alignEnd="@+id/fragment_opening_wensday_text" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="false"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/fragment_opening_friday_text"
+        android:layout_below="@+id/fragment_opening_thursday_text"
+        android:layout_alignLeft="@+id/fragment_opening_thursday_text"
+        android:layout_alignStart="@+id/fragment_opening_thursday_text"
+        android:layout_alignRight="@+id/fragment_opening_thursday_text"
+        android:layout_alignEnd="@+id/fragment_opening_thursday_text" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="false"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/fragment_opening_saturday_text"
+        android:layout_below="@+id/fragment_opening_friday_text"
+        android:layout_alignLeft="@+id/fragment_opening_friday_text"
+        android:layout_alignStart="@+id/fragment_opening_friday_text"
+        android:layout_alignRight="@+id/fragment_opening_friday_text"
+        android:layout_alignEnd="@+id/fragment_opening_friday_text" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="false"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/fragment_opening_sunday_text"
+        android:layout_below="@+id/fragment_opening_saturday_text"
+        android:layout_alignRight="@+id/fragment_opening_saturday_text"
+        android:layout_alignEnd="@+id/fragment_opening_saturday_text"
+        android:layout_alignLeft="@+id/fragment_opening_saturday_text"
+        android:layout_alignStart="@+id/fragment_opening_saturday_text" />
+</RelativeLayout>

@@ -12,7 +12,7 @@
             android:title="Öffnungszeiten" />
         <item
             android:id="@+id/nav_happy_hour"
-            android:icon="@mipmap/ic_local_bar_back"
+            android:icon="@mipmap/ic_local_bar_black"
             android:title="Happy Hour" />
         <item
             android:id="@+id/nav_camera"
