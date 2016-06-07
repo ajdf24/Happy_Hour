@@ -97,7 +97,7 @@ public class LocationInformation extends Fragment {
         file_maps.put("Clubeins 3", "https://www.blitz-world.de/magazin/archiv/2014/1405/pix/t-club-clubeins2.jpg");
 
         for(String name : file_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(CreateContextForResource.getContext());
+            TextSliderView textSliderView = new TextSliderView(new CreateContextForResource().getContext());
             // initialize a SliderLayout
             textSliderView
                     .description(name)
@@ -114,7 +114,7 @@ public class LocationInformation extends Fragment {
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
         mDemoSlider.setDuration(4000);
 
-        infoButton.setColorFilter(Color.parseColor(CreateContextForResource.getStringFromID(R.color.colorAccent)));
+        infoButton.setColorFilter(Color.parseColor(new CreateContextForResource().getStringFromID(R.color.colorAccent)));
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,7 +122,7 @@ public class LocationInformation extends Fragment {
                 Bundle bundle = new Bundle();
 
                 bundle.putSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION, currentLocation);
-                intent.setClass(CreateContextForResource.getContext(), LocationDetail.class);
+                intent.setClass(new CreateContextForResource().getContext(), LocationDetail.class);
                 startActivity(intent);
             }
         });

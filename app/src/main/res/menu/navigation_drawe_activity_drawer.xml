@@ -3,24 +3,25 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_general"
+            android:icon="@mipmap/ic_general_black"
+            android:title="Allgemein" />
+        <item
+            android:id="@+id/nav_open"
+            android:icon="@mipmap/ic_clock"
+            android:title="Öffnungszeiten" />
+        <item
+            android:id="@+id/nav_happy_hour"
+            android:icon="@mipmap/ic_local_bar_back"
+            android:title="Happy Hour" />
+        <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Favoriten Hinzufügen" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Favoriten bearbeiten" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Favoriten löschen" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Zurück" />
+            android:title="Fotos" />
+
     </group>
 
-   <item android:title="Communicate">
+   <item android:title="Social">
         <menu>
             <item
                 android:id="@+id/nav_share"
