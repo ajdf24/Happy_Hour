@@ -164,38 +164,39 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION);
-        }
+        }else {
 
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        // Create a criteria object to retrieve provider
-        Criteria criteria = new Criteria();
+            // Create a criteria object to retrieve provider
+            Criteria criteria = new Criteria();
 
-        // Get the name of the best provider
-        String provider = locationManager.getBestProvider(criteria, true);
+            // Get the name of the best provider
+            String provider = locationManager.getBestProvider(criteria, true);
 
-        try{
-            Location myLocation = locationManager.getLastKnownLocation(provider);
+            try {
+                Location myLocation = locationManager.getLastKnownLocation(provider);
 
-            //set map type
-            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                //set map type
+                googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
-            // Get latitude of the current location
-            double latitude = myLocation.getLatitude();
+                // Get latitude of the current location
+                double latitude = myLocation.getLatitude();
 
-            // Get longitude of the current location
-            double longitude = myLocation.getLongitude();
+                // Get longitude of the current location
+                double longitude = myLocation.getLongitude();
 
-            // Create a LatLng object for the current location
-            LatLng latLng = new LatLng(latitude, longitude);
+                // Create a LatLng object for the current location
+                LatLng latLng = new LatLng(latitude, longitude);
 
-            // Show the current location in Google Map
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                // Show the current location in Google Map
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
-            // Zoom in the Google Map
-            googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-        }catch (NullPointerException e){
-            Log.w("Log", "Can not load current position");
+                // Zoom in the Google Map
+                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            } catch (NullPointerException e) {
+                Log.w("Log", "Can not load current position");
+            }
         }
 
         //TODO: C1 Marker entfernen Locations laden
@@ -341,4 +342,36 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
     public void onMapClick(LatLng latLng) {
         removeInfoFragment();
     }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+//        switch (requestCode) {
+//            case AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION:
+//                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+//
+//                    Snackbar snackbar = Snackbar
+//                            .make((View)findViewById(R.id.activity_maps), R.string.toast_permission_sms_denied, Snackbar.LENGTH_LONG);
+//
+//                    View snackbarView = snackbar.getView();
+//                    TextView textView = (TextView)snackbarView .findViewById(android.support.design.R.id.snackbar_text);
+//                    textView.setTextColor(Color.WHITE);
+//                    snackbar.show();
+//
+//                    return;
+//                }
+//                break;
+//            case AppConstants.PermissionsIDs.PERMISSION_ID_FOR_STORAGE:
+//                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+//
+//                    Snackbar snackbar = Snackbar
+//                            .make(layoutView, R.string.toast_permission_storage_denied, Snackbar.LENGTH_LONG);
+//
+//                    View snackbarView = snackbar.getView();
+//                    TextView textView = (TextView)snackbarView .findViewById(android.support.design.R.id.snackbar_text);
+//                    textView.setTextColor(Color.WHITE);
+//                    snackbar.show();
+//                }
+//                break;
+//        }
+//    }
 }
