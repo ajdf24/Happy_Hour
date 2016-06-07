@@ -66,6 +66,9 @@ public class Location implements Serializable{
      */
     public List<String> notCachedImages = new ArrayList<>();
 
+    public Location() {
+    }
+
     /**
      * constructor
      * @param name name of the location

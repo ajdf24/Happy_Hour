@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -19,7 +17,6 @@ import java.util.HashMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
-import it.rieger.happyhour.view.viewholder.Navigation_Drawe_Activity;
 
 /**
  * Activity which shows the details for the location
@@ -50,7 +47,7 @@ public class LocationDetail extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LocationDetail.this, Navigation_Drawe_Activity.class));
+                startActivity(new Intent(LocationDetail.this, ChangeLocationActivity.class));
             }
         });
     }
