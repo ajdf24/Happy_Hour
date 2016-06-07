@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_LOCATION_ID
             + " integer not null);";
 
-    private static final String CREATE_TABLE_LOCATION_IMAGES = "create table"
+    private static final String CREATE_TABLE_LOCATION_IMAGES = "create table "
             + TABLE_LOCATION_IMAGES + "("
             + COLUMN_LOCATION_ID
             + " integer primary key, "

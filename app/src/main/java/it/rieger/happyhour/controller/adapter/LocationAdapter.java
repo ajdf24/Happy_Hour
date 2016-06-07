@@ -82,9 +82,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
                 bundle.putSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION, locationList.get(position));
 
                 intent.putExtras(bundle);
-                intent.setClass(CreateContextForResource.getContext(), LocationDetail.class);
+                intent.setClass(new CreateContextForResource().getContext(), LocationDetail.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                CreateContextForResource.getContext().startActivity(intent);
+                new CreateContextForResource().getContext().startActivity(intent);
 
             }
         });
