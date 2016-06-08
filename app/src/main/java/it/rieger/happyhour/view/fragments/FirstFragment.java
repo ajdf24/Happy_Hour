@@ -19,7 +19,7 @@ public class FirstFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.first_layout, container, false);
+        myView = inflater.inflate(R.layout.fragment_camera, container, false);
         return myView;
     }
 }
