@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import butterknife.Bind;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.view.fragments.changelocation.CameraFragment;
 import it.rieger.happyhour.view.fragments.changelocation.GeneralFragment;
 import it.rieger.happyhour.view.fragments.changelocation.OpeningFragment;
 
@@ -77,6 +78,12 @@ public class ChangeLocationActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            if(currentFragment != null)
+                fragmentTransaction.remove(currentFragment);
+            final CameraFragment cameraFragment = CameraFragment.newInstance(location);
+            fragmentTransaction.add(R.id.fragment_container, cameraFragment, "CameraFragment");
+            fragmentTransaction.commit();
+            currentFragment = cameraFragment;
         } else if (id == R.id.nav_general) {
             if(currentFragment != null)
                 fragmentTransaction.remove(currentFragment);

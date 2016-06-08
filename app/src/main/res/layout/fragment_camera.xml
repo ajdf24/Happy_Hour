@@ -10,4 +10,20 @@
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fragment_camera_imageview"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fragment_button_takepicture"/>
+    <Button
+        android:id="@+id/fragment_button_pick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="@string/change_image" />
+
 </RelativeLayout>

@@ -1,14 +1,22 @@
 package it.rieger.happyhour.view.fragments.changelocation;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,10 +37,20 @@ public class CameraFragment extends Fragment {
 
     private Location mParam1;
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int SELECT_PHOTO = 2;
+
+
+
     private OnFragmentInteractionListener mListener;
 //    TODO:
-//    @Bindpü(R.id.irgendwas)
-//    Button irgendwas;
+    @Bind(R.id.fragment_button_takepicture)
+    Button takePictureIntent;
+    @Bind(R.id.fragment_button_pick)
+    Button photoPickerIntent;
+
+    @Bind(R.id.fragment_camera_imageview)
+    ImageView mImageView;
 
 
     public CameraFragment() {
@@ -60,14 +78,7 @@ public class CameraFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = (Location) getArguments().getSerializable(ARG_PARAM1);
         }
-//        TODO:
-        //irgendwas.setOnClickListener(new View.OnClickListener(new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            Intent für Bilder
-//                bla
-//        }
-//    });
+
 
 
     }
@@ -78,6 +89,26 @@ public class CameraFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
         ButterKnife.bind(this, view);
+
+        takePictureIntent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        });
+        photoPickerIntent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+            }
+        });
+
+
         return view;
     }
 
@@ -105,6 +136,29 @@ public class CameraFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
+           Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mImageView.setImageBitmap(imageBitmap);
+
+        }
+        if(requestCode == SELECT_PHOTO && resultCode == Activity.RESULT_OK){
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mImageView.setImageBitmap(imageBitmap);
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                mImageView.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -119,4 +173,5 @@ public class CameraFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }
