@@ -27,7 +27,8 @@ import it.rieger.happyhour.view.fragments.changelocation.OpeningFragment;
 public class ChangeLocationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GeneralFragment.OnFragmentInteractionListener,
-        OpeningFragment.OnFragmentInteractionListener{
+        OpeningFragment.OnFragmentInteractionListener,
+        CameraFragment.OnFragmentInteractionListener{
 
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;

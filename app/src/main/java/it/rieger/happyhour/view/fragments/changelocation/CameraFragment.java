@@ -9,10 +9,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import java.io.FileNotFoundException;
@@ -22,7 +25,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Location;
-import it.rieger.happyhour.view.ChangeLocationActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,14 +45,19 @@ public class CameraFragment extends Fragment {
 
 
     private OnFragmentInteractionListener mListener;
-//    TODO:
     @Bind(R.id.fragment_button_takepicture)
-    Button takePictureIntent;
+    FloatingActionButton takePictureIntent;
+
     @Bind(R.id.fragment_button_pick)
-    Button photoPickerIntent;
+    FloatingActionButton photoPickerIntent;
+
+    @Bind(R.id.fragment_button_show_buttons)
+    FloatingActionButton showButton;
 
     @Bind(R.id.fragment_camera_imageview)
     ImageView mImageView;
+
+    private boolean isButtonsShow = false;
 
 
     public CameraFragment() {
@@ -108,6 +115,68 @@ public class CameraFragment extends Fragment {
             }
         });
 
+        showButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isButtonsShow) {
+                    Animation expandIn = AnimationUtils.loadAnimation(getActivity(), R.anim.expand_in);
+                    Animation rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_clock_whise);
+                    showButton.startAnimation(rotate);
+                    takePictureIntent.startAnimation(expandIn);
+                    photoPickerIntent.startAnimation(expandIn);
+                    expandIn.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            takePictureIntent.setVisibility(View.VISIBLE);
+                            photoPickerIntent.setVisibility(View.VISIBLE);
+                            isButtonsShow = true;
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }else {
+                    Animation expandOut = AnimationUtils.loadAnimation(getActivity(), R.anim.expand_out);
+                    Animation rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_un_clock_whise);
+                    showButton.startAnimation(rotate);
+                    takePictureIntent.startAnimation(expandOut);
+                    photoPickerIntent.startAnimation(expandOut);
+                    expandOut.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            takePictureIntent.setVisibility(View.INVISIBLE);
+                            photoPickerIntent.setVisibility(View.INVISIBLE);
+                            isButtonsShow = false;
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
+            }
+        });
+
+        showButton.setOnHoverListener(new View.OnHoverListener() {
+            @Override
+            public boolean onHover(View v, MotionEvent event) {
+                System.out.println("TEST");
+                return false;
+            }
+        });
 
         return view;
     }
