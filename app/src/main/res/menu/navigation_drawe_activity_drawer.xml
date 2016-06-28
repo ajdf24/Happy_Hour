@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_general"
+            android:icon="@mipmap/ic_general_black"
+            android:title="Allgemein" />
+        <item
+            android:id="@+id/nav_open"
+            android:icon="@mipmap/ic_clock"
+            android:title="Öffnungszeiten" />
+        <item
+            android:id="@+id/nav_happy_hour"
+            android:icon="@mipmap/ic_local_bar_black"
+            android:title="Happy Hour" />
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Fotos" />
+
+    </group>
+
+   <item android:title="Social">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+
+</menu>
