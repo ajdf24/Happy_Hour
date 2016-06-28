@@ -37,6 +37,8 @@ enum BackendDatabase {
 
     private LatLng oldCoordinates;
 
+    private float oldRadius;
+
     /**
      *
      * @return the instance of the backend database
@@ -56,7 +58,7 @@ enum BackendDatabase {
     public synchronized List<Location> loadLocations(@NonNull Context context, @NonNull LatLng coordinates, float radius){
 
         //TODO: Remove mocked Location with a real database connection.
-        if(!oldCoordinates.equals(coordinates)) {
+        if(!oldCoordinates.equals(coordinates) || radius != oldRadius) {
 
             locationList.clear();
             Time timefriday = new Time();
