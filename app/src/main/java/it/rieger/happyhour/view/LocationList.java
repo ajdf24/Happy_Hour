@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -43,6 +45,9 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
 
     @Bind(R.id.activity_location_list_searchView)
     SearchView searchView;
+
+    @Bind(R.id.activity_location_list_progressBar)
+    ProgressBar progressBar;
 
     List<Location> locationList;
 
@@ -202,6 +207,9 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
 
     @Override
     public void locationLoaded() {
+
+        progressBar.setVisibility(View.INVISIBLE);
+        locationListView.setVisibility(View.VISIBLE);
         createLocationList();
     }
 }

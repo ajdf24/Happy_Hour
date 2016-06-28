@@ -36,7 +36,7 @@ public enum BackendDatabase {
 
     private List<Location> locationList = new ArrayList<>();
 
-    private LatLng oldCoordinates;
+    private LatLng oldCoordinates = new LatLng(0.0,0.0);
 
     private float oldRadius;
 
@@ -108,5 +108,22 @@ public enum BackendDatabase {
             ((LocationLoadedCallback) context).locationLoaded();
         }
 
+    }
+
+    /**
+     * Get a new id from the backend database
+     * @return the new id
+     */
+    public int getNewBackendId(){
+        //TODO: Add database connection
+        return 0;
+    }
+
+    /**
+     * Save a location in the backend database
+     * @param location the location which should be saved
+     */
+    public void saveLocation(Location location){
+        //TODO: implement
     }
 }
