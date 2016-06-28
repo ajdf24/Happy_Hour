@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.SearchView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
@@ -22,6 +23,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.LocationAdapter;
+import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.controller.cache.BitmapLRUCache;
 import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.HappyHour;
@@ -29,11 +31,12 @@ import it.rieger.happyhour.model.HappyHourTime;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.OpeningTimes;
 import it.rieger.happyhour.model.Time;
+import it.rieger.happyhour.util.LocationLoadedCallback;
 
 /**
  * activity which shows a list of locations
  */
-public class LocationList extends AppCompatActivity {
+public class LocationList extends AppCompatActivity implements LocationLoadedCallback{
 
     @Bind(R.id.activity_location_list_recycler_view)
     RecyclerView locationListView;
@@ -61,10 +64,9 @@ public class LocationList extends AppCompatActivity {
 
         createSampeData();
 
-        createLocationList();
+        BackendDatabase.getInstance().loadLocations(locationList, this, new LatLng(0.0,0.0), 10);
 
         createBottomBar(savedInstanceState);
-
 
     }
 
@@ -196,5 +198,10 @@ public class LocationList extends AppCompatActivity {
         Location location = new Location("Clubeins", 4.3f, "Steigerstraße 18", 11.0181322f, 50.9624967f, openingTimes, happyHours, imageKeys);
 
         locationList.add(location);
+    }
+
+    @Override
+    public void locationLoaded() {
+        createLocationList();
     }
 }

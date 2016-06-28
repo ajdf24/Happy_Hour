@@ -17,6 +17,7 @@ import it.rieger.happyhour.model.HappyHourTime;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.OpeningTimes;
 import it.rieger.happyhour.model.Time;
+import it.rieger.happyhour.util.LocationLoadedCallback;
 
 /**
  * Created by sebastian on 28.06.16.
@@ -29,7 +30,7 @@ import it.rieger.happyhour.model.Time;
  * This class is fully thread save and can called from everywhere.
  *
  */
-enum BackendDatabase {
+public enum BackendDatabase {
 
     INSTANCE;
 
@@ -49,13 +50,21 @@ enum BackendDatabase {
     }
 
     /**
-     * load locations from the backend database
+     * Load locations from the backend database.
+     *
+     * This method loads the specific locations to the given list.
+     *
+     * @param locationList the list in which the locations are loaded
      * @param context the called context
      * @param coordinates the current coordinates
      * @param radius the search radius in kilometer
-     * @return a list of all locations
      */
-    public synchronized List<Location> loadLocations(@NonNull Context context, @NonNull LatLng coordinates, float radius){
+    public synchronized void loadLocations(@NonNull List<Location> locationList, @NonNull Context context, @NonNull LatLng coordinates, float radius){
+
+        if(!(context instanceof LocationLoadedCallback)){
+            throw new RuntimeException(context.toString()
+                    + " must implement LocationLoadedCallback");
+        }
 
         //TODO: Remove mocked Location with a real database connection.
         if(!oldCoordinates.equals(coordinates) || radius != oldRadius) {
@@ -90,9 +99,14 @@ enum BackendDatabase {
             Location location = new Location("Clubeins", 4.3f, "Steigerstraße 18", 11.0181322f, 50.9624967f, openingTimes, happyHours, imageKeys);
 
             locationList.add(location);
+            this.locationList.add(location);
             oldCoordinates = coordinates;
+
+            ((LocationLoadedCallback) context).locationLoaded();
+        }else {
+            locationList = this.locationList;
+            ((LocationLoadedCallback) context).locationLoaded();
         }
 
-        return locationList;
     }
 }
