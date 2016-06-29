@@ -35,7 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.rieger.happyhour.R;
@@ -72,12 +72,13 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mapFragment.getMap().setOnMapClickListener(this);
 
-        loadLocationsFromBundle();
+        loadLocations();
 
         createBottomBar(savedInstanceState);
 
@@ -95,10 +96,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 if (!start) {
                     if (menuItemId == R.id.bottomBarItemOne) {
-
+                        //Ist schon in der Karten ansicht
                     }
                     if (menuItemId == R.id.bottomBarItemTwo) {
-
+                        //TODO: Implementieren Favoriten --> Vorher interne Datenbank fertig stellen.
                     }
                     if (menuItemId == R.id.bottomBarItemThree) {
                         startActivity(new Intent(Maps.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));
@@ -110,20 +111,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
-                if (menuItemId == R.id.bottomBarItemOne) {
-                    // The user reselected item number one, scroll your content to top.
-                }
-                if (menuItemId == R.id.bottomBarItemTwo) {
-
-                }
-                if (menuItemId == R.id.bottomBarItemThree) {
-
-                }
+                //Ungenutzt in der Karte
             }
         });
 
-        // Setting colors for different tabs when there's more than three of them.
-        // You can set colors for tabs in three different ways as shown below.
         bottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
         bottomBar.mapColorForTab(1, 0xFF5D4037);
         bottomBar.mapColorForTab(2, 0xFF5D4037);
@@ -134,15 +125,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         mapFragment.getMap().setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
-//                RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
-//                relativeLayout.setVisibility(View.INVISIBLE);
-//
-//                FragmentManager fragmentManager = getFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                final LocationInformation welcomeFragment = new LocationInformation();
-//                fragmentTransaction.remove(welcomeFragment);
-//                fragmentTransaction.commit();
-//                Log.e("Click", "OnMap");
             }
         });
     }
@@ -150,13 +132,38 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
     /**
      * Load all locations from the intent
      */
-    private void loadLocationsFromBundle(){
+    private void loadLocations(){
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             locations =(List<it.rieger.happyhour.model.Location>) bundle.getSerializable(AppConstants.BUNDLE_CONTEXT_LOCATIONS);
         }
-        if(locations.size() <= 0){
-            BackendDatabase.getInstance().loadLocations(locations, this, new LatLng(0.0,0.0), 10);
+
+        //keine locations im bundle --> lade neue
+        if(locations == null){
+            locations = new ArrayList<>();
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                        AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION);
+            }else {
+                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+                // Create a criteria object to retrieve provider
+                Criteria criteria = new Criteria();
+
+                // Get the name of the best provider
+                String provider = locationManager.getBestProvider(criteria, true);
+                try {
+                    Location myLocation = locationManager.getLastKnownLocation(provider);
+
+                    LatLng currentPosition = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                    BackendDatabase.getInstance().loadLocations(locations, this, currentPosition, 10);
+
+                } catch (NullPointerException e) {
+                    Log.w("Log", "Can not load current position");
+                    BackendDatabase.getInstance().loadLocations(locations, this, new LatLng(0.0, 0.0), 10);
+                }
+            }
         }
     }
 
@@ -206,16 +213,12 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
             }
         }
 
-        //TODO: C1 Marker entfernen Locations laden
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(50.962497, 11.018132)).title("Clubeins")).showInfoWindow();
-
         if(locations != null) {
             for (it.rieger.happyhour.model.Location location : locations) {
                 googleMap.addMarker(new MarkerOptions().position(new LatLng(location.getAddressLatitude(), location.getAddressLongitude())).title(location.getName())).showInfoWindow();
             }
         }
 
-        // Activate Callback
         googleMap.setOnMarkerClickListener(this);
 
     }
@@ -229,57 +232,48 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
     public boolean onMarkerClick(Marker marker) {
 
         if(locations != null) {
-            for (it.rieger.happyhour.model.Location location : locations) {
+            for (final it.rieger.happyhour.model.Location location : locations) {
                 if (marker.getTitle().toString().equals(location.getName())) {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    final LocationInformation information = LocationInformation.newInstance(location);
-                    fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
-                    fragmentTransaction.commit();
-                    RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.fragment_container);
-                    relativeLayout.setVisibility(View.VISIBLE);
+                    final RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.fragment_container);
+
+                    if(relativeLayout.getVisibility() == View.VISIBLE){
+                        Animation slideUp = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_up);
+                        relativeLayout.startAnimation(slideUp);
+                        slideUp.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                showInfoFragment(relativeLayout, location);
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+                    }else{
+                        showInfoFragment(relativeLayout, location);
+                    }
                 }
             }
-        }
-
-        //TODO: Entfernen bzw oben einbauen
-        if (marker.getTitle().toString().equals("Clubeins"))
-        {
-            final RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
-
-            if(relativeLayout.getVisibility() == View.VISIBLE){
-                Animation slideUp = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_up);
-                relativeLayout.startAnimation(slideUp);
-                slideUp.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        showInfoFragment(relativeLayout);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-            }else{
-                showInfoFragment(relativeLayout);
-            }
-
-
         }
 
         return false;
     }
 
-    private void showInfoFragment(RelativeLayout relativeLayout){
+    /**
+     * This method opens the info fragment for a specific location
+     * @param relativeLayout
+     * @param location the location which info are should be shown
+     */
+    private void showInfoFragment(RelativeLayout relativeLayout, it.rieger.happyhour.model.Location location){
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        final LocationInformation information = new LocationInformation();
+        final LocationInformation information = LocationInformation.newInstance(location);
         fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
         fragmentTransaction.commit();
 
@@ -288,6 +282,9 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         relativeLayout.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * This method removes the info fragment
+     */
     private void removeInfoFragment(){
         final RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.fragment_container);
 
@@ -329,10 +326,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        // Necessary to restore the BottomBar's state, otherwise we would
-        // lose the current tab on orientation change.
         bottomBar.onSaveInstanceState(outState);
-
     }
 
     /**
@@ -341,7 +335,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
      */
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 
     @Override
@@ -351,38 +344,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void locationLoaded() {
-
+        onMapReady(mapFragment.getMap());
     }
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-//        switch (requestCode) {
-//            case AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION:
-//                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-//
-//                    Snackbar snackbar = Snackbar
-//                            .make((View)findViewById(R.id.activity_maps), R.string.toast_permission_sms_denied, Snackbar.LENGTH_LONG);
-//
-//                    View snackbarView = snackbar.getView();
-//                    TextView textView = (TextView)snackbarView .findViewById(android.support.design.R.id.snackbar_text);
-//                    textView.setTextColor(Color.WHITE);
-//                    snackbar.show();
-//
-//                    return;
-//                }
-//                break;
-//            case AppConstants.PermissionsIDs.PERMISSION_ID_FOR_STORAGE:
-//                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-//
-//                    Snackbar snackbar = Snackbar
-//                            .make(layoutView, R.string.toast_permission_storage_denied, Snackbar.LENGTH_LONG);
-//
-//                    View snackbarView = snackbar.getView();
-//                    TextView textView = (TextView)snackbarView .findViewById(android.support.design.R.id.snackbar_text);
-//                    textView.setTextColor(Color.WHITE);
-//                    snackbar.show();
-//                }
-//                break;
-//        }
-//    }
 }
