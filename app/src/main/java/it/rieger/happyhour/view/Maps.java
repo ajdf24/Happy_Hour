@@ -36,9 +36,12 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
 import java.util.HashMap;
+import java.util.List;
 
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.LocationLoadedCallback;
 import it.rieger.happyhour.view.fragments.LocationInformation;
 
 /**
@@ -49,13 +52,14 @@ import it.rieger.happyhour.view.fragments.LocationInformation;
 public class Maps extends FragmentActivity implements OnMapReadyCallback,
                                                         GoogleMap.OnMarkerClickListener,
                                                         GoogleMap.OnMapClickListener,
-                                                        LocationInformation.OnFragmentInteractionListener {
+                                                        LocationInformation.OnFragmentInteractionListener,
+                                                        LocationLoadedCallback{
 
     private BottomBar bottomBar;
 
     private SupportMapFragment mapFragment;
 
-    private HashMap<String,it.rieger.happyhour.model.Location> locations;
+    private List<it.rieger.happyhour.model.Location> locations;
 
     private boolean start = true;
 
@@ -149,7 +153,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
     private void loadLocationsFromBundle(){
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
-            locations =(HashMap<String,it.rieger.happyhour.model.Location>) bundle.getSerializable(AppConstants.BUNDLE_CONTEXT_LOCATIONS);
+            locations =(List<it.rieger.happyhour.model.Location>) bundle.getSerializable(AppConstants.BUNDLE_CONTEXT_LOCATIONS);
+        }
+        if(locations.size() <= 0){
+            BackendDatabase.getInstance().loadLocations(locations, this, new LatLng(0.0,0.0), 10);
         }
     }
 
@@ -203,11 +210,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         googleMap.addMarker(new MarkerOptions().position(new LatLng(50.962497, 11.018132)).title("Clubeins")).showInfoWindow();
 
         if(locations != null) {
-            for (String key : locations.keySet()) {
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(locations.get(key).getAddressLatitude(), locations.get(key).getAddressLongitude())).title(locations.get(key).getName())).showInfoWindow();
+            for (it.rieger.happyhour.model.Location location : locations) {
+                googleMap.addMarker(new MarkerOptions().position(new LatLng(location.getAddressLatitude(), location.getAddressLongitude())).title(location.getName())).showInfoWindow();
             }
         }
-
 
         // Activate Callback
         googleMap.setOnMarkerClickListener(this);
@@ -223,11 +229,11 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
     public boolean onMarkerClick(Marker marker) {
 
         if(locations != null) {
-            for (String key : locations.keySet()) {
-                if (marker.getTitle().toString().equals(key)) {
+            for (it.rieger.happyhour.model.Location location : locations) {
+                if (marker.getTitle().toString().equals(location.getName())) {
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    final LocationInformation information = LocationInformation.newInstance(locations.get(key));
+                    final LocationInformation information = LocationInformation.newInstance(location);
                     fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
                     fragmentTransaction.commit();
                     RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.fragment_container);
@@ -341,6 +347,11 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
     @Override
     public void onMapClick(LatLng latLng) {
         removeInfoFragment();
+    }
+
+    @Override
+    public void locationLoaded() {
+
     }
 
 //    @Override
