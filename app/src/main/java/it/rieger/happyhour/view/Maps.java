@@ -73,7 +73,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         mapFragment.getMap().setOnMapClickListener(this);
@@ -130,7 +129,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
     }
 
     /**
-     * Load all locations from the intent
+     * Load all locations
      */
     private void loadLocations(){
         Bundle bundle = this.getIntent().getExtras();
@@ -181,32 +180,17 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         }else {
 
             LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-            // Create a criteria object to retrieve provider
             Criteria criteria = new Criteria();
-
-            // Get the name of the best provider
             String provider = locationManager.getBestProvider(criteria, true);
 
             try {
                 Location myLocation = locationManager.getLastKnownLocation(provider);
-
-                //set map type
                 googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
-                // Get latitude of the current location
-                double latitude = myLocation.getLatitude();
+                LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
 
-                // Get longitude of the current location
-                double longitude = myLocation.getLongitude();
-
-                // Create a LatLng object for the current location
-                LatLng latLng = new LatLng(latitude, longitude);
-
-                // Show the current location in Google Map
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
-                // Zoom in the Google Map
                 googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
             } catch (NullPointerException e) {
                 Log.w("Log", "Can not load current position");
@@ -242,7 +226,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                         slideUp.setAnimationListener(new Animation.AnimationListener() {
                             @Override
                             public void onAnimationStart(Animation animation) {
-
                             }
 
                             @Override
@@ -252,7 +235,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
                             @Override
                             public void onAnimationRepeat(Animation animation) {
-
                             }
                         });
                     }else{
