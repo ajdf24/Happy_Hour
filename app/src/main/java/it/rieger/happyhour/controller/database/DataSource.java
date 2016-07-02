@@ -5,13 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-
+import android.util.Log;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import it.rieger.happyhour.model.FacebookLoginData;
+import it.rieger.happyhour.model.database.FacebookLoginData;
+import it.rieger.happyhour.model.database.LikedLocation;
 
 
 /**
@@ -26,8 +27,12 @@ public class DataSource {
     // Database fields
     private SQLiteDatabase database;
     private DatabaseHelper dbHelper;
-    private String[] allColumns = { DatabaseHelper.COLUMN_ID,
+    private String[] allColumnsFacebook = { DatabaseHelper.COLUMN_ID,
             DatabaseHelper.COLUMN_FACEBOOK_ID, DatabaseHelper.COLUMN_FACEBOOK_TOKEN};
+
+    private String[] allColumnsLikedLocations = { DatabaseHelper.COLUMN_ID,
+            DatabaseHelper.COLUMN_LOCATION_ID};
+
 
     /**
      * constructor
@@ -54,44 +59,70 @@ public class DataSource {
     }
 
     /**
-     * create a new database entry
+     * create a new database entry for facebook login
      * @param facebooklogindata the data for the entry
      * @return the entry which was saved in the database
      */
     public FacebookLoginData createFacebookLoginData(String facebooklogindata) {
+        open();
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_FACEBOOK_ID, facebooklogindata);
         long insertId = database.insert(DatabaseHelper.TABLE_FACEBOOK_LOGIN, null,
                 values);
         Cursor cursor = database.query(DatabaseHelper.TABLE_FACEBOOK_LOGIN,
-                allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null,
+                allColumnsFacebook, DatabaseHelper.COLUMN_ID + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
         FacebookLoginData newComment = cursorToFacebookLoginData(cursor);
         cursor.close();
+        close();
+        return newComment;
+    }
+
+    public LikedLocation createLikedLocation(long locationID){
+        open();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_LOCATION_ID, locationID);
+        long insertId = database.insert(DatabaseHelper.TABLE_FAVORITE_LOCATIONS, null, values);
+        Cursor cursor = database.query(DatabaseHelper.TABLE_FAVORITE_LOCATIONS,
+                allColumnsLikedLocations, DatabaseHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
+        cursor.moveToFirst();
+        LikedLocation newComment = cursorToLikedLocation(cursor);
+        cursor.close();
+        close();
         return newComment;
     }
 
     /**
-     * delete a db entry
+     * delete a db entry for facebook login
      * @param facebookLoginData the entry which should be deleted
      */
     public void deleteFacebookLoginData(FacebookLoginData facebookLoginData) {
+        open();
         long id = facebookLoginData.getId();
-        System.out.println("FacebookLoginData deleted with id: " + id);
         database.delete(DatabaseHelper.TABLE_FACEBOOK_LOGIN, DatabaseHelper.COLUMN_ID
                 + " = " + id, null);
+        close();
+    }
+
+    public void deleteLikedLocation(LikedLocation likedLocation){
+        open();
+        long id = likedLocation.getId();
+        database.delete(DatabaseHelper.TABLE_FAVORITE_LOCATIONS, DatabaseHelper.COLUMN_ID
+                + " = " + id, null);
+        close();
     }
 
     /**
-     * get all entries from the db
+     * get all entries for facebook login
      * @return a list of all entries
      */
     public List<FacebookLoginData> getAllFacebookLoginData() {
-        List<FacebookLoginData> facebookLoginDatas = new ArrayList<FacebookLoginData>();
+        open();
+        List<FacebookLoginData> facebookLoginDatas = new ArrayList<>();
 
         Cursor cursor = database.query(DatabaseHelper.TABLE_FACEBOOK_LOGIN,
-                allColumns, null, null, null, null, null);
+                allColumnsFacebook, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -101,7 +132,30 @@ public class DataSource {
         }
         // make sure to close the cursor
         cursor.close();
+        close();
         return facebookLoginDatas;
+    }
+
+    public List<LikedLocation> getAllLikedLocations(){
+        open();
+        List<LikedLocation> likedLocations = new ArrayList<>();
+
+        try {
+            Cursor cursor = database.query(DatabaseHelper.TABLE_FACEBOOK_LOGIN,
+                    allColumnsFacebook, null, null, null, null, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()){
+                LikedLocation likedLocation = cursorToLikedLocation(cursor);
+                likedLocations.add(likedLocation);
+                cursor.moveToNext();
+            }
+        }catch (NullPointerException e){
+            Log.i("Database", "No Locations found");
+        }finally {
+            close();
+            return likedLocations;
+        }
+
     }
 
     /**
@@ -110,11 +164,18 @@ public class DataSource {
      * @return
      */
     private FacebookLoginData cursorToFacebookLoginData(Cursor cursor) {
-        FacebookLoginData FacebookLoginData = new FacebookLoginData();
-        FacebookLoginData.setId(cursor.getLong(0));
-        FacebookLoginData.setFacebookID(cursor.getString(1));
-        FacebookLoginData.setFacebookToken(cursor.getString(2));
-        return FacebookLoginData;
+        FacebookLoginData facebookLoginData = new FacebookLoginData();
+        facebookLoginData.setId(cursor.getLong(0));
+        facebookLoginData.setFacebookID(cursor.getString(1));
+        facebookLoginData.setFacebookToken(cursor.getString(2));
+        return facebookLoginData;
+    }
+
+    private LikedLocation cursorToLikedLocation(Cursor cursor) {
+        LikedLocation likedLocation = new LikedLocation();
+        likedLocation.setId(cursor.getLong(0));
+        likedLocation.setLocationID(cursor.getLong(1));
+        return likedLocation;
     }
 }
 

@@ -97,6 +97,7 @@ public enum BackendDatabase {
 
             OpeningTimes openingTimes = new OpeningTimes(times);
             Location location = new Location("Clubeins", 4.3f, "Steigerstraße 18", 11.0181322f, 50.9624967f, openingTimes, happyHours, imageKeys);
+            location.setId(1);
 
             locationList.add(location);
             this.locationList.add(location);

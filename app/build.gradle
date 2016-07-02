@@ -45,4 +45,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:9.0.1'
     compile 'com.google.android.gms:play-services-gcm:9.0.1'
     compile 'com.borax12.materialdaterangepicker:library:1.6'
+    compile 'com.github.lawloretienne:imagegallery:0.0.14'
 }

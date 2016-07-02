@@ -1,4 +1,4 @@
-package it.rieger.happyhour.model;
+package it.rieger.happyhour.model.database;
 
 /**
  * Created by admin on 07.05.16.

@@ -31,7 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String CREATE_TABLEFACEBOOK_LOGIN = "create table "
+    private static final String CREATE_TABLE_FACEBOOK_LOGIN = "create table "
             + TABLE_FACEBOOK_LOGIN + "("
             + COLUMN_ID
             + " integer primary key autoincrement, "
@@ -69,7 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(CREATE_TABLEFACEBOOK_LOGIN);
+        db.execSQL(CREATE_TABLE_FACEBOOK_LOGIN);
         db.execSQL(CREATE_TABLE_FAVORITE_LOCATIONS);
         //db.execSQL(CREATE_TABLE_LOCATION_IMAGES);
     }

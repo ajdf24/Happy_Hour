@@ -21,12 +21,15 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.database.DataSource;
 import it.rieger.happyhour.controller.widget.FavoriteButton;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.model.database.LikedLocation;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.LocationDetail;
@@ -127,8 +130,10 @@ public class LocationInformation extends Fragment {
             }
         });
 
-        favoriteButton.setLocation(currentLocation);
+        DataSource db = new DataSource(this.getActivity());
 
+        favoriteButton.setLocation(currentLocation);
+        
         return view;
     }
 

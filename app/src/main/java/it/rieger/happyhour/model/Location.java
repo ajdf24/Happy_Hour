@@ -19,7 +19,7 @@ public class Location implements Serializable{
     /**
      * database id of this location
      */
-    public int id;
+    public long id;
 
     /**
      * name of the locaton
@@ -196,6 +196,14 @@ public class Location implements Serializable{
 
     public void setImageKey(String key){
         imageKeyList.add(key);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     /**
