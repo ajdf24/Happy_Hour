@@ -41,7 +41,7 @@
                 android:text="Test"/>
 
             <TextView
-                android:id="@+id/activity_location_details_happy_hours"
+                android:id="@+id/activity_location_details_happy_hours_headline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/activity_location_details_opening_time"
@@ -51,16 +51,24 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
+                android:id="@+id/activity_location_details_happy_hours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/activity_location_details_happy_hours_headline"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:text="Test" />
+
+            <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/activity_location_details_happy_hours"
-
                 android:layout_alignLeft="@+id/activity_location_details_happy_hours"
-                android:layout_alignRight="@+id/activity_location_details_happy_hours"
                 android:layout_alignStart="@+id/activity_location_details_happy_hours"
                 android:layout_below="@+id/activity_location_details_happy_hours"
-                android:text="Bewertung" />
+                android:text="Bewertung"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
         </RelativeLayout>
     </ScrollView>

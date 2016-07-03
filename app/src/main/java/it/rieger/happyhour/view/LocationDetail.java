@@ -19,6 +19,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Day;
+import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
@@ -37,6 +38,9 @@ public class LocationDetail extends AppCompatActivity {
 
     @Bind(R.id.activity_location_details_opening_time)
     TextView openingTimes;
+
+    @Bind(R.id.activity_location_details_happy_hours)
+    TextView happyHours;
 
     Location currentLocation;
 
@@ -63,11 +67,23 @@ public class LocationDetail extends AppCompatActivity {
 
         openingTimes.setText(openingTimeSting);
 
+        String happyHoursString = "";
+        for(HappyHour happyHour : currentLocation.getHappyHours()){
+            happyHoursString = happyHoursString + happyHour.getDrink() + " für " + happyHour.getPrice() + "\n";
+        }
+
+        happyHours.setText(happyHoursString);
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LocationDetail.this, ChangeLocationActivity.class));
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION, currentLocation);
+            Intent intent = new Intent();
+            intent.putExtras(bundle);
+            intent.setClass(LocationDetail.this, ChangeLocationActivity.class);
+                startActivity(intent);
             }
         });
     }
