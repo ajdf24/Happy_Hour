@@ -99,6 +99,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                     }
                     if (menuItemId == R.id.bottomBarItemTwo) {
                         //TODO: Implementieren Favoriten --> Vorher interne Datenbank fertig stellen.
+
+                        startActivity(new Intent(Maps.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(AppConstants.BUNDLE_LOAD_FAVOTITE_LOCATIONS,true));
                     }
                     if (menuItemId == R.id.bottomBarItemThree) {
                         startActivity(new Intent(Maps.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));

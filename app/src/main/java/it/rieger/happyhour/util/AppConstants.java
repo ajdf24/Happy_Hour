@@ -8,6 +8,7 @@ public interface AppConstants {
 
     String BUNDLE_CONTEXT_LOCATIONS = "Locations";
     String BUNDLE_CONTEXT_LOCATION = "Location";
+    String BUNDLE_LOAD_FAVOTITE_LOCATIONS = "Favorite_Locations";
 
     /**
      * interface for permission constants

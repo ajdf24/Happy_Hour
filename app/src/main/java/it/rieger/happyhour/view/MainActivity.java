@@ -2,37 +2,23 @@ package it.rieger.happyhour.view;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.IdRes;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.widget.TextView;
 
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
 
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
-import it.rieger.happyhour.controller.cache.BitmapLRUCache;
+import it.rieger.happyhour.util.AppConstants;
 
 /**
  * Macht bisher nix und wird denke ich nicht mehr benötigt!
- * @deprecated
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -51,11 +37,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 if (menuItemId == R.id.bottomBarItemOne) {
-                    Intent firstpage= new Intent(MainActivity.this ,Maps.class);
-                    startActivity(firstpage);
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+                    Maps maps = new Maps();
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack so the user can navigate back
+                    transaction.replace(R.id.activity_main_fragment_container, maps);
+                    transaction.addToBackStack(null);
+
+// Commit the transaction
+                    transaction.commit();
                 }
                 if (menuItemId == R.id.bottomBarItemTwo){
-
+                    startActivity(new Intent(MainActivity.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(AppConstants.BUNDLE_LOAD_FAVOTITE_LOCATIONS,true));
                 }
                 if (menuItemId == R.id.bottomBarItemThree) {
 

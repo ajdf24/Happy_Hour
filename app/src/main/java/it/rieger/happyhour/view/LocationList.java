@@ -33,6 +33,7 @@ import it.rieger.happyhour.model.HappyHourTime;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.OpeningTimes;
 import it.rieger.happyhour.model.Time;
+import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.LocationLoadedCallback;
 
 /**
@@ -49,11 +50,13 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
     @Bind(R.id.activity_location_list_progressBar)
     ProgressBar progressBar;
 
-    List<Location> locationList;
+    List<Location> locationList = new ArrayList<>();
 
     private BottomBar bottomBar;
 
     private boolean start = true;
+
+    private boolean showFavoriteList = false;
 
     /**
      * {@inheritDoc}
@@ -67,9 +70,11 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
 
         ButterKnife.bind(this);
 
-        createSampeData();
-
-        BackendDatabase.getInstance().loadLocations(locationList, this, new LatLng(0.0,0.0), 10);
+        if(this.getIntent().getBooleanExtra(AppConstants.BUNDLE_LOAD_FAVOTITE_LOCATIONS, false)){
+            showFavoriteList = true;
+        }else {
+            BackendDatabase.getInstance().loadLocations(locationList, this, new LatLng(0.0, 0.0), 10);
+        }
 
         createBottomBar(savedInstanceState);
 
@@ -133,8 +138,10 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
                                     addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             break;
                         case R.id.bottomBarItemTwo:
+                            startActivity(new Intent(LocationList.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(AppConstants.BUNDLE_LOAD_FAVOTITE_LOCATIONS,true));
                             break;
                         case R.id.bottomBarItemThree:
+//                            startActivity(new Intent(LocationList.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             break;
                         default:
                             break;
@@ -148,13 +155,10 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
                 if (menuItemId == R.id.bottomBarItemOne) {
-                    // The user reselected item number one, scroll your content to top.
                 }
                 if (menuItemId == R.id.bottomBarItemTwo) {
-
                 }
                 if (menuItemId == R.id.bottomBarItemThree) {
-
                 }
             }
         });
@@ -166,7 +170,12 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
         bottomBar.mapColorForTab(2, "#7B1FA2");
 
         //Aktiven Button setzen
-        bottomBar.selectTabAtPosition(2, false);
+        if(showFavoriteList){
+            bottomBar.selectTabAtPosition(1, false);
+
+        }else {
+            bottomBar.selectTabAtPosition(2, false);
+        }
     }
 
     /**

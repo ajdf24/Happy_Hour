@@ -188,7 +188,7 @@ public class StartActivity extends AppCompatActivity {
     private void goToMainActivity(){
         Intent intent = new Intent();
 
-        intent.setClass(StartActivity.this, Maps.class);
+        intent.setClass(StartActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
     }
