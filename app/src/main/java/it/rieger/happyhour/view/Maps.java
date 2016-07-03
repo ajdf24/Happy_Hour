@@ -94,13 +94,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 if (!start) {
-                    if (menuItemId == R.id.bottomBarItemOne) {
-                        //Ist schon in der Karten ansicht
-                    }
                     if (menuItemId == R.id.bottomBarItemTwo) {
-                        //TODO: Implementieren Favoriten --> Vorher interne Datenbank fertig stellen.
-
-                        startActivity(new Intent(Maps.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(AppConstants.BUNDLE_LOAD_FAVOTITE_LOCATIONS,true));
+                        startActivity(new Intent(Maps.this, FavoriteLocations.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));
                     }
                     if (menuItemId == R.id.bottomBarItemThree) {
                         startActivity(new Intent(Maps.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));
@@ -112,7 +107,9 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
-                //Ungenutzt in der Karte
+                if (menuItemId == R.id.bottomBarItemOne) {
+                    focusMapToCurrentPosition(mapFragment.getMap());
+                }
             }
         });
 
@@ -175,6 +172,20 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        focusMapToCurrentPosition(googleMap);
+
+        if(locations != null) {
+            for (it.rieger.happyhour.model.Location location : locations) {
+                googleMap.addMarker(new MarkerOptions().position(new LatLng(location.getAddressLatitude(), location.getAddressLongitude())).title(location.getName())).showInfoWindow();
+            }
+        }
+
+        googleMap.setOnMarkerClickListener(this);
+
+    }
+
+    private void focusMapToCurrentPosition(GoogleMap googleMap) {
         // Get Current Location
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -198,15 +209,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                 Log.w("Log", "Can not load current position");
             }
         }
-
-        if(locations != null) {
-            for (it.rieger.happyhour.model.Location location : locations) {
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(location.getAddressLatitude(), location.getAddressLongitude())).title(location.getName())).showInfoWindow();
-            }
-        }
-
-        googleMap.setOnMarkerClickListener(this);
-
     }
 
     /**

@@ -19,6 +19,7 @@ import it.rieger.happyhour.util.AppConstants;
 
 /**
  * Macht bisher nix und wird denke ich nicht mehr benötigt!
+ * @deprecated
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -37,17 +38,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 if (menuItemId == R.id.bottomBarItemOne) {
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-                    Maps maps = new Maps();
-
-// Replace whatever is in the fragment_container view with this fragment,
-// and add the transaction to the back stack so the user can navigate back
-                    transaction.replace(R.id.activity_main_fragment_container, maps);
-                    transaction.addToBackStack(null);
-
-// Commit the transaction
-                    transaction.commit();
                 }
                 if (menuItemId == R.id.bottomBarItemTwo){
                     startActivity(new Intent(MainActivity.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(AppConstants.BUNDLE_LOAD_FAVOTITE_LOCATIONS,true));

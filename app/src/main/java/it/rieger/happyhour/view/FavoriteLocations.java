@@ -1,7 +1,6 @@
 package it.rieger.happyhour.view;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
@@ -9,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -33,21 +31,17 @@ import it.rieger.happyhour.model.HappyHourTime;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.OpeningTimes;
 import it.rieger.happyhour.model.Time;
-import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.LocationLoadedCallback;
 
-/**
- * activity which shows a list of locations
- */
-public class LocationList extends AppCompatActivity implements LocationLoadedCallback{
+public class FavoriteLocations extends AppCompatActivity implements LocationLoadedCallback {
 
-    @Bind(R.id.activity_location_list_recycler_view)
+    @Bind(R.id.activity_favorite_location_recycler_view)
     RecyclerView locationListView;
 
-    @Bind(R.id.activity_location_list_searchView)
+    @Bind(R.id.activity_favorite_location_searchView)
     SearchView searchView;
 
-    @Bind(R.id.activity_location_list_progressBar)
+    @Bind(R.id.activity_favorite_location_progressBar)
     ProgressBar progressBar;
 
     List<Location> locationList = new ArrayList<>();
@@ -64,11 +58,11 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location_list);
+        setContentView(R.layout.activity_favorite_locations);
 
         ButterKnife.bind(this);
 
-        BackendDatabase.getInstance().loadLocations(locationList, this, new LatLng(0.0, 0.0), 10);
+        BackendDatabase.getInstance().loadFavorites(locationList, this);
 
         createBottomBar(savedInstanceState);
 
@@ -128,11 +122,11 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
                 if (!start) {
                     switch (menuItemId) {
                         case R.id.bottomBarItemOne:
-                            startActivity(new Intent(LocationList.this, Maps.class).
+                            startActivity(new Intent(FavoriteLocations.this, Maps.class).
                                     addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             break;
-                        case R.id.bottomBarItemTwo:
-                            startActivity(new Intent(LocationList.this, FavoriteLocations.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                        case R.id.bottomBarItemThree:
+                            startActivity(new Intent(FavoriteLocations.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             break;
                         default:
                             break;
@@ -145,7 +139,7 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
 
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
-                if (menuItemId == R.id.bottomBarItemThree) {
+                if (menuItemId == R.id.bottomBarItemTwo) {
                     locationListView.scrollToPosition(0);
                 }
             }
