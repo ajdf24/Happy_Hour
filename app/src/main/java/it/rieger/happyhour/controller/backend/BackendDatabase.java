@@ -133,8 +133,14 @@ public enum BackendDatabase {
         HappyHourTime happyHourTime = new HappyHourTime(times);
 
         HappyHour happyHour = new HappyHour("Cuba Libre Doppeldecker", "5€", happyHourTime);
+        HappyHour happyHour4 = new HappyHour("Cuba Libre Doppeldecker", "5€", happyHourTime);
+        HappyHour happyHour2 = new HappyHour("Rum Cola Doppeldecker", "5€", happyHourTime);
+        HappyHour happyHour3 = new HappyHour("Bier Doppeldecker", "5€", happyHourTime);
         List<HappyHour> happyHours = new ArrayList<>();
         happyHours.add(happyHour);
+        happyHours.add(happyHour2);
+        happyHours.add(happyHour3);
+        happyHours.add(happyHour4);
 
         BitmapLRUCache.getInstance().addBitmapToMemoryCache("C1", BitmapFactory.decodeResource(context.getResources(), R.mipmap.c1));
 

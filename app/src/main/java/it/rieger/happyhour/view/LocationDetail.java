@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -17,6 +18,10 @@ import java.util.HashMap;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.model.Day;
+import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.model.Time;
+import it.rieger.happyhour.util.AppConstants;
 
 /**
  * Activity which shows the details for the location
@@ -29,6 +34,11 @@ public class LocationDetail extends AppCompatActivity {
 
     @Bind(R.id.activity_location_details_pictures_list_view)
     SliderLayout mDemoSlider;
+
+    @Bind(R.id.activity_location_details_opening_time)
+    TextView openingTimes;
+
+    Location currentLocation;
 
     /**
      * {@inheritDoc}
@@ -43,6 +53,16 @@ public class LocationDetail extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initializeGUI();
+
+        currentLocation = (Location) this.getIntent().getSerializableExtra(AppConstants.BUNDLE_CONTEXT_LOCATION);
+
+        String openingTimeSting = "";
+        for(Time time :currentLocation.getOpeningTimes().getTimes()){
+            openingTimeSting = openingTimeSting + Day.toString(time.day) + ": "+ time.getStartTime() + " bis " + time.getEndTime() + "\n" ;
+        }
+
+        openingTimes.setText(openingTimeSting);
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

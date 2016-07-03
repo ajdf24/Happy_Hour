@@ -95,10 +95,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 if (!start) {
                     if (menuItemId == R.id.bottomBarItemTwo) {
-                        startActivity(new Intent(Maps.this, FavoriteLocations.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                        startActivity(new Intent(Maps.this, FavoriteLocations.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                     }
                     if (menuItemId == R.id.bottomBarItemThree) {
-                        startActivity(new Intent(Maps.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                        startActivity(new Intent(Maps.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                     }
                 }else{
                     start = false;

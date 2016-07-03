@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import it.rieger.happyhour.controller.cache.BitmapLRUCache;
@@ -204,6 +205,49 @@ public class Location implements Serializable{
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Time getTodysOpeningTime(){
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+        Time today = null;
+
+        switch (day) {
+            case Calendar.SUNDAY:
+                today = getTimeForDay(Day.SUNDAY);
+                break;
+            case Calendar.MONDAY:
+                today = getTimeForDay(Day.MONDAY);
+                break;
+            case Calendar.TUESDAY:
+                today = getTimeForDay(Day.TUESDAY);
+                break;
+            case Calendar.WEDNESDAY:
+                today = getTimeForDay(Day.WEDNESDAY);
+                break;
+            case Calendar.THURSDAY:
+                today = getTimeForDay(Day.THURSDAY);
+                break;
+            case Calendar.FRIDAY:
+                today = getTimeForDay(Day.FRIDAY);
+                break;
+            case Calendar.SATURDAY:
+                today = getTimeForDay(Day.SATURDAY);
+                break;
+        }
+        return today;
+    }
+
+    private Time getTimeForDay(Day day){
+        Time today = null;
+        for(Time time : this.getOpeningTimes().getTimes()){
+            if(time.getDay() == day){
+                today = time;
+                break;
+            }
+        }
+        return today;
     }
 
     /**

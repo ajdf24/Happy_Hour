@@ -123,10 +123,10 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
                     switch (menuItemId) {
                         case R.id.bottomBarItemOne:
                             startActivity(new Intent(FavoriteLocations.this, Maps.class).
-                                    addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                    addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             break;
                         case R.id.bottomBarItemThree:
-                            startActivity(new Intent(FavoriteLocations.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                            startActivity(new Intent(FavoriteLocations.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             break;
                         default:
                             break;
@@ -149,7 +149,7 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
         bottomBar.mapColorForTab(1, 0xFF5D4037);
         bottomBar.mapColorForTab(2, "#7B1FA2");
 
-        bottomBar.selectTabAtPosition(2, false);
+        bottomBar.selectTabAtPosition(1, false);
     }
 
     /**

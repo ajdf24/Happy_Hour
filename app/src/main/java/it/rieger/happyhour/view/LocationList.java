@@ -127,10 +127,10 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
                     switch (menuItemId) {
                         case R.id.bottomBarItemOne:
                             startActivity(new Intent(LocationList.this, Maps.class).
-                                    addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                                    addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             break;
                         case R.id.bottomBarItemTwo:
-                            startActivity(new Intent(LocationList.this, FavoriteLocations.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                            startActivity(new Intent(LocationList.this, FavoriteLocations.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             break;
                         default:
                             break;

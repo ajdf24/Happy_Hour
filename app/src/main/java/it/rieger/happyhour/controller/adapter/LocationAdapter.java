@@ -1,7 +1,13 @@
 package it.rieger.happyhour.controller.adapter;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,12 +16,18 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.LocationDetail;
@@ -90,14 +102,70 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
         });
 
         holder.getLocationName().setText(location.getName());
-        //TODO: sre Hier muss die Zeit noch eingetragen werden
-        holder.getOpeningTime().setText("");
+        Time today = location.getTodysOpeningTime();
+        if(today != null){
+            holder.getOpeningTime().setText(today.getStartTime() + " bis " + today.getEndTime());
+        }else{
+            holder.getOpeningTime().setText("geschlossen");
+        }
 
-        //TODO: sre Distanz berechnen
-        holder.getDistance().setText("");
+        if (ActivityCompat.checkSelfPermission(holder.getView().getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(holder.getView().getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        }
+            LocationManager locationManager = (LocationManager) holder.getView().getContext().getSystemService(Context.LOCATION_SERVICE);
 
-        //TODO: sre Drinks holden
-        holder.getDistance().setText("");
+            Criteria criteria = new Criteria();
+
+            String provider = locationManager.getBestProvider(criteria, true);
+            try {
+                android.location.Location myLocation = locationManager.getLastKnownLocation(provider);
+
+                float[] results = new float[1];
+
+                android.location.Location.distanceBetween(location.getAddressLatitude(), location.getAddressLongitude(), myLocation.getLatitude(), myLocation.getLongitude(), results);
+
+                String distance = "";
+
+                if(results[0] > 999.9){
+                    DecimalFormat df = new DecimalFormat("#.#");
+                    df.setRoundingMode(RoundingMode.CEILING);
+
+                    results[0] = results[0]/1000;
+
+                    distance = df.format(results[0]);
+
+                    distance = distance + " km";
+
+                }else {
+                    DecimalFormat df = new DecimalFormat("#");
+                    df.setRoundingMode(RoundingMode.CEILING);
+
+                    distance = df.format(results[0]);
+
+                    distance = distance + " m";
+                }
+
+
+                holder.getDistance().setText(distance);
+                System.out.println(distance + " Distanz");
+            } catch (NullPointerException e) {
+                Log.w("Log", "Can not load current position");
+
+        }
+
+        String drinks = "";
+        int maxNumberOffDrinks = 3;
+        int currentDrink = 0;
+
+        for(HappyHour happyHour : location.getHappyHours()){
+            if(currentDrink < maxNumberOffDrinks) {
+                drinks = drinks + happyHour.getDrink() + ",\n";
+                currentDrink++;
+            }
+        }
+        drinks = drinks.substring(0, drinks.length()-2);
+
+        holder.getDrinks().setText(drinks);
+
 
         holder.getRating().setRating(location.getRating());
 
