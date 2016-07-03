@@ -136,7 +136,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
             locations =(List<it.rieger.happyhour.model.Location>) bundle.getSerializable(AppConstants.BUNDLE_CONTEXT_LOCATIONS);
         }
 
-        //keine locations im bundle --> lade neue
         if(locations == null){
             locations = new ArrayList<>();
 
@@ -146,10 +145,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
             }else {
                 LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-                // Create a criteria object to retrieve provider
                 Criteria criteria = new Criteria();
 
-                // Get the name of the best provider
                 String provider = locationManager.getBestProvider(criteria, true);
                 try {
                     Location myLocation = locationManager.getLastKnownLocation(provider);

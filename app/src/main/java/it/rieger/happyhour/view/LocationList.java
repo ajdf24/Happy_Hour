@@ -109,8 +109,6 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        // Necessary to restore the BottomBar's state, otherwise we would
-        // lose the current tab on orientation change.
         bottomBar.onSaveInstanceState(outState);
 
     }
@@ -156,42 +154,6 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
         bottomBar.mapColorForTab(2, "#7B1FA2");
 
         bottomBar.selectTabAtPosition(2, false);
-    }
-
-    /**
-     * TODO: remove
-     */
-    private void createSampeData(){
-        locationList = new ArrayList<>();
-        Time timefriday = new Time();
-        timefriday.setDay(Day.FRIDAY);
-        timefriday.setStartTime("23:00");
-        timefriday.setEndTime("05:00");
-        Time timesaturday = new Time();
-        timesaturday.setDay(Day.SATURDAY);
-        timesaturday.setStartTime("23:00");
-        timesaturday.setEndTime("05:00");
-
-        List<Time> times = new ArrayList<>();
-        times.add(timefriday);
-        times.add(timesaturday);
-
-        HappyHourTime happyHourTime = new HappyHourTime(times);
-
-        HappyHour happyHour = new HappyHour("Cuba Libre Doppeldecker", "5€", happyHourTime);
-        List<HappyHour> happyHours = new ArrayList<>();
-        happyHours.add(happyHour);
-
-        BitmapLRUCache.getInstance().addBitmapToMemoryCache("C1", BitmapFactory.decodeResource(this.getResources(), R.mipmap.c1));
-
-
-        List<String> imageKeys = new ArrayList<>();
-        imageKeys.add("C1");
-
-        OpeningTimes openingTimes = new OpeningTimes(times);
-        Location location = new Location("Clubeins", 4.3f, "Steigerstraße 18", 11.0181322f, 50.9624967f, openingTimes, happyHours, imageKeys);
-
-        locationList.add(location);
     }
 
     @Override
