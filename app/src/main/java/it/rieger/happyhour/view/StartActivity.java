@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -16,8 +17,13 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -143,7 +149,9 @@ public class StartActivity extends AppCompatActivity {
     private void initializeFacebookLogin(){
         callbackManager = CallbackManager.Factory.create();
 
-        loginButton.setReadPermissions("user_friends");
+        loginButton.setPublishPermissions("publish_actions");
+//        loginButton.setReadPermissions("user_friends");
+//        loginButton.
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
@@ -153,17 +161,28 @@ public class StartActivity extends AppCompatActivity {
                 //TODO: write to database
 
                 DataSource db = new DataSource(StartActivity.this);
-                db.open();
-                db.close();
-//                info.setText(
-//                        "User ID: "
-//                                + loginResult.getAccessToken().getUserId()
-//                                + "\n" +
-//                                "Auth Token: "
-//                                + loginResult.getAccessToken().getToken()
-//                );
+                db.createFacebookLoginData(loginResult.getAccessToken().getUserId(), loginResult.getAccessToken().getToken());
 
                 goToMainActivity();
+
+//                GraphRequest request = GraphRequest.newMeRequest(
+//                        loginResult.getAccessToken(),
+//                        new GraphRequest.GraphJSONObjectCallback() {
+//                            @Override
+//                            public void onCompleted(JSONObject object, GraphResponse response) {
+//                                Log.v("LoginActivity", response.toString());
+//
+//                                // Application code
+//                                try {
+//                                    String email = object.getString("email");
+//                                    String birthday = object.getString("birthday"); // 01/31/1980 format
+//                                    System.out.println(object.getString("name"));
+//                                } catch (JSONException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        });
+
 
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean(AppConstants.SharedPreferencesKeys.FIRST_START, false);

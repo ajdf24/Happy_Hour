@@ -5,12 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.database.FacebookLoginData;
 import it.rieger.happyhour.model.database.LikedLocation;
 
@@ -60,13 +62,14 @@ public class DataSource {
 
     /**
      * create a new database entry for facebook login
-     * @param facebooklogindata the data for the entry
+     * @param facebookId the data for the entry
      * @return the entry which was saved in the database
      */
-    public FacebookLoginData createFacebookLoginData(String facebooklogindata) {
+    public FacebookLoginData createFacebookLoginData(String facebookId, String facebookToken) {
         open();
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_FACEBOOK_ID, facebooklogindata);
+        values.put(DatabaseHelper.COLUMN_FACEBOOK_ID, facebookId);
+        values.put(DatabaseHelper.COLUMN_FACEBOOK_TOKEN, facebookToken);
         long insertId = database.insert(DatabaseHelper.TABLE_FACEBOOK_LOGIN, null,
                 values);
         Cursor cursor = database.query(DatabaseHelper.TABLE_FACEBOOK_LOGIN,
@@ -105,10 +108,10 @@ public class DataSource {
         close();
     }
 
-    public void deleteLikedLocation(LikedLocation likedLocation){
+    public void deleteLikedLocation(@NonNull LikedLocation likedLocation){
         open();
-        long id = likedLocation.getId();
-        database.delete(DatabaseHelper.TABLE_FAVORITE_LOCATIONS, DatabaseHelper.COLUMN_ID
+        long id = likedLocation.getLocationID();
+        database.delete(DatabaseHelper.TABLE_FAVORITE_LOCATIONS, DatabaseHelper.COLUMN_LOCATION_ID
                 + " = " + id, null);
         close();
     }
@@ -136,25 +139,15 @@ public class DataSource {
         return facebookLoginDatas;
     }
 
-    public List<LikedLocation> getAllLikedLocations(){
-        open();
-        List<LikedLocation> likedLocations = new ArrayList<>();
 
-        try {
-            Cursor cursor = database.query(DatabaseHelper.TABLE_FACEBOOK_LOGIN,
-                    allColumnsFacebook, null, null, null, null, null);
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()){
-                LikedLocation likedLocation = cursorToLikedLocation(cursor);
-                likedLocations.add(likedLocation);
-                cursor.moveToNext();
-            }
-        }catch (NullPointerException e){
-            Log.i("Database", "No Locations found");
-        }finally {
-            close();
-            return likedLocations;
-        }
+    public LikedLocation getLikedLocation(long id){
+        open();
+        Cursor cursor = database.query(DatabaseHelper.TABLE_FAVORITE_LOCATIONS,
+                allColumnsLikedLocations, DatabaseHelper.COLUMN_LOCATION_ID + " = " + id, null, null, null, null);
+        cursor.moveToFirst();
+
+        return cursorToLikedLocation(cursor);
+
 
     }
 
@@ -172,10 +165,16 @@ public class DataSource {
     }
 
     private LikedLocation cursorToLikedLocation(Cursor cursor) {
+        try {
         LikedLocation likedLocation = new LikedLocation();
         likedLocation.setId(cursor.getLong(0));
         likedLocation.setLocationID(cursor.getLong(1));
         return likedLocation;
+
+        }catch (Exception e){
+        e.printStackTrace();
+            return null;
+        }
     }
 }
 

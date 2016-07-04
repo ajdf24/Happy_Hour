@@ -139,8 +139,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         if(locations == null){
             locations = new ArrayList<>();
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION);
             }else {
                 LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -184,8 +184,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
     private void focusMapToCurrentPosition(GoogleMap googleMap) {
         // Get Current Location
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION);
         }else {
 
@@ -284,20 +284,24 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length > 0) {
 
-                    Snackbar snackbar = Snackbar
-                            .make(mapFragment.getView(), R.string.message_permission_location_denied, Snackbar.LENGTH_LONG);
 
-                    View snackbarView = snackbar.getView();
-                    TextView textView = (TextView)snackbarView .findViewById(android.support.design.R.id.snackbar_text);
-                    textView.setTextColor(Color.WHITE);
-                    snackbar.show();
-                    return;
-                }
-                break;
+            switch (requestCode) {
+                case AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION:
+                    if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+
+                        Snackbar snackbar = Snackbar
+                                .make(mapFragment.getView(), R.string.message_permission_location_denied, Snackbar.LENGTH_LONG);
+
+                        View snackbarView = snackbar.getView();
+                        TextView textView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+                        textView.setTextColor(Color.WHITE);
+                        snackbar.show();
+                        return;
+                    }
+                    break;
+            }
         }
     }
 

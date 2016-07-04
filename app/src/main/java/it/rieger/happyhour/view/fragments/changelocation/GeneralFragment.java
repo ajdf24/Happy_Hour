@@ -1,24 +1,50 @@
 package it.rieger.happyhour.view.fragments.changelocation;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.model.Location;
 
 public class GeneralFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "Location";
 
-    private String location;
-
+    private Location location;
 
     private OnFragmentInteractionListener mListener;
+
+    @Bind(R.id.fragment_general_location_name)
+    EditText locationName;
+
+    @Bind(R.id.fragment_general_location_place)
+    EditText place;
+
+    @Bind(R.id.fragment_general_locate)
+    ImageButton buttonGetLocation;
 
     public GeneralFragment() {
         // Required empty public constructor
@@ -41,17 +67,64 @@ public class GeneralFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        location = getArguments().getString(ARG_PARAM1);
+        location = (Location) getArguments().getSerializable(ARG_PARAM1);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_general, container, false);
+
+        final View view = inflater.inflate(R.layout.fragment_general, container, false);
+
+        ButterKnife.bind(this, view);
+
+        locationName.setText(location.getName());
+        place.setText(location.getAddressName());
+
+        buttonGetLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ActivityCompat.checkSelfPermission(view.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(view.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                    LocationManager locationManager = (LocationManager) view.getContext().getSystemService(Context.LOCATION_SERVICE);
+
+                    Criteria criteria = new Criteria();
+
+                    String provider = locationManager.getBestProvider(criteria, true);
+                    try {
+                        android.location.Location myLocation = locationManager.getLastKnownLocation(provider);
+
+                        Geocoder geocoder;
+                        List<Address> addresses;
+                        geocoder = new Geocoder(view.getContext(), Locale.getDefault());
+
+                        addresses = geocoder.getFromLocation(myLocation.getLatitude(), myLocation.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+                        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                        String city = addresses.get(0).getLocality();
+
+                        place.setText(address + ", " + city);
+
+                        //TODO: Places API Implementieren
+                        locationName.setText("");
+
+
+                    } catch (NullPointerException e) {
+                        Log.w("Log", "Can not load current position");
+                        Toast.makeText(view.getContext(),"Standort kann nicht bestimmt werden.", Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        Log.w("Log", "Can not load current position");
+                        Toast.makeText(view.getContext(),"Standort kann nicht bestimmt werden.", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -72,6 +145,9 @@ public class GeneralFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+
+        BackendDatabase.getInstance().saveLocation(location);
+
         mListener = null;
     }
 

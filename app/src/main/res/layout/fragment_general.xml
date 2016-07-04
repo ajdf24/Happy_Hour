@@ -54,7 +54,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <it.rieger.happyhour.controller.widget.DynamicImageView
+    <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/fragment_general_locate"

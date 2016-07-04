@@ -3,11 +3,19 @@ package it.rieger.happyhour.controller.widget;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.share.ShareApi;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareLinkContent;
 
 import java.util.List;
 
@@ -37,19 +45,9 @@ public class FavoriteButton extends ImageButton  {
         this.context = context;
         setColorFilter(Color.parseColor(CreateContextForResource.getStringFromID(R.color.colorAccent)));
 
-        db = new DataSource(context);
-
-        List<LikedLocation> likedLocations = db.getAllLikedLocations();
-        for (LikedLocation likedLocation : likedLocations){
-            if(location.getId() == likedLocation.getLocationID()){
-                this.setActive(true);
-                this.likedLocation = likedLocation;
-                break;
-            }
-        }
+        setImage();
 
         setListener();
-        toggle();
     }
 
     public FavoriteButton(Context context, AttributeSet attrs) {
@@ -57,19 +55,9 @@ public class FavoriteButton extends ImageButton  {
         this.context = context;
         setColorFilter(Color.parseColor(CreateContextForResource.getStringFromID(R.color.colorAccent)));
 
-        db = new DataSource(context);
-
-        List<LikedLocation> likedLocations = db.getAllLikedLocations();
-        for (LikedLocation likedLocation : likedLocations){
-            if(location.getId() == likedLocation.getLocationID()){
-                this.setActive(true);
-                this.likedLocation = likedLocation;
-                break;
-            }
-        }
+        setImage();
 
         setListener();
-        toggle();
     }
 
     public FavoriteButton(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -77,19 +65,9 @@ public class FavoriteButton extends ImageButton  {
         this.context = context;
         setColorFilter(Color.parseColor(CreateContextForResource.getStringFromID(R.color.colorAccent)));
 
-        db = new DataSource(context);
-
-        List<LikedLocation> likedLocations = db.getAllLikedLocations();
-        for (LikedLocation likedLocation : likedLocations){
-            if(location.getId() == likedLocation.getLocationID()){
-                this.setActive(true);
-                this.likedLocation = likedLocation;
-                break;
-            }
-        }
+        setImage();
 
         setListener();
-        toggle();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -98,19 +76,9 @@ public class FavoriteButton extends ImageButton  {
         this.context = context;
         setColorFilter(Color.parseColor(CreateContextForResource.getStringFromID(R.color.colorAccent)));
 
-        db = new DataSource(context);
-
-        List<LikedLocation> likedLocations = db.getAllLikedLocations();
-        for (LikedLocation likedLocation : likedLocations){
-            if(location.getId() == likedLocation.getLocationID()){
-                this.setActive(true);
-                this.likedLocation = likedLocation;
-                break;
-            }
-        }
+        setImage();
 
         setListener();
-        toggle();
     }
 
     private void setListener(){
@@ -123,13 +91,14 @@ public class FavoriteButton extends ImageButton  {
                 if(db == null){
                     throw new RuntimeException("Database not set");
                 }
-                toggle();
-                if(isActive()){
+                if(!isActive()){
                     Toast.makeText(context,"Zu Favoriten hinzugefügt",Toast.LENGTH_LONG).show();
                     likedLocation = db.createLikedLocation(location.getId());
+                    toggle();
                 }else {
                     Toast.makeText(context,"Favorit entfernt",Toast.LENGTH_LONG).show();
                     db.deleteLikedLocation(likedLocation);
+                    toggle();
                 }
             }
         });
@@ -138,16 +107,16 @@ public class FavoriteButton extends ImageButton  {
     private void toggle(){
         if(isActive){
             isActive = false;
-            setImageResource(R.mipmap.ic_favorite_border);
+            setImage();
         }else {
             isActive = true;
-            setImageResource(R.mipmap.ic_favorite);
+            setImage();
         }
     }
 
     public void setActive(boolean isActive){
         this.isActive = isActive;
-        toggle();
+        setImage();
     }
 
     public boolean isActive() {
@@ -156,7 +125,54 @@ public class FavoriteButton extends ImageButton  {
 
     public void setLocation(Location location){
         this.location = location;
+
+        db = new DataSource(context);
+
+        likedLocation = db.getLikedLocation(location.getId());
+
+        if(likedLocation != null){
+            this.setActive(true);
+        }
     }
 
+    @Override
+    protected void onVisibilityChanged(View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        setImage();
+    }
+
+    private void setImage(){
+
+        if(isActive){
+            setImageResource(R.mipmap.ic_favorite);
+        }else {
+            setImageResource(R.mipmap.ic_favorite_border);
+        }
+    }
+
+    private void postFavoriteOnFacebook(){
+        //TODO: Morgen fertig machen
+        ShareContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse("http://stackoverflow.com/questions/31651850/facebook-android-sdk-4-0-not-returning-emailid"))
+                .setContentDescription("Test").setContentTitle("TEST")
+                .build();
+
+        ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                System.out.println("Gepostet");
+            }
+
+            @Override
+            public void onCancel() {
+                System.out.println("Abgebrochen");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                System.out.println("Fehler" + error);
+            }
+        });
+    }
 }
 

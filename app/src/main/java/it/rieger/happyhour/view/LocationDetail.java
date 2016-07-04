@@ -26,7 +26,6 @@ import it.rieger.happyhour.util.AppConstants;
 
 /**
  * Activity which shows the details for the location
- * TODO: Bundle einarbeiten, welches die location beinhaltet
  */
 public class LocationDetail extends AppCompatActivity {
 

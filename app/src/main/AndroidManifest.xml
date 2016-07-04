@@ -28,6 +28,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".view.MainActivity"></activity>
 
+        <provider android:authorities="com.facebook.app.FacebookContentProvider2027885040770872"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
