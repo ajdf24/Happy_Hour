@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -16,8 +17,6 @@ import com.facebook.share.ShareApi;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareLinkContent;
-
-import java.util.List;
 
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.database.DataSource;
@@ -95,6 +94,7 @@ public class FavoriteButton extends ImageButton  {
                     Toast.makeText(context,"Zu Favoriten hinzugefügt",Toast.LENGTH_LONG).show();
                     likedLocation = db.createLikedLocation(location.getId());
                     toggle();
+                    new PostLocationOnFacebook().execute(location);
                 }else {
                     Toast.makeText(context,"Favorit entfernt",Toast.LENGTH_LONG).show();
                     db.deleteLikedLocation(likedLocation);
@@ -150,29 +150,38 @@ public class FavoriteButton extends ImageButton  {
         }
     }
 
-    private void postFavoriteOnFacebook(){
-        //TODO: Morgen fertig machen
-        ShareContent content = new ShareLinkContent.Builder()
-                .setContentUrl(Uri.parse("http://stackoverflow.com/questions/31651850/facebook-android-sdk-4-0-not-returning-emailid"))
-                .setContentDescription("Test").setContentTitle("TEST")
-                .build();
+    /**
+     * This class posts the new favorite location on facebook
+     */
+    private class PostLocationOnFacebook extends AsyncTask<Location, Integer, Boolean>{
 
-        ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
-            @Override
-            public void onSuccess(Sharer.Result result) {
-                System.out.println("Gepostet");
-            }
+        /**
+         * post location as favorite on facebook
+         * @param params the location
+         * @return always true
+         */
+        @Override
+        protected Boolean doInBackground(Location... params) {
+            ShareContent content = new ShareLinkContent.Builder()
+                    .setContentUrl(Uri.parse("http:xxx-platzhalter.de"))
+                    .setContentTitle("... Hat hat " + location.getName() + " zu seinen Favoriten hinzugefügt")
+                    .build();
 
-            @Override
-            public void onCancel() {
-                System.out.println("Abgebrochen");
-            }
+            ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
+                @Override
+                public void onSuccess(Sharer.Result result) {
+                }
 
-            @Override
-            public void onError(FacebookException error) {
-                System.out.println("Fehler" + error);
-            }
-        });
+                @Override
+                public void onCancel() {
+                }
+
+                @Override
+                public void onError(FacebookException error) {
+                }
+            });
+            return true;
+        }
     }
 }
 
