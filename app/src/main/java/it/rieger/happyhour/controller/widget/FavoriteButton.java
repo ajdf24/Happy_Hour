@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -28,6 +29,8 @@ import it.rieger.happyhour.util.standard.CreateContextForResource;
  * Created by sebastian on 16.05.16.
  */
 public class FavoriteButton extends ImageButton  {
+
+    private final String LOG_TAG = getClass().getSimpleName();
 
     private boolean isActive = false;
 
@@ -155,6 +158,7 @@ public class FavoriteButton extends ImageButton  {
      */
     private class PostLocationOnFacebook extends AsyncTask<Location, Integer, Boolean>{
 
+        private final String LOG_TAG = getClass().getSimpleName();
         /**
          * post location as favorite on facebook
          * @param params the location
@@ -174,10 +178,12 @@ public class FavoriteButton extends ImageButton  {
 
                 @Override
                 public void onCancel() {
+                    Log.e(LOG_TAG, "Can not post Location");
                 }
 
                 @Override
                 public void onError(FacebookException error) {
+                    Log.e(LOG_TAG, "Can not post Location");
                 }
             });
             return true;

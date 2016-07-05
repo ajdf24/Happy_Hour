@@ -39,6 +39,8 @@ import it.rieger.happyhour.view.viewholder.LocationViewHolder;
  */
 public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> implements Filterable{
 
+    private final String LOG_TAG = getClass().getSimpleName();
+
     /**
      * List of all locations
      */
