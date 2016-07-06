@@ -44,6 +44,7 @@ import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.view.fragments.changelocation.CameraFragment;
 import it.rieger.happyhour.view.fragments.changelocation.GeneralFragment;
+import it.rieger.happyhour.view.fragments.changelocation.HappyHoursFragment;
 import it.rieger.happyhour.view.fragments.changelocation.OpeningFragment;
 
 public class ChangeLocationActivity extends AppCompatActivity
@@ -51,6 +52,7 @@ public class ChangeLocationActivity extends AppCompatActivity
         GeneralFragment.OnFragmentInteractionListener,
         OpeningFragment.OnFragmentInteractionListener,
         CameraFragment.OnFragmentInteractionListener,
+        HappyHoursFragment.OnFragmentInteractionListener,
         GraphRequest.GraphJSONArrayCallback{
 
     @Bind(R.id.fab)
@@ -145,6 +147,13 @@ public class ChangeLocationActivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.nav_happy_hour){
+            if(currentFragment != null)
+                fragmentTransaction.remove(currentFragment);
+            final HappyHoursFragment happyHoursFragment = HappyHoursFragment.newInstance(location);
+            fragmentTransaction.add(R.id.fragment_container, happyHoursFragment, "happyHoursFragment");
+            fragmentTransaction.commit();
+            currentFragment = happyHoursFragment;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
