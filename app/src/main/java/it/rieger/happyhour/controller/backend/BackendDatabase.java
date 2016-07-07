@@ -80,9 +80,7 @@ public enum BackendDatabase {
             times.add(timefriday);
             times.add(timesaturday);
 
-            HappyHourTime happyHourTime = new HappyHourTime(times);
-
-            HappyHour happyHour = new HappyHour("Cuba Libre Doppeldecker", "5€", happyHourTime);
+            HappyHour happyHour = new HappyHour("Cuba Libre Doppeldecker", "5€", timefriday);
             List<HappyHour> happyHours = new ArrayList<>();
             happyHours.add(happyHour);
 
@@ -130,12 +128,10 @@ public enum BackendDatabase {
         times.add(timefriday);
         times.add(timesaturday);
 
-        HappyHourTime happyHourTime = new HappyHourTime(times);
-
-        HappyHour happyHour = new HappyHour("Cuba Libre Doppeldecker", "5€", happyHourTime);
-        HappyHour happyHour4 = new HappyHour("Cuba Libre Doppeldecker", "5€", happyHourTime);
-        HappyHour happyHour2 = new HappyHour("Rum Cola Doppeldecker", "5€", happyHourTime);
-        HappyHour happyHour3 = new HappyHour("Bier Doppeldecker", "5€", happyHourTime);
+        HappyHour happyHour = new HappyHour("Cuba Libre Doppeldecker", "5€", timefriday);
+        HappyHour happyHour4 = new HappyHour("Cuba Libre Doppeldecker", "5€", timefriday);
+        HappyHour happyHour2 = new HappyHour("Rum Cola Doppeldecker", "5€", timefriday);
+        HappyHour happyHour3 = new HappyHour("Bier Doppeldecker", "5€", timefriday);
         List<HappyHour> happyHours = new ArrayList<>();
         happyHours.add(happyHour);
         happyHours.add(happyHour2);

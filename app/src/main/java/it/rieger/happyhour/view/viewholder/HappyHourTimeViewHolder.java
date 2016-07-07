@@ -21,9 +21,6 @@ public class HappyHourTimeViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.list_item_happy_hour_time_time)
     EditText time;
 
-    @Bind(R.id.list_item_happy_hour_time_delete)
-    ImageButton deleteButton;
-
     public HappyHourTimeViewHolder(View itemView) {
         super(itemView);
 

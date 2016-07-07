@@ -16,9 +16,12 @@ public class HappyHour implements Serializable {
 
     public String price;
 
-    public HappyHourTime happyHourTime;
+    public Time happyHourTime;
 
-    public HappyHour(@NonNull String drink, @NonNull String price, @NonNull HappyHourTime happyHourTime) {
+    public HappyHour() {
+    }
+
+    public HappyHour(@NonNull String drink, @NonNull String price, @NonNull Time happyHourTime) {
         this.drink = drink;
         this.price = price;
         this.happyHourTime = happyHourTime;
@@ -40,11 +43,11 @@ public class HappyHour implements Serializable {
         this.price = price;
     }
 
-    public HappyHourTime getHappyHourTime() {
+    public Time getHappyHourTime() {
         return happyHourTime;
     }
 
-    public void setHappyHourTime(@NonNull HappyHourTime happyHourTime) {
+    public void setHappyHourTime(@NonNull Time happyHourTime) {
         this.happyHourTime = happyHourTime;
     }
 

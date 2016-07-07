@@ -15,26 +15,18 @@ public class HappyHourTime implements Serializable {
     /**
      * list of all times the happy hour is
      */
-    public List<Time> times;
+    public Time times;
 
-    public HappyHourTime(@NonNull List<Time> times) {
+    public HappyHourTime(@NonNull Time times) {
         this.times = times;
     }
 
-    public List<Time> getTimes() {
+    public Time getTime() {
         return times;
     }
 
-    public void setTimes(@NonNull List<Time> times) {
-        this.times = times;
-    }
-
-    public void setTime(@NonNull Time time){
-        this.times.add(time);
-    }
-
-    public void removeTime(@NonNull Time time){
-        this.times.remove(time);
+    public void setTime(@NonNull Time time) {
+        this.times = time;
     }
 
     @Override

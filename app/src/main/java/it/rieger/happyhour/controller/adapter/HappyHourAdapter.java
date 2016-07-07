@@ -1,22 +1,33 @@
 package it.rieger.happyhour.controller.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
+import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
+import com.borax12.materialdaterangepicker.time.TimePickerDialog;
+
+import java.util.Calendar;
 import java.util.List;
 
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.HappyHour;
+import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.view.viewholder.HappyHourViewHolder;
 
 /**
  * Created by sebastian on 05.07.16.
  */
-public class HappyHourAdapter extends RecyclerView.Adapter<HappyHourViewHolder> {
+public class HappyHourAdapter extends RecyclerView.Adapter<HappyHourViewHolder>{
 
     private List<HappyHour> happyHours;
 
@@ -24,11 +35,12 @@ public class HappyHourAdapter extends RecyclerView.Adapter<HappyHourViewHolder> 
 
     private HappyHour lastDeletedHappyHour;
 
-    private int lastDeletedPosition;
+    Location location;
 
-    public HappyHourAdapter(List<HappyHour> happyHours, View view) {
-        this.happyHours = happyHours;
+    public HappyHourAdapter(Location location, View view) {
+        this.happyHours = location.getHappyHours();
         this.view = view;
+        this.location = location;
     }
 
     @Override
@@ -38,8 +50,9 @@ public class HappyHourAdapter extends RecyclerView.Adapter<HappyHourViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(HappyHourViewHolder holder, int position) {
-        HappyHour happyHour = happyHours.get(position);
+    public void onBindViewHolder(final HappyHourViewHolder holder, int position) {
+        final HappyHour happyHour = happyHours.get(position);
+        holder.setHappyHour(happyHour);
 
         holder.getDrink().setText(happyHour.getDrink());
         holder.getPrice().setText(happyHour.getPrice());
@@ -66,4 +79,10 @@ public class HappyHourAdapter extends RecyclerView.Adapter<HappyHourViewHolder> 
         });
         snackbar.show();
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
 }

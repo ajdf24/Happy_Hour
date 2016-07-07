@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -15,6 +16,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.HappyHourAdapter;
+import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.view.viewholder.HappyHourViewHolder;
 
@@ -32,6 +34,9 @@ public class HappyHoursFragment extends Fragment {
 
     @Bind(R.id.fragment_happy_hours_cardList)
     RecyclerView happyHours;
+
+    @Bind(R.id.fragment_happy_hours_new_happy_hour)
+    FloatingActionButton fab;
 
     private Location location;
 
@@ -75,7 +80,7 @@ public class HappyHoursFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         happyHours.setLayoutManager(linearLayoutManager);
 
-        final HappyHourAdapter happyHourAdapter = new HappyHourAdapter(location.getHappyHours(), view);
+        final HappyHourAdapter happyHourAdapter = new HappyHourAdapter(location, view);
         happyHours.setAdapter(happyHourAdapter);
 
         ItemTouchHelper.SimpleCallback simpleItemTouchHelper = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT){
@@ -93,6 +98,15 @@ public class HappyHoursFragment extends Fragment {
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchHelper);
         itemTouchHelper.attachToRecyclerView(happyHours);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                location.happyHours.add(new HappyHour());
+                happyHourAdapter.notifyDataSetChanged();
+//                happyHours.scrollToPosition(happyHourAdapter.getItemCount() - 1);
+            }
+        });
 
         return view;
     }
@@ -133,4 +147,6 @@ public class HappyHoursFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
+
+
 }

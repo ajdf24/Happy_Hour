@@ -100,6 +100,8 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
                         true
                 );
 
+
+
                 tpd.show(getFragmentManager(), "Timepickerdialog Monday");
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
