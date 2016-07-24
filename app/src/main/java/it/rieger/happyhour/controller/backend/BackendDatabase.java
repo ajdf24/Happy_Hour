@@ -88,7 +88,9 @@ public enum BackendDatabase {
 
 
             List<String> imageKeys = new ArrayList<>();
-            imageKeys.add("C1");
+            imageKeys.add("http://www.eventsofa.de/venue-images/534/ef0/534ef027b7605368076c4eeb-7262.jpg");
+            imageKeys.add("http://www.afterworkclub-erfurt.de/wp-content/uploads/2014/11/IMG_6385-705x476.jpg");
+            imageKeys.add("https://www.blitz-world.de/magazin/archiv/2014/1405/pix/t-club-clubeins2.jpg");
 
             OpeningTimes openingTimes = new OpeningTimes(times);
             Location location = new Location("Clubeins", 4.3f, "Steigerstraße 18", 11.0181322f, 50.9624967f, openingTimes, happyHours, imageKeys);

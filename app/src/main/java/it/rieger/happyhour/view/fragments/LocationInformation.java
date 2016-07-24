@@ -95,9 +95,11 @@ public class LocationInformation extends Fragment {
         ButterKnife.bind(this, view);
 
         HashMap<String,String> file_maps = new HashMap<String, String>();
-        file_maps.put("Clubeins 1", "http://www.eventsofa.de/venue-images/534/ef0/534ef027b7605368076c4eeb-7262.jpg");
-        file_maps.put("Clubeins 2", "http://www.afterworkclub-erfurt.de/wp-content/uploads/2014/11/IMG_6385-705x476.jpg");
-        file_maps.put("Clubeins 3", "https://www.blitz-world.de/magazin/archiv/2014/1405/pix/t-club-clubeins2.jpg");
+        int numberOfPicture = 1;
+        for(String image : currentLocation.getImageKeyList()){
+            file_maps.put(currentLocation.getName() + " " + numberOfPicture, image);
+            numberOfPicture++;
+        }
 
         for(String name : file_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(getActivity());
@@ -106,8 +108,6 @@ public class LocationInformation extends Fragment {
                     .description(name)
                     .image(file_maps.get(name))
                     .setScaleType(BaseSliderView.ScaleType.Fit);
-//                    .setOnSliderClickListener(this);
-
 
             mDemoSlider.addSlider(textSliderView);
         }
