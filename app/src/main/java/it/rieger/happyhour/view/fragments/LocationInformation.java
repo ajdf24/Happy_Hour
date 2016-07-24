@@ -100,7 +100,7 @@ public class LocationInformation extends Fragment {
         file_maps.put("Clubeins 3", "https://www.blitz-world.de/magazin/archiv/2014/1405/pix/t-club-clubeins2.jpg");
 
         for(String name : file_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(new CreateContextForResource().getContext());
+            TextSliderView textSliderView = new TextSliderView(getActivity());
             // initialize a SliderLayout
             textSliderView
                     .description(name)
@@ -125,7 +125,8 @@ public class LocationInformation extends Fragment {
                 Bundle bundle = new Bundle();
 
                 bundle.putSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION, currentLocation);
-                intent.setClass(new CreateContextForResource().getContext(), LocationDetail.class);
+                intent.setClass(getActivity(), LocationDetail.class);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

@@ -232,6 +232,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                             @Override
                             public void onAnimationEnd(Animation animation) {
                                 showInfoFragment(relativeLayout, location);
+                                System.out.println("TEST!!!!!!!!");
                             }
 
                             @Override

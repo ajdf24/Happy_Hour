@@ -58,9 +58,8 @@ public class LocationDetail extends AppCompatActivity {
         initializeGUI();
 
         currentLocation = (Location) this.getIntent().getSerializableExtra(AppConstants.BUNDLE_CONTEXT_LOCATION);
-
         String openingTimeSting = "";
-        for(Time time :currentLocation.getOpeningTimes().getTimes()){
+        for(Time time : currentLocation.getOpeningTimes().getTimes()){
             openingTimeSting = openingTimeSting + Day.toString(time.day) + ": "+ time.getStartTime() + " bis " + time.getEndTime() + "\n" ;
         }
 
