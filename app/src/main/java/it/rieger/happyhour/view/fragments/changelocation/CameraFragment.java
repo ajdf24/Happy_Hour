@@ -219,7 +219,7 @@ public class CameraFragment extends Fragment {
 
                 SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance(images);
                 newFragment.setArguments(bundle);
-                fragmentTransaction.add(R.id.fragment_container, newFragment, "GeneralFragment");
+                fragmentTransaction.add(R.id.fragment_container, newFragment, "GeneralFragment").addToBackStack("SlideShowFragment");
                 fragmentTransaction.commit();
             }
 
@@ -260,7 +260,7 @@ public class CameraFragment extends Fragment {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
            Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
+            //TODO: Upload to Server Show in Galery
 
         }
         if(requestCode == SELECT_PHOTO && resultCode == Activity.RESULT_OK){
@@ -271,7 +271,7 @@ public class CameraFragment extends Fragment {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                mImageView.setImageBitmap(selectedImage);
+                //TODO: Upload to Server Show in Galery
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

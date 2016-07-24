@@ -70,7 +70,6 @@
             android:name=".view.ChangeLocationActivity"
             android:label="@string/title_activity_navigation__drawe_"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.BottombarActivity" />
         <activity android:name=".view.FavoriteLocations"></activity>
     </application>
 

@@ -190,7 +190,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
     public Filter getFilter() {
         Filter filter = new Filter() {
 
-            @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
@@ -202,20 +201,18 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
             protected FilterResults performFiltering(CharSequence constraint) {
 
                 FilterResults results = new FilterResults();
-                List<Location> FilteredArrayNames = new ArrayList<>();
-
-                // perform your search here using the searchConstraint String.
+                List<Location> filteredArrayNames = new ArrayList<>();
 
                 constraint = constraint.toString().toLowerCase();
                 for (int i = 0; i < locationListswap.size(); i++) {
-                    Location dataNames = locationListswap.get(i);
+                    Location location = locationListswap.get(i);
 
-                    if(dataNames.getName().contains(constraint)){
-                        FilteredArrayNames.add(dataNames);
+                    if(location.getName().toLowerCase().contains(constraint)){
+                        filteredArrayNames.add(location);
                     }else{
-                        for (HappyHour happyHour : dataNames.getHappyHours()){
-                            if(happyHour.drink.contains(constraint)){
-                                FilteredArrayNames.add(dataNames);
+                        for (HappyHour happyHour : location.getHappyHours()){
+                            if(happyHour.getDrink().toLowerCase().contains(constraint)){
+                                filteredArrayNames.add(location);
                                 break;
                             }
                         }
@@ -223,9 +220,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
 
                 }
 
-                results.count = FilteredArrayNames.size();
-                results.values = FilteredArrayNames;
-                Log.e("VALUES", results.values.toString());
+                results.count = filteredArrayNames.size();
+                results.values = filteredArrayNames;
 
                 return results;
             }

@@ -167,6 +167,7 @@ public class FavoriteButton extends ImageButton  {
         @Override
         protected Boolean doInBackground(Location... params) {
             ShareContent content = new ShareLinkContent.Builder()
+            //TODO: Hier muss später ein realer Link erscheinen
                     .setContentUrl(Uri.parse("http:xxx-platzhalter.de"))
                     .setContentTitle("... Hat hat " + location.getName() + " zu seinen Favoriten hinzugefügt")
                     .build();
