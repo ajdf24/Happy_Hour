@@ -148,7 +148,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
 
 
                 holder.getDistance().setText(distance);
-                System.out.println(distance + " Distanz");
             } catch (NullPointerException e) {
                 Log.w("Log", "Can not load current position");
 
