@@ -1,11 +1,16 @@
 package it.rieger.happyhour.controller.backend;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +97,10 @@ public enum BackendDatabase {
             imageKeys.add("http://www.afterworkclub-erfurt.de/wp-content/uploads/2014/11/IMG_6385-705x476.jpg");
             imageKeys.add("https://www.blitz-world.de/magazin/archiv/2014/1405/pix/t-club-clubeins2.jpg");
 
+            for(String key : imageKeys){
+                new LoadImageTask().execute(key);
+            }
+
             OpeningTimes openingTimes = new OpeningTimes(times);
             Location location = new Location("Clubeins", 4.3f, "Steigerstraße 18", 11.0181322f, 50.9624967f, openingTimes, happyHours, imageKeys);
             location.setId(1);
@@ -144,7 +153,12 @@ public enum BackendDatabase {
 
 
         List<String> imageKeys = new ArrayList<>();
-        imageKeys.add("C1");
+        imageKeys.add("http://www.eventsofa.de/venue-images/534/ef0/534ef027b7605368076c4eeb-7262.jpg");
+        imageKeys.add("http://www.afterworkclub-erfurt.de/wp-content/uploads/2014/11/IMG_6385-705x476.jpg");
+        imageKeys.add("https://www.blitz-world.de/magazin/archiv/2014/1405/pix/t-club-clubeins2.jpg");
+        for(String key : imageKeys){
+            new LoadImageTask().execute(key);
+        }
 
         OpeningTimes openingTimes = new OpeningTimes(times);
         Location location = new Location("Clubeins", 4.3f, "Steigerstraße 18", 11.0181322f, 50.9624967f, openingTimes, happyHours, imageKeys);
@@ -174,5 +188,29 @@ public enum BackendDatabase {
      */
     public void saveLocation(Location location) {
         //TODO: implement
+    }
+
+    private class LoadImageTask extends AsyncTask<String, Integer, Integer>{
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            BitmapLRUCache bitmapLRUCache = BitmapLRUCache.getInstance();
+            for(String url : params){
+                if(bitmapLRUCache.getBitmapFromMemCache(url) == null) {
+                    URL newurl = null;
+                    try {
+                        newurl = new URL(url);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        bitmapLRUCache.addBitmapToMemoryCache(url, BitmapFactory.decodeStream(newurl.openConnection().getInputStream()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return null;
+        }
     }
 }

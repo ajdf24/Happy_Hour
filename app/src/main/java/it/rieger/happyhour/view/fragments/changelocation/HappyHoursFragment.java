@@ -104,7 +104,7 @@ public class HappyHoursFragment extends Fragment {
             public void onClick(View v) {
                 location.happyHours.add(new HappyHour());
                 happyHourAdapter.notifyDataSetChanged();
-//                happyHours.scrollToPosition(happyHourAdapter.getItemCount() - 1);
+                happyHours.scrollToPosition(happyHourAdapter.getItemCount() - 1);
             }
         });
 
