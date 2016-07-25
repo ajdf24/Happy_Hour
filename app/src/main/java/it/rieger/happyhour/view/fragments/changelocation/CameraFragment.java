@@ -11,8 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +24,6 @@ import android.widget.ImageView;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -34,6 +31,8 @@ import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.GalleryAdapter;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.listener.AnimationListener;
 import it.rieger.happyhour.view.fragments.SlideshowDialogFragment;
 
 /**
@@ -45,14 +44,15 @@ import it.rieger.happyhour.view.fragments.SlideshowDialogFragment;
  * create an instance of this fragment.
  */
 public class CameraFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
 
-    private Location mParam1;
+    private final String LOG_TAG = getClass().getSimpleName();
+
+    private static final String ARG_LOCATION = "location";
+
+    private Location location;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int SELECT_PHOTO = 2;
-
-
 
     private OnFragmentInteractionListener mListener;
     @Bind(R.id.fragment_button_takepicture)
@@ -73,7 +73,7 @@ public class CameraFragment extends Fragment {
     private boolean isButtonsShow = false;
 
     private List<String> images;
-    private GalleryAdapter mAdapter;
+    private GalleryAdapter galleryAdapter;
 
 
 
@@ -91,7 +91,7 @@ public class CameraFragment extends Fragment {
     public static CameraFragment newInstance(Location param1) {
         CameraFragment fragment = new CameraFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PARAM1, param1);
+        args.putSerializable(ARG_LOCATION, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -100,7 +100,7 @@ public class CameraFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = (Location) getArguments().getSerializable(ARG_PARAM1);
+            location = (Location) getArguments().getSerializable(ARG_LOCATION);
         }
 
 
@@ -141,22 +141,12 @@ public class CameraFragment extends Fragment {
                     showButton.startAnimation(rotate);
                     takePictureIntent.startAnimation(expandIn);
                     photoPickerIntent.startAnimation(expandIn);
-                    expandIn.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
-
+                    expandIn.setAnimationListener(new AnimationListener() {
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             takePictureIntent.setVisibility(View.VISIBLE);
                             photoPickerIntent.setVisibility(View.VISIBLE);
                             isButtonsShow = true;
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
                         }
                     });
                 }else {
@@ -165,22 +155,12 @@ public class CameraFragment extends Fragment {
                     showButton.startAnimation(rotate);
                     takePictureIntent.startAnimation(expandOut);
                     photoPickerIntent.startAnimation(expandOut);
-                    expandOut.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
-
+                    expandOut.setAnimationListener(new AnimationListener() {
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             takePictureIntent.setVisibility(View.INVISIBLE);
                             photoPickerIntent.setVisibility(View.INVISIBLE);
                             isButtonsShow = false;
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
                         }
                     });
                 }
@@ -190,42 +170,38 @@ public class CameraFragment extends Fragment {
         showButton.setOnHoverListener(new View.OnHoverListener() {
             @Override
             public boolean onHover(View v, MotionEvent event) {
-                System.out.println("TEST");
                 return false;
             }
         });
 
 
-        images = new ArrayList<>();
-        images.add("http://www.eventsofa.de/venue-images/534/ef0/534ef027b7605368076c4eeb-7262.jpg");
-        images.add("http://www.afterworkclub-erfurt.de/wp-content/uploads/2014/11/IMG_6385-705x476.jpg");
-        images.add("https://www.blitz-world.de/magazin/archiv/2014/1405/pix/t-club-clubeins2.jpg");
-        mAdapter = new GalleryAdapter(view.getContext(), images);
+        images = location.getImageKeyList();
+        galleryAdapter = new GalleryAdapter(view.getContext(), images);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(view.getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(galleryAdapter);
 
         recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener(view.getContext(), recyclerView, new GalleryAdapter.ClickListener() {
             @Override
             public void onClick(View view, int position) {
 
                 Bundle bundle = new Bundle();
-                bundle.putInt("position", position);
+                bundle.putInt(AppConstants.BUNDLE_CONTEXT_POSITION, position);
 
                 FragmentManager fragmentManager = getFragmentManager();
                 android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                 SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance(images);
                 newFragment.setArguments(bundle);
-                fragmentTransaction.add(R.id.fragment_container, newFragment, "GeneralFragment").addToBackStack("SlideShowFragment");
+                fragmentTransaction.add(R.id.fragment_container, newFragment, AppConstants.FragmentTags.FRAGMENT_SLIDE_SHOW).addToBackStack(AppConstants.FragmentTags.FRAGMENT_SLIDE_SHOW);
                 fragmentTransaction.commit();
             }
 
             @Override
             public void onLongClick(View view, int position) {
-
+                //TODO: delete action
             }
         }));
 

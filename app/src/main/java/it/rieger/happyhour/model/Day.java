@@ -1,6 +1,11 @@
 package it.rieger.happyhour.model;
 
+import android.annotation.SuppressLint;
+
 import java.io.Serializable;
+
+import it.rieger.happyhour.R;
+import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
  * A enum for the days of the week.
@@ -15,25 +20,25 @@ public enum Day implements Serializable {
         String dayName = "";
         switch (day){
             case SUNDAY:
-                dayName = "Sonntag";
+                dayName = CreateContextForResource.getStringFromID(R.string.general_day_sunday);
                 break;
             case MONDAY:
-                dayName = "Montag";
+                dayName = CreateContextForResource.getStringFromID(R.string.general_day_monday);
                 break;
             case TUESDAY:
-                dayName = "Dienstag";
+                dayName = CreateContextForResource.getStringFromID(R.string.general_day_thuesday);
                 break;
             case WEDNESDAY:
-                dayName = "Mittwoch";
+                dayName = CreateContextForResource.getStringFromID(R.string.general_day_wensday);
                 break;
             case THURSDAY:
-                dayName = "Donnerstag";
+                dayName = CreateContextForResource.getStringFromID(R.string.general_day_thursday);
                 break;
             case FRIDAY:
-                dayName = "Freitag";
+                dayName = CreateContextForResource.getStringFromID(R.string.general_day_friday);
                 break;
             case SATURDAY:
-                dayName = "Samstag";
+                dayName = CreateContextForResource.getStringFromID(R.string.general_day_saturday);
                 break;
         }
         return dayName;

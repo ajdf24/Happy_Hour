@@ -12,11 +12,11 @@ import java.io.Serializable;
  */
 public class HappyHour implements Serializable {
 
-    public String drink;
+    private String drink;
 
-    public String price;
+    private String price;
 
-    public Time happyHourTime;
+    private Time happyHourTime;
 
     public HappyHour() {
     }

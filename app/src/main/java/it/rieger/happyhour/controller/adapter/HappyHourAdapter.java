@@ -18,6 +18,8 @@ import it.rieger.happyhour.view.viewholder.HappyHourViewHolder;
  */
 public class HappyHourAdapter extends RecyclerView.Adapter<HappyHourViewHolder>{
 
+    private final String LOG_TAG = getClass().getSimpleName();
+
     private List<HappyHour> happyHours;
 
     private View view;
@@ -58,8 +60,8 @@ public class HappyHourAdapter extends RecyclerView.Adapter<HappyHourViewHolder>{
         happyHours.remove(position);
         notifyDataSetChanged();
 
-        Snackbar snackbar = Snackbar.make(view, "Aktion rückgängig machen?", Snackbar.LENGTH_LONG);
-        snackbar.setAction("Undo", new View.OnClickListener() {
+        Snackbar snackbar = Snackbar.make(view, R.string.general_undo_action, Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.general_undo, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 happyHours.add(position, lastDeletedHappyHour);

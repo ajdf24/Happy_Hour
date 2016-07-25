@@ -13,6 +13,8 @@ import android.widget.ImageView;
  */
 public class DynamicImageView extends ImageView {
 
+    private final String LOG_TAG = getClass().getSimpleName();
+
     /**
      * {@inheritDoc}
      * call the super constructor
@@ -30,7 +32,6 @@ public class DynamicImageView extends ImageView {
         final Drawable d = this.getDrawable();
 
         if (d != null) {
-            // ceil not round - avoid thin vertical gaps along the left/right edges
             final int width = MeasureSpec.getSize(widthMeasureSpec);
             final int height = (int) Math.ceil(width * (float) d.getIntrinsicHeight() / d.getIntrinsicWidth());
             this.setMeasuredDimension(width, height);

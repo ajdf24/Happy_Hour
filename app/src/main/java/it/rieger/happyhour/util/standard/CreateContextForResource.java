@@ -1,7 +1,6 @@
 package it.rieger.happyhour.util.standard;
 
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
@@ -9,7 +8,7 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 /**
- * Helper class for getting string resources without {@link Context}.
+ * Helper class for getting resources without {@link Context}.
  * <br>
  * This class creates a static {@link Context} with which it is possible
  * to get string resources without a {@link android.app.Activity} or a {@link android.app.Service}.

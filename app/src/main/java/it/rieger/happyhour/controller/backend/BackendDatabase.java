@@ -1,10 +1,10 @@
 package it.rieger.happyhour.controller.backend;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -18,11 +18,10 @@ import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.cache.BitmapLRUCache;
 import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.HappyHour;
-import it.rieger.happyhour.model.HappyHourTime;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.OpeningTimes;
 import it.rieger.happyhour.model.Time;
-import it.rieger.happyhour.util.LocationLoadedCallback;
+import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
 
 /**
  * Created by sebastian on 28.06.16.
@@ -37,6 +36,8 @@ import it.rieger.happyhour.util.LocationLoadedCallback;
 public enum BackendDatabase {
 
     INSTANCE;
+
+    private final String LOG_TAG = getClass().getSimpleName();
 
     private List<Location> locationList = new ArrayList<>();
 
@@ -201,12 +202,12 @@ public enum BackendDatabase {
                     try {
                         newurl = new URL(url);
                     } catch (MalformedURLException e) {
-                        e.printStackTrace();
+                        Log.e(LOG_TAG, "String is not a url");
                     }
                     try {
                         bitmapLRUCache.addBitmapToMemoryCache(url, BitmapFactory.decodeStream(newurl.openConnection().getInputStream()));
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Log.e(LOG_TAG, "Can not load Image from URL");
                     }
                 }
             }

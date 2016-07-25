@@ -16,15 +16,12 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.rieger.happyhour.R;
-import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.Time;
@@ -49,7 +46,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
     /**
      * List of all locations for filtering
      */
-    private List<Location> locationListswap;
+    private List<Location> locationListSwap;
 
 
     /**
@@ -58,7 +55,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
      */
     public LocationAdapter(List<Location> locations) {
         locationList = locations;
-        locationListswap = locations;
+        locationListSwap = locations;
     }
 
     /**
@@ -106,9 +103,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
         holder.getLocationName().setText(location.getName());
         Time today = location.getTodysOpeningTime();
         if(today != null){
-            holder.getOpeningTime().setText(today.getStartTime() + " bis " + today.getEndTime());
+            holder.getOpeningTime().setText(today.getStartTime() + CreateContextForResource.getStringFromID(R.string.general_time_till) + today.getEndTime());
         }else{
-            holder.getOpeningTime().setText("geschlossen");
+            holder.getOpeningTime().setText(R.string.general_closed);
         }
 
         if (ActivityCompat.checkSelfPermission(holder.getView().getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(holder.getView().getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -135,7 +132,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
 
                     distance = df.format(results[0]);
 
-                    distance = distance + " km";
+                    distance = distance + CreateContextForResource.getStringFromID(R.string.general_distance_kilometer);
 
                 }else {
                     DecimalFormat df = new DecimalFormat("#");
@@ -143,13 +140,13 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
 
                     distance = df.format(results[0]);
 
-                    distance = distance + " m";
+                    distance = distance + CreateContextForResource.getStringFromID(R.string.general_distance_meter);
                 }
 
 
                 holder.getDistance().setText(distance);
             } catch (NullPointerException e) {
-                Log.w("Log", "Can not load current position");
+                Log.w(LOG_TAG, "Can not load current position");
 
         }
 
@@ -203,8 +200,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
                 List<Location> filteredArrayNames = new ArrayList<>();
 
                 constraint = constraint.toString().toLowerCase();
-                for (int i = 0; i < locationListswap.size(); i++) {
-                    Location location = locationListswap.get(i);
+                for (int i = 0; i < locationListSwap.size(); i++) {
+                    Location location = locationListSwap.get(i);
 
                     if(location.getName().toLowerCase().contains(constraint)){
                         filteredArrayNames.add(location);

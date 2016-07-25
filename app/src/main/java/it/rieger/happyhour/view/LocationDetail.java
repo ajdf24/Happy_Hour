@@ -105,7 +105,7 @@ public class LocationDetail extends AppCompatActivity {
 
         String openingTimeSting = "";
         for(Time time : currentLocation.getOpeningTimes().getTimes()){
-            openingTimeSting = openingTimeSting + Day.toString(time.day) + ": "+ time.getStartTime() + " bis " + time.getEndTime() + "\n" ;
+            openingTimeSting = openingTimeSting + Day.toString(time.getDay()) + ": "+ time.getStartTime() + " bis " + time.getEndTime() + "\n" ;
         }
 
         openingTimes.setText(openingTimeSting);

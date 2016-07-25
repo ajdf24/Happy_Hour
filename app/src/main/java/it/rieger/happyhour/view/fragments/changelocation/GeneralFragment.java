@@ -31,11 +31,13 @@ import it.rieger.happyhour.model.Location;
 
 public class GeneralFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "Location";
+    private final String LOG_TAG = getClass().getSimpleName();
+
+    private static final String LOCATION = "Location";
 
     private Location location;
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener listener;
 
     @Bind(R.id.fragment_general_location_name)
     EditText locationName;
@@ -56,10 +58,10 @@ public class GeneralFragment extends Fragment {
      *
      * @return A new instance of fragment GeneralFragment.
      */
-    public static GeneralFragment newInstance(Location param1) {
+    public static GeneralFragment newInstance(Location location) {
         GeneralFragment fragment = new GeneralFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PARAM1, param1);
+        args.putSerializable(LOCATION, location);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,7 +69,7 @@ public class GeneralFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        location = (Location) getArguments().getSerializable(ARG_PARAM1);
+        location = (Location) getArguments().getSerializable(LOCATION);
     }
 
     @Override
@@ -112,10 +114,10 @@ public class GeneralFragment extends Fragment {
 
                     } catch (NullPointerException e) {
                         Log.w("Log", "Can not load current position");
-                        Toast.makeText(view.getContext(),"Standort kann nicht bestimmt werden.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(view.getContext(), R.string.general_can_not_locate, Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         Log.w("Log", "Can not load current position");
-                        Toast.makeText(view.getContext(),"Standort kann nicht bestimmt werden.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(view.getContext(), R.string.general_can_not_locate, Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }
@@ -126,8 +128,8 @@ public class GeneralFragment extends Fragment {
     }
 
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        if (listener != null) {
+            listener.onFragmentInteraction(uri);
         }
     }
 
@@ -135,7 +137,7 @@ public class GeneralFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            listener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -148,7 +150,7 @@ public class GeneralFragment extends Fragment {
 
         BackendDatabase.getInstance().saveLocation(location);
 
-        mListener = null;
+        listener = null;
     }
 
     /**
@@ -162,7 +164,6 @@ public class GeneralFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

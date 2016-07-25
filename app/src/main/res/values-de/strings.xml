@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="Weekdays">
+        <item>Montag</item>
+        <item>Dienstag</item>
+        <item>Mittwoch</item>
+        <item>Donnerstag</item>
+        <item>Freitag</item>
+        <item>Samstag</item>
+        <item>Sonntag</item>
+    </array>
+
+    <!--GeneralStrings for all activitys-->
+    <string name="general_undo_action">Aktion rückgängig machen?</string>
+    <string name="general_undo">Undo</string>
+    <string name="general_distance_kilometer">&#160;km</string>
+    <string name="general_distance_meter">&#160;m</string>
+    <string name="general_closed">geschlossen</string>
+    <string name="general_time_till">&#160;bis&#160;</string>
+    <string name="general_added_to_favorites">Zu Favoriten hinzugefügt</string>
+    <string name="general_removed_from_favorites">Favorit entfernt</string>
+    <string name="general_day_sunday">Sonntag</string>
+    <string name="general_day_monday">Montag</string>
+    <string name="general_day_thuesday">Dienstag</string>
+    <string name="general_day_wensday">Mittwoch</string>
+    <string name="general_day_thursday">Donnerstag</string>
+    <string name="general_day_friday">Freitag</string>
+    <string name="general_day_saturday">Samstag</string>
+    <string name="general_can_not_locate">Standort kann nicht bestimmt werden.</string>
+    <string name="general_clock_to">Uhr Bis:&#160;</string>
+    <string name="general_clock">Uhr</string>
+    <string name="general_"></string>
+
+    <!--SlideShowFragment-->
+    <string name="slideshowfragment_picture_of">&#160;von&#160;</string>
+</resources>

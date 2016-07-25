@@ -18,7 +18,6 @@ import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.HappyHourAdapter;
 import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Location;
-import it.rieger.happyhour.view.viewholder.HappyHourViewHolder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,7 +29,7 @@ import it.rieger.happyhour.view.viewholder.HappyHourViewHolder;
  */
 public class HappyHoursFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String LOCATION = "location";
 
     @Bind(R.id.fragment_happy_hours_cardList)
     RecyclerView happyHours;
@@ -40,7 +39,7 @@ public class HappyHoursFragment extends Fragment {
 
     private Location location;
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener listener;
 
     public HappyHoursFragment() {
         // Required empty public constructor
@@ -50,13 +49,13 @@ public class HappyHoursFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param location current location.
      * @return A new instance of fragment HappyHoursFragment.
      */
-    public static HappyHoursFragment newInstance(Location param1) {
+    public static HappyHoursFragment newInstance(Location location) {
         HappyHoursFragment fragment = new HappyHoursFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PARAM1, param1);
+        args.putSerializable(LOCATION, location);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,7 +64,7 @@ public class HappyHoursFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = (Location) getArguments().getSerializable(ARG_PARAM1);
+            location = (Location) getArguments().getSerializable(LOCATION);
         }
     }
 
@@ -102,7 +101,7 @@ public class HappyHoursFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                location.happyHours.add(new HappyHour());
+                location.getHappyHours().add(new HappyHour());
                 happyHourAdapter.notifyDataSetChanged();
                 happyHours.scrollToPosition(happyHourAdapter.getItemCount() - 1);
             }
@@ -112,8 +111,8 @@ public class HappyHoursFragment extends Fragment {
     }
 
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        if (listener != null) {
+            listener.onFragmentInteraction(uri);
         }
     }
 
@@ -121,7 +120,7 @@ public class HappyHoursFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            listener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -131,7 +130,7 @@ public class HappyHoursFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     /**

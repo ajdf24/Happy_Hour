@@ -15,17 +15,22 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.listener.OnPageChangeListener;
+import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 public class SlideshowDialogFragment extends DialogFragment{
-    private String TAG = SlideshowDialogFragment.class.getSimpleName();
+
+    private final String LOG_TAG = getClass().getSimpleName();
+
     private static List<String> imageList;
-    private MyViewPagerAdapter myViewPagerAdapter;
+    private ViewPagerAdapter viewPagerAdapter;
+
     @Bind(R.id.lbl_count)
     TextView lblCount;
 
@@ -45,18 +50,11 @@ public class SlideshowDialogFragment extends DialogFragment{
         View v = inflater.inflate(R.layout.fragment_slideshow_dialog, container, false);
 
         ButterKnife.bind(this,v);
-//        viewPager = (ViewPager) v.findViewById(R.id.viewpager);
-//        lblCount = (TextView) v.findViewById(R.id.lbl_count);
-//        lblTitle = (TextView) v.findViewById(R.id.title);
-//        lblDate = (TextView) v.findViewById(R.id.date);
 
-        selectedPosition = getArguments().getInt("position");
+        selectedPosition = getArguments().getInt(AppConstants.BUNDLE_CONTEXT_POSITION);
 
-        Log.e(TAG, "position: " + selectedPosition);
-        Log.e(TAG, "imageList size: " + imageList.size());
-
-        myViewPagerAdapter = new MyViewPagerAdapter();
-        viewPager.setAdapter(myViewPagerAdapter);
+        viewPagerAdapter = new ViewPagerAdapter();
+        viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
         setCurrentItem(selectedPosition);
@@ -70,30 +68,17 @@ public class SlideshowDialogFragment extends DialogFragment{
     }
 
     //  page change listener
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new OnPageChangeListener() {
 
         @Override
         public void onPageSelected(int position) {
             displayMetaInfo(position);
         }
 
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-
-        }
     };
 
     private void displayMetaInfo(int position) {
-        lblCount.setText((position + 1) + " of " + imageList.size());
-
-        String image = imageList.get(position);
-//        lblTitle.setText(image.getName());
-//        lblDate.setText(image.getTimestamp());
+        lblCount.setText((position + 1) + CreateContextForResource.getStringFromID(R.string.slideshowfragment_picture_of) + imageList.size());
     }
 
     @Override
@@ -103,11 +88,11 @@ public class SlideshowDialogFragment extends DialogFragment{
     }
 
     //  adapter
-    public class MyViewPagerAdapter extends PagerAdapter {
+    public class ViewPagerAdapter extends PagerAdapter {
 
         private LayoutInflater layoutInflater;
 
-        public MyViewPagerAdapter() {
+        public ViewPagerAdapter() {
         }
 
         @Override

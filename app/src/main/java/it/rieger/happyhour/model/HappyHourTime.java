@@ -15,9 +15,9 @@ public class HappyHourTime implements Serializable {
     /**
      * list of all times the happy hour is
      */
-    public Time times;
+    private Time times;
 
-    public HappyHourTime(@NonNull Time times) {
+    private HappyHourTime(@NonNull Time times) {
         this.times = times;
     }
 

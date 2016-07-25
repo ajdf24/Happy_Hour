@@ -1,19 +1,15 @@
 package it.rieger.happyhour.view.fragments;
 
-import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
@@ -21,7 +17,6 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,7 +24,6 @@ import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.database.DataSource;
 import it.rieger.happyhour.controller.widget.FavoriteButton;
 import it.rieger.happyhour.model.Location;
-import it.rieger.happyhour.model.database.LikedLocation;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.LocationDetail;
@@ -39,7 +33,9 @@ import it.rieger.happyhour.view.LocationDetail;
  */
 public class LocationInformation extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
+    private final String LOG_TAG = getClass().getSimpleName();
+
+    private OnFragmentInteractionListener listener;
 
     @Bind(R.id.fragment_location_details_pictures_list_view)
     SliderLayout mDemoSlider;
@@ -146,7 +142,7 @@ public class LocationInformation extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            listener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -161,7 +157,7 @@ public class LocationInformation extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     /**

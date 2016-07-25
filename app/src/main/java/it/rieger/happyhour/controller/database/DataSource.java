@@ -26,6 +26,8 @@ import it.rieger.happyhour.model.database.LikedLocation;
  */
 public class DataSource {
 
+    private final String LOG_TAG = getClass().getSimpleName();
+
     // Database fields
     private SQLiteDatabase database;
     private DatabaseHelper dbHelper;
@@ -48,14 +50,14 @@ public class DataSource {
      * open a db connection
      * @throws SQLException if a error occurs
      */
-    public void open() throws SQLException {
+    private void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
 
     /**
      * close the db connection
      */
-    public void close() {
+    private void close() {
 
         dbHelper.close();
     }
@@ -165,16 +167,10 @@ public class DataSource {
     }
 
     private LikedLocation cursorToLikedLocation(Cursor cursor) {
-        try {
-        LikedLocation likedLocation = new LikedLocation();
-        likedLocation.setId(cursor.getLong(0));
-        likedLocation.setLocationID(cursor.getLong(1));
-        return likedLocation;
-
-        }catch (Exception e){
-        e.printStackTrace();
-            return null;
-        }
+            LikedLocation likedLocation = new LikedLocation();
+            likedLocation.setId(cursor.getLong(0));
+            likedLocation.setLocationID(cursor.getLong(1));
+            return likedLocation;
     }
 }
 

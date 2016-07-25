@@ -15,17 +15,17 @@ public class Time implements Serializable {
     /**
      * day of the opening
      */
-    public Day day;
+    private Day day;
 
     /**
      * start time for the opening
      */
-    public String startTime;
+    private String startTime;
 
     /**
      * end time for the opening
      */
-    public String endTime;
+    private String endTime;
 
     public Day getDay() {
         return day;

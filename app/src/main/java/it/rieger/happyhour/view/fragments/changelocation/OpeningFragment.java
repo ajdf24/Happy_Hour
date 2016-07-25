@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
@@ -19,6 +18,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +30,10 @@ import it.rieger.happyhour.model.Location;
  * create an instance of this fragment.
  */
 public class OpeningFragment extends Fragment implements TimePickerDialog.OnTimeSetListener{
-    private static final String ARG_PARAM1 = "Location";
+
+    private final String LOG_TAG = getClass().getSimpleName();
+
+    private static final String LOCATION = "Location";
 
     private String location;
 
@@ -54,7 +58,7 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
     @Bind(R.id.fragment_opening_sunday_text)
     EditText sundayText;
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener listener;
 
     private int dayClickID;
 
@@ -62,10 +66,10 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
         // Required empty public constructor
     }
 
-    public static OpeningFragment newInstance(Location param1) {
+    public static OpeningFragment newInstance(Location location) {
         OpeningFragment fragment = new OpeningFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PARAM1, param1);
+        args.putSerializable(LOCATION, location);
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,7 +78,7 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = getArguments().getString(ARG_PARAM1);
+            location = getArguments().getString(LOCATION);
         }
 
 
@@ -102,7 +106,7 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
 
 
 
-                tpd.show(getFragmentManager(), "Timepickerdialog Monday");
+                tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_MONDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
                 dayClickID = 0;
@@ -119,7 +123,7 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
                         true
                 );
 
-                tpd.show(getFragmentManager(), "Timepickerdialog Thuesday");
+                tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_TUESDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
                 dayClickID = 1;
@@ -136,7 +140,7 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
                         true
                 );
 
-                tpd.show(getFragmentManager(), "Timepickerdialog Wensday");
+                tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_WEDNESDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
                 dayClickID = 2;
@@ -153,7 +157,7 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
                         true
                 );
 
-                tpd.show(getFragmentManager(), "Timepickerdialog Thursday");
+                tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_THURSDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
                 dayClickID = 3;
@@ -170,7 +174,7 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
                         true
                 );
 
-                tpd.show(getFragmentManager(), "Timepickerdialog Friday");
+                tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_FRIDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
                 dayClickID = 4;
@@ -187,7 +191,7 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
                         true
                 );
 
-                tpd.show(getFragmentManager(), "Timepickerdialog Saturday");
+                tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_SATURDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
                 dayClickID = 5;
@@ -204,7 +208,7 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
                         true
                 );
 
-                tpd.show(getFragmentManager(), "Timepickerdialog Sunday");
+                tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_SUNDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
                 dayClickID = 6;
@@ -214,18 +218,11 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            listener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -235,12 +232,12 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
-        String time = hourOfDay+":"+minute + "Uhr Bis: " + hourOfDayEnd + ":" + minuteEnd + "Uhr";
+        String time = hourOfDay+":"+minute + CreateContextForResource.getStringFromID(R.string.general_clock_to) + hourOfDayEnd + ":" + minuteEnd + CreateContextForResource.getStringFromID(R.string.general_clock);
 
         switch (dayClickID){
             case 0:
@@ -278,7 +275,6 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

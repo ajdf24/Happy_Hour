@@ -41,7 +41,7 @@ import java.util.List;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.util.AppConstants;
-import it.rieger.happyhour.util.LocationLoadedCallback;
+import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
 import it.rieger.happyhour.view.fragments.LocationInformation;
 
 /**

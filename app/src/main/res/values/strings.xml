@@ -3,22 +3,21 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_location_detail">LocationDetail</string>
 
-    <string name="activity_maps_main_text">Main Text der Activity</string>
+    <!--<string name="activity_maps_main_text">Main Text der Activity</string>-->
 
     <string name="facebook_app_id">2027885040770872</string>
-    //TODO der beiden Variablen
     <string name="facbooklog">FacebookLog</string>
     <string name="message_permission_location_denied">Message permission Location denied</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_navigation__drawe_">Navigation_Drawe_Activity</string>
-
+    <!--<string name="hello_blank_fragment">Hello blank fragment</string>-->
+    <string name="title_activity_navigation_drawer">Navigation_Drawe_Activity</string>
+<!---->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
-    <array name="days">
+    <!--<string name="action_settings">Settings</string>-->
+    <array name="Weekdays">
         <item>Montag</item>
         <item>Dienstag</item>
         <item>Mittwoch</item>
@@ -28,5 +27,5 @@
         <item>Sonntag</item>
     </array>
 
-    <string name="change_image">Photo</string>
+    <!--<string name="change_image">Photo</string>-->
 </resources>

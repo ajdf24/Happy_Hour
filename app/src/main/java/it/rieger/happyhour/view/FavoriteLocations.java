@@ -1,7 +1,6 @@
 package it.rieger.happyhour.view;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
@@ -24,14 +22,8 @@ import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.LocationAdapter;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
-import it.rieger.happyhour.controller.cache.BitmapLRUCache;
-import it.rieger.happyhour.model.Day;
-import it.rieger.happyhour.model.HappyHour;
-import it.rieger.happyhour.model.HappyHourTime;
 import it.rieger.happyhour.model.Location;
-import it.rieger.happyhour.model.OpeningTimes;
-import it.rieger.happyhour.model.Time;
-import it.rieger.happyhour.util.LocationLoadedCallback;
+import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
 
 public class FavoriteLocations extends AppCompatActivity implements LocationLoadedCallback {
 

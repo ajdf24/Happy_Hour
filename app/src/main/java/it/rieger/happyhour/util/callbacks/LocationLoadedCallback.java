@@ -1,4 +1,4 @@
-package it.rieger.happyhour.util;
+package it.rieger.happyhour.util.callbacks;
 
 
 /**

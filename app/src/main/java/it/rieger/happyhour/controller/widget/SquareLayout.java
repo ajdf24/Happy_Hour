@@ -7,9 +7,13 @@ import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
 /**
+ * Layout, which is parted in squares.
+ * This layout be used like a {@link RelativeLayout}.
  * Created by Admin on 08.07.2016.
  */
 public class SquareLayout extends RelativeLayout {
+
+    private final String LOG_TAG = getClass().getSimpleName();
 
     public SquareLayout(Context context) {
         super(context);

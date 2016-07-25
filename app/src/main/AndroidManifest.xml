@@ -68,7 +68,7 @@
         </activity>
         <activity
             android:name=".view.ChangeLocationActivity"
-            android:label="@string/title_activity_navigation__drawe_"
+            android:label="@string/title_activity_navigation_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.FavoriteLocations"></activity>
     </application>

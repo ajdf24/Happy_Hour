@@ -1,15 +1,12 @@
 package it.rieger.happyhour.view;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -26,15 +23,8 @@ import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.LocationAdapter;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
-import it.rieger.happyhour.controller.cache.BitmapLRUCache;
-import it.rieger.happyhour.model.Day;
-import it.rieger.happyhour.model.HappyHour;
-import it.rieger.happyhour.model.HappyHourTime;
 import it.rieger.happyhour.model.Location;
-import it.rieger.happyhour.model.OpeningTimes;
-import it.rieger.happyhour.model.Time;
-import it.rieger.happyhour.util.AppConstants;
-import it.rieger.happyhour.util.LocationLoadedCallback;
+import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
 
 /**
  * activity which shows a list of locations

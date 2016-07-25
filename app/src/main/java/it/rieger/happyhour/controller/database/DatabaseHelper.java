@@ -1,5 +1,6 @@
 package it.rieger.happyhour.controller.database;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -16,18 +17,29 @@ import android.util.Log;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    private final String LOG_TAG = getClass().getSimpleName();
+
     public static final String TABLE_FACEBOOK_LOGIN = "facebooklogin";
+    @SuppressLint(TABLE_FACEBOOK_LOGIN)
     public static final String COLUMN_ID = "_id";
+    @SuppressLint(COLUMN_ID)
     public static final String COLUMN_FACEBOOK_ID = "facebookid";
+    @SuppressLint(COLUMN_FACEBOOK_ID)
     public static final String COLUMN_FACEBOOK_TOKEN = "facebooktoken";
+    @SuppressLint(COLUMN_FACEBOOK_TOKEN)
 
     public static final String TABLE_FAVORITE_LOCATIONS = "favoritelocations";
+    @SuppressLint(TABLE_FAVORITE_LOCATIONS)
     public static final String COLUMN_LOCATION_ID = "locationid";
+    @SuppressLint(COLUMN_LOCATION_ID)
 
     public static final String TABLE_LOCATION_IMAGES = "locationimages";
+    @SuppressLint(TABLE_LOCATION_IMAGES)
     public static final String COLUMN_IMAGE_KEY = "imagekey";
+    @SuppressLint(COLUMN_IMAGE_KEY)
 
     private static final String DATABASE_NAME = "internal.db";
+    @SuppressLint(DATABASE_NAME)
     private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
@@ -39,6 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " text not null,"
             + COLUMN_FACEBOOK_TOKEN
             + " text not null);";
+    @SuppressLint(CREATE_TABLE_FACEBOOK_LOGIN)
 
     private static final String CREATE_TABLE_FAVORITE_LOCATIONS = "create table "
             + TABLE_FAVORITE_LOCATIONS + "("
@@ -46,6 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " integer primary key autoincrement, "
             + COLUMN_LOCATION_ID
             + " integer not null);";
+    @SuppressLint(CREATE_TABLE_FAVORITE_LOCATIONS)
 
     private static final String CREATE_TABLE_LOCATION_IMAGES = "create table "
             + TABLE_LOCATION_IMAGES + "("
@@ -53,6 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + " integer primary key, "
             + COLUMN_IMAGE_KEY
             + " text not null);";
+    @SuppressLint(CREATE_TABLE_LOCATION_IMAGES)
 
     /**
      * constructor
@@ -71,7 +86,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_TABLE_FACEBOOK_LOGIN);
         db.execSQL(CREATE_TABLE_FAVORITE_LOCATIONS);
-        //db.execSQL(CREATE_TABLE_LOCATION_IMAGES);
     }
 
     /**
@@ -84,13 +98,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //TODO: implementieren sollte ein Uodate fällig sein
-        //throw new UnsupportedOperationException("Methode nicht implementiert!!!");
-        Log.w(DatabaseHelper.class.getName(),
+        Log.w(LOG_TAG,
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FACEBOOK_LOGIN);
         db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_FAVORITE_LOCATIONS);
-        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_LOCATION_IMAGES);
         onCreate(db);
     }
 }

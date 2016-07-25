@@ -20,52 +20,52 @@ public class Location implements Serializable{
     /**
      * database id of this location
      */
-    public long id;
+    private long id;
 
     /**
      * name of the locaton
      */
-    public String name;
+    private String name;
 
     /**
      * rating for the location
      */
-    public float rating;
+    private float rating;
 
     /**
      * name of the address
      */
-    public String addressName;
+    private String addressName;
 
     /**
      * longitude of the location
      */
-    public float addressLongitude;
+    private float addressLongitude;
 
     /**
      * latitude of the location
      */
-    public float addressLatitude;
+    private float addressLatitude;
 
     /**
      * times when the location is open
      */
-    public OpeningTimes openingTimes;
+    private OpeningTimes openingTimes;
 
     /**
      * happy hours of the location
      */
-    public List<HappyHour> happyHours;
+    private List<HappyHour> happyHours;
 
     /**
      * list of image keys for the location
      */
-    public List<String> imageKeyList = new ArrayList<>();
+    private List<String> imageKeyList = new ArrayList<>();
 
     /**
      * list of image keys which are not in the cache
      */
-    public List<String> notCachedImages = new ArrayList<>();
+    private List<String> notCachedImages = new ArrayList<>();
 
     public Location() {
     }

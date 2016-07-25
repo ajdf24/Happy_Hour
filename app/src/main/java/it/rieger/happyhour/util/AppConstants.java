@@ -9,6 +9,7 @@ public interface AppConstants {
     String BUNDLE_CONTEXT_LOCATIONS = "Locations";
     String BUNDLE_CONTEXT_LOCATION = "Location";
     String BUNDLE_LOAD_FAVOTITE_LOCATIONS = "Favorite_Locations";
+    String BUNDLE_CONTEXT_POSITION = "position";
 
     /**
      * interface for permission constants
@@ -22,5 +23,16 @@ public interface AppConstants {
      */
     interface SharedPreferencesKeys {
         String FIRST_START = "First Start";
+    }
+
+    interface FragmentTags {
+        String FRAGMENT_SLIDE_SHOW = "SlideShowFragment";
+        String FRAGMENT_TIME_PICKER_MONDAY = "Timepickerdialog Monday";
+        String FRAGMENT_TIME_PICKER_TUESDAY = "Timepickerdialog Tuesday";
+        String FRAGMENT_TIME_PICKER_WEDNESDAY = "Timepickerdialog Wednesday";
+        String FRAGMENT_TIME_PICKER_THURSDAY = "Timepickerdialog Thursday";
+        String FRAGMENT_TIME_PICKER_FRIDAY = "Timepickerdialog Friday";
+        String FRAGMENT_TIME_PICKER_SATURDAY = "Timepickerdialog Saturday";
+        String FRAGMENT_TIME_PICKER_SUNDAY = "Timepickerdialog Sunday";
     }
 }

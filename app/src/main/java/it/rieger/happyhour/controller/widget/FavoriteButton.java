@@ -94,12 +94,12 @@ public class FavoriteButton extends ImageButton  {
                     throw new RuntimeException("Database not set");
                 }
                 if(!isActive()){
-                    Toast.makeText(context,"Zu Favoriten hinzugefügt",Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.general_added_to_favorites, Toast.LENGTH_LONG).show();
                     likedLocation = db.createLikedLocation(location.getId());
                     toggle();
                     new PostLocationOnFacebook().execute(location);
                 }else {
-                    Toast.makeText(context,"Favorit entfernt",Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.general_removed_from_favorites, Toast.LENGTH_LONG).show();
                     db.deleteLikedLocation(likedLocation);
                     toggle();
                 }

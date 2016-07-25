@@ -14,25 +14,22 @@ public enum BitmapLRUCache {
 
     BITMAP_LRU_CACHE;
 
+    private final String LOG_TAG = getClass().getSimpleName();
+
     private LruCache<String, Bitmap> bitmapLruCache;
 
     /**
-     * constructor
+     * constructor which reserves a cache
      */
     BitmapLRUCache() {
 
-        //get memory size
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 
-        //set cache size
         final int cacheSize = maxMemory / 8;
 
-        //initialize cache
         bitmapLruCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
             protected int sizeOf(String key, Bitmap bitmap) {
-                // The cache size will be measured in kilobytes rather than
-                // number of items.
                 return bitmap.getByteCount() / 1024;
             }
         };
