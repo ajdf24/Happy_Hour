@@ -15,12 +15,12 @@ import java.util.List;
 
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.util.listener.OnItemTouchListener;
-import it.rieger.happyhour.view.viewholder.MyViewHolder;
+import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
 /**
  * Created by Admin on 08.07.2016.
  */
-public class GalleryAdapter extends RecyclerView.Adapter<MyViewHolder> {
+public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
@@ -33,14 +33,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<MyViewHolder> {
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ThumbnailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.gallery_thumbnail, parent, false);
 
-        return new MyViewHolder(itemView);
+        return new ThumbnailViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(ThumbnailViewHolder holder, int position) {
         String image = images.get(position);
 
         Glide.with(context).load(image)

@@ -7,37 +7,37 @@
     tools:context="it.rieger.happyhour.view.StartActivity">
 
     <it.rieger.happyhour.controller.widget.DynamicImageView
+        android:id="@+id/start_activity_image"
         android:layout_width="fill_parent"
         android:layout_height="400dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/launcher"
-        android:id="@+id/view2" />
+        android:src="@mipmap/launcher"/>
 
     <TextView
+        android:id="@+id/start_activity_welcome_head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Willkommen bei Happy Hour"
+        android:text="@string/start_activity_welcome_head"
         android:layout_marginTop="10dp"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/view2"
+        android:layout_below="@+id/start_activity_image"
         android:layout_centerHorizontal="true" />
 
     <TextView
+        android:id="@+id/start_activity_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Bitte melde dich mit deinem Facebook-Account an, um teilzunehmen."
-        android:id="@+id/textView13"
+        android:text="@string/start_activity_welcome"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/start_activity_welcome_head"
         android:layout_centerHorizontal="true" />
 
     <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
+        android:id="@+id/start_activity_login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -47,11 +47,11 @@
         android:layout_centerHorizontal="true" />
 
     <Button
+        android:id="@+id/start_activity_button_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Weiter"
+        android:text="@string/general_next"
         android:background="?android:attr/selectableItemBackground"
-        android:id="@+id/start_activity_button_next"
         android:textColor="@color/colorAccent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

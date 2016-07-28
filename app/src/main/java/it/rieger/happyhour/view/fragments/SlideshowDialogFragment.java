@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,7 @@ public class SlideshowDialogFragment extends DialogFragment{
     private static List<String> imageList;
     private ViewPagerAdapter viewPagerAdapter;
 
-    @Bind(R.id.lbl_count)
+    @Bind(R.id.slide_show_fragment_image_count)
     TextView lblCount;
 
     @Bind(R.id.viewpager)

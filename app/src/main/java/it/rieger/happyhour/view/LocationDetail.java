@@ -24,11 +24,14 @@ import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
  * Activity which shows the details for the location
  */
 public class LocationDetail extends AppCompatActivity {
+
+    private final String LOG_TAG = getClass().getSimpleName();
 
     @Bind(R.id.activity_location_details_fab)
     public FloatingActionButton fab;
@@ -78,13 +81,10 @@ public class LocationDetail extends AppCompatActivity {
 
         for(String name : file_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(this);
-            // initialize a SliderLayout
             textSliderView
                     .description(name)
                     .image(file_maps.get(name))
                     .setScaleType(BaseSliderView.ScaleType.Fit);
-
-
             slider.addSlider(textSliderView);
         }
 
@@ -95,24 +95,16 @@ public class LocationDetail extends AppCompatActivity {
 
         ratingBar.setRating(currentLocation.getRating());
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         String openingTimeSting = "";
         for(Time time : currentLocation.getOpeningTimes().getTimes()){
-            openingTimeSting = openingTimeSting + Day.toString(time.getDay()) + ": "+ time.getStartTime() + " bis " + time.getEndTime() + "\n" ;
+            openingTimeSting = openingTimeSting + Day.toString(time.getDay()) + ": "+ time.getStartTime() + CreateContextForResource.getStringFromID(R.string.general_time_till) + time.getEndTime() + "\n" ;
         }
 
         openingTimes.setText(openingTimeSting);
 
         String happyHoursString = "";
         for(HappyHour happyHour : currentLocation.getHappyHours()){
-            happyHoursString = happyHoursString + happyHour.getDrink() + " für " + happyHour.getPrice() + "\n";
+            happyHoursString = happyHoursString + happyHour.getDrink() + CreateContextForResource.getStringFromID(R.string.general_for) + happyHour.getPrice() + "\n";
         }
 
         happyHours.setText(happyHoursString);

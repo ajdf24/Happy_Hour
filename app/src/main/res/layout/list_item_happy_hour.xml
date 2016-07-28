@@ -5,7 +5,7 @@
     android:layout_margin="10dp">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/list_item_happy_hour_cardview"
+        android:id="@+id/list_item_happy_hour_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -40,7 +40,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.7"
-                    android:hint="Drink" />
+                    android:hint="@string/general_hint_drink" />
 
                 <EditText
                     android:id="@+id/list_item_happy_hour_price"
@@ -48,19 +48,19 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/list_item_happy_hour_drink"
                     android:layout_weight=".3"
-                    android:hint="Preis" />
+                    android:hint="@string/general_hint_price" />
             </LinearLayout>
             <TextView
+                android:id="@+id/list_item_happy_hour_label_day_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Tag: "
+                android:text="@string/general_label_day"
                 android:layout_marginTop="1dp"
-                android:id="@+id/list_item_happy_hour"
                 android:layout_below="@id/layout"/>
 
             <Spinner
-                android:id="@+id/list_item_happy_hour_time_day"
+                android:id="@+id/list_item_happy_hour_spinner_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:entries="@array/Weekdays"
@@ -68,8 +68,8 @@
                 android:layout_below="@+id/layout"
                 android:layout_alignRight="@+id/list_item_happy_hour_button_save"
                 android:layout_alignEnd="@+id/list_item_happy_hour_button_save"
-                android:layout_toRightOf="@+id/list_item_happy_hour"
-                android:layout_toEndOf="@+id/list_item_happy_hour" />
+                android:layout_toRightOf="@+id/list_item_happy_hour_label_day_spinner"
+                android:layout_toEndOf="@+id/list_item_happy_hour_label_day_spinner" />
 
             <EditText
                 android:id="@+id/list_item_happy_hour_time_time"
@@ -78,12 +78,10 @@
                 android:focusableInTouchMode="false"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/list_item_happy_hour_time_day"
-                android:hint="Zeit von bis"
+                android:layout_below="@+id/list_item_happy_hour_spinner_day"
+                android:hint="@string/general_from_to_time"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
-
-
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

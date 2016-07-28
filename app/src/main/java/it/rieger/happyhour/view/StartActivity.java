@@ -12,18 +12,14 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,17 +27,20 @@ import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.database.DataSource;
 import it.rieger.happyhour.controller.widget.DynamicImageView;
 import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.listener.AnimationListener;
 
 /**
  * Start activity on which the user can login with facebook.
  */
 public class StartActivity extends AppCompatActivity {
 
+    private final String LOG_TAG = this.getClass().getSimpleName();
+
     SharedPreferences prefs;
 
     CallbackManager callbackManager;
 
-    @Bind(R.id.login_button)
+    @Bind(R.id.start_activity_login_button)
     LoginButton loginButton;
 
     @Bind(R.id.start_activity_button_next)
@@ -72,7 +71,6 @@ public class StartActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        // Show only the first time
         prefs = PreferenceManager.getDefaultSharedPreferences(StartActivity.this);
         if(prefs.getBoolean(AppConstants.SharedPreferencesKeys.FIRST_START, true)){
             initializeElementsAndAnimations();
@@ -96,27 +94,35 @@ public class StartActivity extends AppCompatActivity {
      * initialize all active elements and the animations for the activity
      */
     private void initializeElementsAndAnimations(){
-        final DynamicImageView imageView = (DynamicImageView) this.findViewById(R.id.view2);
-        final TextView explanation = (TextView) this.findViewById(R.id.textView13);
-        final TextView mainText = (TextView) this.findViewById(R.id.textView2);
+        final DynamicImageView imageView = (DynamicImageView) this.findViewById(R.id.start_activity_image);
+        final TextView explanation = (TextView) this.findViewById(R.id.start_activity_welcome);
+        final TextView mainText = (TextView) this.findViewById(R.id.start_activity_welcome_head);
 
         final TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -1000);
         animation.setDuration(500);
         animation.setFillAfter(false);
 
-        animation.setAnimationListener(new Animation.AnimationListener() {
+        animation.setAnimationListener(new AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                explanation.setVisibility(View.INVISIBLE);
+                if (explanation != null) {
+                    explanation.setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                imageView.setVisibility(View.GONE);
+                if (imageView != null) {
+                    imageView.setVisibility(View.GONE);
+                }
 
 
-                explanation.startAnimation(AnimationUtils.loadAnimation(StartActivity.this, R.anim.fade_in));
-                explanation.setText("Melde dich jetzt mit Facebook an.");
+                if (explanation != null) {
+                    explanation.startAnimation(AnimationUtils.loadAnimation(StartActivity.this, R.anim.fade_in));
+                }
+                if (explanation != null) {
+                    explanation.setText(R.string.start_activity_login_with_facebook);
+                }
 
                 loginButton.setVisibility(View.VISIBLE);
                 loginButton.startAnimation(AnimationUtils.loadAnimation(StartActivity.this, R.anim.fade_in));
@@ -125,19 +131,21 @@ public class StartActivity extends AppCompatActivity {
                 next.setVisibility(View.INVISIBLE);
             }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
         });
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView.startAnimation(animation);
+                if (imageView != null) {
+                    imageView.startAnimation(animation);
+                }
 
-                explanation.startAnimation(animation);
-                mainText.startAnimation(animation);
+                if (explanation != null) {
+                    explanation.startAnimation(animation);
+                }
+                if (mainText != null) {
+                    mainText.startAnimation(animation);
+                }
 
             }
         });
@@ -149,54 +157,34 @@ public class StartActivity extends AppCompatActivity {
     private void initializeFacebookLogin(){
         callbackManager = CallbackManager.Factory.create();
 
-        loginButton.setPublishPermissions("publish_actions");
-//        loginButton.setReadPermissions("user_friends");
-//        loginButton.
+        loginButton.setPublishPermissions(AppConstants.FacebookPermissions.PUBLISH_ACTIONS);
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                //TODO: write to database
 
                 DataSource db = new DataSource(StartActivity.this);
                 db.createFacebookLoginData(loginResult.getAccessToken().getUserId(), loginResult.getAccessToken().getToken());
 
                 goToMainActivity();
 
-//                GraphRequest request = GraphRequest.newMeRequest(
-//                        loginResult.getAccessToken(),
-//                        new GraphRequest.GraphJSONObjectCallback() {
-//                            @Override
-//                            public void onCompleted(JSONObject object, GraphResponse response) {
-//                                Log.v("LoginActivity", response.toString());
-//
-//                                // Application code
-//                                try {
-//                                    String email = object.getString("email");
-//                                    String birthday = object.getString("birthday"); // 01/31/1980 format
-//                                    System.out.println(object.getString("name"));
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        });
-
-
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean(AppConstants.SharedPreferencesKeys.FIRST_START, false);
-                editor.commit();
+                editor.apply();
             }
 
             @Override
             public void onCancel() {
-
+                Toast.makeText(StartActivity.this,R.string.start_activity_can_not_login_cancle,Toast.LENGTH_LONG).show();
+                Log.w(LOG_TAG, "Facebook Login Canceled");
             }
 
             @Override
             public void onError(FacebookException error) {
-
+                Toast.makeText(StartActivity.this,R.string.start_activity_can_not_login_error,Toast.LENGTH_LONG).show();
+                Log.e(LOG_TAG, "Facebook Login Error");
             }
         });
     }

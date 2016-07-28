@@ -1,7 +1,6 @@
 package it.rieger.happyhour.view.viewholder;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.Spinner;
 import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
 import com.borax12.materialdaterangepicker.time.TimePickerDialog;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import butterknife.Bind;
@@ -20,14 +18,16 @@ import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.HappyHour;
-import it.rieger.happyhour.model.HappyHourTime;
-import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.Time;
+import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
  * Created by sebastian on 05.07.16.
  */
 public class HappyHourViewHolder extends RecyclerView.ViewHolder implements TimePickerDialog.OnTimeSetListener{
+
+    private final String LOG_TAG = getClass().getSimpleName();
 
     @Bind(R.id.list_item_happy_hour_drink)
     EditText drink;
@@ -35,7 +35,7 @@ public class HappyHourViewHolder extends RecyclerView.ViewHolder implements Time
     @Bind(R.id.list_item_happy_hour_price)
     EditText price;
 
-    @Bind(R.id.list_item_happy_hour_time_day)
+    @Bind(R.id.list_item_happy_hour_spinner_day)
     Spinner daySpinner;
 
     @Bind(R.id.list_item_happy_hour_time_time)
@@ -61,7 +61,7 @@ public class HappyHourViewHolder extends RecyclerView.ViewHolder implements Time
                         now.get(Calendar.MINUTE),
                         true
                 );
-                tpd.show(((Activity) itemView.getContext()).getFragmentManager(), "Timepickerdialog Monday");
+                tpd.show(((Activity) itemView.getContext()).getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_MONDAY);
                 tpd.setOnTimeSetListener(HappyHourViewHolder.this);
             }
         });
@@ -94,7 +94,7 @@ public class HappyHourViewHolder extends RecyclerView.ViewHolder implements Time
                             break;
                     }
                 }catch (NullPointerException e){
-                    Log.e("","Time not set");
+                    Log.e(LOG_TAG,"Time not set");
                 }
             }
 
@@ -128,9 +128,8 @@ public class HappyHourViewHolder extends RecyclerView.ViewHolder implements Time
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
-        String timeString = hourOfDay+":"+minute + "Uhr Bis: " + hourOfDayEnd + ":" + minuteEnd + "Uhr";
+        String timeString = hourOfDay+":"+minute + CreateContextForResource.getStringFromID(R.string.general_clock_to) + hourOfDayEnd + ":" + minuteEnd + CreateContextForResource.getStringFromID(R.string.general_clock);
         timeField.setText(timeString);
-
 
         time.setStartTime(hourOfDay+":"+minute);
         time.setEndTime(hourOfDayEnd + ":" + minuteEnd);

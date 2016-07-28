@@ -3,7 +3,6 @@ package it.rieger.happyhour.view;
 
 import android.content.Intent;
 import android.support.annotation.IdRes;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 if (menuItemId == R.id.bottomBarItemOne) {
                 }
                 if (menuItemId == R.id.bottomBarItemTwo){
-                    startActivity(new Intent(MainActivity.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(AppConstants.BUNDLE_LOAD_FAVOTITE_LOCATIONS,true));
+                    startActivity(new Intent(MainActivity.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(AppConstants.BUNDLE_LOAD_FAVORITE_LOCATIONS,true));
                 }
                 if (menuItemId == R.id.bottomBarItemThree) {
 

@@ -9,10 +9,10 @@ import it.rieger.happyhour.R;
 /**
  * Created by Admin on 08.07.2016.
  */
-public class MyViewHolder extends RecyclerView.ViewHolder {
+public class ThumbnailViewHolder extends RecyclerView.ViewHolder {
     public ImageView thumbnail;
 
-    public MyViewHolder(View view) {
+    public ThumbnailViewHolder(View view) {
         super(view);
         thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
     }

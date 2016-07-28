@@ -25,11 +25,14 @@ import it.rieger.happyhour.controller.adapter.LocationAdapter;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
+import it.rieger.happyhour.util.listener.OnQueryTextListener;
 
 /**
  * activity which shows a list of locations
  */
 public class LocationList extends AppCompatActivity implements LocationLoadedCallback{
+
+    private final String LOG_TAG = getClass().getSimpleName();
 
     @Bind(R.id.activity_location_list_recycler_view)
     RecyclerView locationListView;
@@ -72,15 +75,10 @@ public class LocationList extends AppCompatActivity implements LocationLoadedCal
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         locationListView.setLayoutManager(linearLayoutManager);
 
-        //TODO: Liste muss mit Serverdaten gefüllt werden
         final LocationAdapter locationAdapter = new LocationAdapter(locationList);
         locationListView.setAdapter(locationAdapter);
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+        searchView.setOnQueryTextListener(new OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextChange(String newText) {

@@ -22,22 +22,20 @@
                 android:id="@+id/list_item_location_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="Name" />
+                android:gravity="left" />
 
             <it.rieger.happyhour.controller.widget.DynamicImageView
+                android:id="@+id/list_item_picture"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_below="@+id/list_item_location_name"
-                android:layout_marginTop="5dp"
-                android:id="@+id/list_item_picture" />
+                android:layout_marginTop="5dp"/>
 
     <TextView
 
         android:id="@+id/list_item_opening_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(9p.m. - 02 a.m.)"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/list_item_drink"
         android:layout_alignStart="@+id/list_item_drink" />
@@ -46,8 +44,7 @@
         android:id="@+id/list_item_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="400 m" />
+        android:layout_alignParentRight="true" />
 
     <TextView
         android:id="@+id/list_item_drink"
@@ -56,8 +53,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_below="@+id/list_item_location_name"
-        android:layout_toRightOf="@id/list_item_picture"
-        android:text="Drinks" />
+        android:layout_toRightOf="@id/list_item_picture" />
 
     <RatingBar
         style="?android:attr/ratingBarStyleSmall"

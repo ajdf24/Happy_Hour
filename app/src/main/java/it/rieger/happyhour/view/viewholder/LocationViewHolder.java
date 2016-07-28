@@ -16,6 +16,8 @@ import it.rieger.happyhour.controller.widget.DynamicImageView;
  */
 public class LocationViewHolder extends RecyclerView.ViewHolder {
 
+    private final String LOG_TAG = getClass().getSimpleName();
+
     @Bind(R.id.list_item_location_name)
     TextView locationName;
 

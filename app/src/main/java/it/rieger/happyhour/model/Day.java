@@ -1,7 +1,5 @@
 package it.rieger.happyhour.model;
 
-import android.annotation.SuppressLint;
-
 import java.io.Serializable;
 
 import it.rieger.happyhour.R;
@@ -26,10 +24,10 @@ public enum Day implements Serializable {
                 dayName = CreateContextForResource.getStringFromID(R.string.general_day_monday);
                 break;
             case TUESDAY:
-                dayName = CreateContextForResource.getStringFromID(R.string.general_day_thuesday);
+                dayName = CreateContextForResource.getStringFromID(R.string.general_day_tuesday);
                 break;
             case WEDNESDAY:
-                dayName = CreateContextForResource.getStringFromID(R.string.general_day_wensday);
+                dayName = CreateContextForResource.getStringFromID(R.string.general_day_wednesday);
                 break;
             case THURSDAY:
                 dayName = CreateContextForResource.getStringFromID(R.string.general_day_thursday);

@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -52,11 +53,8 @@ public class ChangeLocationActivity extends AppCompatActivity
         GeneralFragment.OnFragmentInteractionListener,
         OpeningFragment.OnFragmentInteractionListener,
         CameraFragment.OnFragmentInteractionListener,
-        HappyHoursFragment.OnFragmentInteractionListener,
-        GraphRequest.GraphJSONArrayCallback{
+        HappyHoursFragment.OnFragmentInteractionListener{
 
-    @Bind(R.id.fab)
-    FloatingActionButton floatingActionButton;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -88,7 +86,7 @@ public class ChangeLocationActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         final GeneralFragment generalFragment = GeneralFragment.newInstance(location);
-        fragmentTransaction.add(R.id.fragment_container, generalFragment, "GeneralFragment");
+        fragmentTransaction.add(R.id.fragment_container, generalFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_GENERAL);
         fragmentTransaction.commit();
         currentFragment = generalFragment;
     }
@@ -103,35 +101,32 @@ public class ChangeLocationActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
             if(currentFragment != null)
                 fragmentTransaction.remove(currentFragment);
             final CameraFragment cameraFragment = CameraFragment.newInstance(location);
-            fragmentTransaction.add(R.id.fragment_container, cameraFragment, "CameraFragment");
+            fragmentTransaction.add(R.id.fragment_container, cameraFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_CAMERA);
             fragmentTransaction.commit();
             currentFragment = cameraFragment;
         } else if (id == R.id.nav_general) {
             if(currentFragment != null)
                 fragmentTransaction.remove(currentFragment);
             final GeneralFragment generalFragment = GeneralFragment.newInstance(location);
-            fragmentTransaction.add(R.id.fragment_container, generalFragment, "GeneralFragment");
+            fragmentTransaction.add(R.id.fragment_container, generalFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_GENERAL);
             fragmentTransaction.commit();
             currentFragment = generalFragment;
         } else if (id == R.id.nav_open) {
             if(currentFragment != null)
                 fragmentTransaction.remove(currentFragment);
             final OpeningFragment openingFragment = OpeningFragment.newInstance(location);
-            fragmentTransaction.add(R.id.fragment_container, openingFragment, "OpeningFragment");
+            fragmentTransaction.add(R.id.fragment_container, openingFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_OPENING);
             fragmentTransaction.commit();
             currentFragment = openingFragment;
         } else if (id == R.id.nav_share) {
@@ -139,19 +134,24 @@ public class ChangeLocationActivity extends AppCompatActivity
             ShareDialog shareDialog = new ShareDialog(this);
             if (ShareDialog.canShow(ShareLinkContent.class)) {
 
+                //TODO: Change with real Share Data
                 ShareContent shareContent = new ShareLinkContent.Builder()
                         .setContentDescription("TEst")
                         .build();
 
                 shareDialog.show(shareContent);  // Show facebook ShareDialog
+
+                Toast.makeText(this, R.string.general_not_implemented,Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.nav_send) {
+                //TODO: Implement and send a real Backend Link
+                Toast.makeText(this, R.string.general_not_implemented,Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_happy_hour){
             if(currentFragment != null)
                 fragmentTransaction.remove(currentFragment);
             final HappyHoursFragment happyHoursFragment = HappyHoursFragment.newInstance(location);
-            fragmentTransaction.add(R.id.fragment_container, happyHoursFragment, "happyHoursFragment");
+            fragmentTransaction.add(R.id.fragment_container, happyHoursFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_Happy_HOURS);
             fragmentTransaction.commit();
             currentFragment = happyHoursFragment;
         }
@@ -166,9 +166,4 @@ public class ChangeLocationActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void onCompleted(JSONArray objects, GraphResponse response) {
-        System.out.println("TEST");
-        System.out.println(objects);
-    }
 }

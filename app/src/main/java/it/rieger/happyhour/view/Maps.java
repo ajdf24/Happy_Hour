@@ -42,6 +42,7 @@ import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
+import it.rieger.happyhour.util.listener.AnimationListener;
 import it.rieger.happyhour.view.fragments.LocationInformation;
 
 /**
@@ -54,6 +55,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                                                         GoogleMap.OnMapClickListener,
                                                         LocationInformation.OnFragmentInteractionListener,
                                                         LocationLoadedCallback{
+
+    private final String LOG_TAG = getClass().getSimpleName();
 
     private BottomBar bottomBar;
 
@@ -117,7 +120,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         bottomBar.mapColorForTab(1, 0xFF5D4037);
         bottomBar.mapColorForTab(2, 0xFF5D4037);
 
-        //Aktiven Button setzen
         bottomBar.selectTabAtPosition(0, false);
 
         mapFragment.getMap().setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
@@ -155,7 +157,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                     BackendDatabase.getInstance().loadLocations(locations, this, currentPosition, 10);
 
                 } catch (NullPointerException e) {
-                    Log.w("Log", "Can not load current position");
+                    Log.w(LOG_TAG, "Can not load current position");
                     BackendDatabase.getInstance().loadLocations(locations, this, new LatLng(0.0, 0.0), 10);
                 }
             }
@@ -183,7 +185,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
     }
 
     private void focusMapToCurrentPosition(GoogleMap googleMap) {
-        // Get Current Location
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION);
@@ -203,7 +204,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
                 googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
             } catch (NullPointerException e) {
-                Log.w("Log", "Can not load current position");
+                Log.w(LOG_TAG, "Can not load current position");
             }
         }
     }
@@ -224,19 +225,11 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                     if(relativeLayout.getVisibility() == View.VISIBLE){
                         Animation slideUp = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_up);
                         relativeLayout.startAnimation(slideUp);
-                        slideUp.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-                            }
+                        slideUp.setAnimationListener(new AnimationListener() {
 
                             @Override
                             public void onAnimationEnd(Animation animation) {
                                 showInfoFragment(relativeLayout, location);
-                                System.out.println("TEST!!!!!!!!");
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
                             }
                         });
                     }else{
@@ -258,7 +251,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         final LocationInformation information = LocationInformation.newInstance(location);
-        fragmentTransaction.add(R.id.fragment_container, information, "WelcomeFragment");
+        fragmentTransaction.add(R.id.fragment_container, information, AppConstants.FragmentTags.FRAGMENT_LOCATION_INFORMATION);
         fragmentTransaction.commit();
 
         Animation slideDown = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_down);

@@ -10,11 +10,11 @@
     android:id="@+id/viewpager"/>
 
     <TextView
+        android:id="@+id/slide_show_fragment_image_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
-        android:id="@+id/lbl_count"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textColor="#FFFFFF"

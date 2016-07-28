@@ -67,7 +67,7 @@ public class CameraFragment extends Fragment {
     @Bind(R.id.fragment_camera_imageview)
     ImageView mImageView;
 
-    @Bind(R.id.recycler_view)
+    @Bind(R.id.fragment_camera_image_recycler_view)
     RecyclerView recyclerView;
 
     private boolean isButtonsShow = false;

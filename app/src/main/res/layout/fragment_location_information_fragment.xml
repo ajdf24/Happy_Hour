@@ -12,7 +12,7 @@
         />
 
     <ImageButton
-        android:id="@+id/fragment_information_button"
+        android:id="@+id/fragment_location_information_information_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@mipmap/ic_info_black"
@@ -20,12 +20,12 @@
         android:layout_alignParentRight="true" />
 
     <it.rieger.happyhour.controller.widget.FavoriteButton
-        android:id="@+id/fragment_button_favorite"
+        android:id="@+id/fragment_location_information_button_favorite"
         android:src="@mipmap/ic_favorite_border"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginRight="-15dp"
         android:background="@null"
-        android:layout_toLeftOf="@+id/fragment_information_button" />
+        android:layout_toLeftOf="@+id/fragment_location_information_information_button" />
 
 </RelativeLayout>

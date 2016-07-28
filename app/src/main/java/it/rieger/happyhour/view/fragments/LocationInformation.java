@@ -40,10 +40,10 @@ public class LocationInformation extends Fragment {
     @Bind(R.id.fragment_location_details_pictures_list_view)
     SliderLayout mDemoSlider;
 
-    @Bind(R.id.fragment_information_button)
+    @Bind(R.id.fragment_location_information_information_button)
     ImageButton infoButton;
 
-    @Bind(R.id.fragment_button_favorite)
+    @Bind(R.id.fragment_location_information_button_favorite)
     FavoriteButton favoriteButton;
 
     static Location currentLocation;

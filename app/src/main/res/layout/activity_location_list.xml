@@ -10,9 +10,9 @@
     tools:context=".view.LocationList">
 
     <SearchView
+        android:id="@+id/activity_location_list_searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/activity_location_list_searchView"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -26,9 +26,9 @@
         android:visibility="invisible"/>
 
     <ProgressBar
+        android:id="@+id/activity_location_list_progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/activity_location_list_progressBar"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 

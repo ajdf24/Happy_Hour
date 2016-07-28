@@ -40,10 +40,10 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
     @Bind(R.id.fragment_opening_monday_text)
     EditText mondayText;
 
-    @Bind(R.id.fragment_opening_thuseday_text)
+    @Bind(R.id.fragment_opening_tuesday_text)
     EditText thusedayText;
 
-    @Bind(R.id.fragment_opening_wensday_text)
+    @Bind(R.id.fragment_opening_wednesday_text)
     EditText wensdayText;
 
     @Bind(R.id.fragment_opening_thursday_text)

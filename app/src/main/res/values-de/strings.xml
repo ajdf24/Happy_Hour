@@ -10,6 +10,10 @@
         <item>Sonntag</item>
     </array>
 
+    <string name="app_name">Happy Hour</string>
+
+    <string name="message_permission_location_denied">Standort darf nicht abgefragt werden</string>
+
     <!--GeneralStrings for all activitys-->
     <string name="general_undo_action">Aktion rückgängig machen?</string>
     <string name="general_undo">Undo</string>
@@ -21,16 +25,38 @@
     <string name="general_removed_from_favorites">Favorit entfernt</string>
     <string name="general_day_sunday">Sonntag</string>
     <string name="general_day_monday">Montag</string>
-    <string name="general_day_thuesday">Dienstag</string>
-    <string name="general_day_wensday">Mittwoch</string>
+    <string name="general_day_tuesday">Dienstag</string>
+    <string name="general_day_wednesday">Mittwoch</string>
     <string name="general_day_thursday">Donnerstag</string>
     <string name="general_day_friday">Freitag</string>
     <string name="general_day_saturday">Samstag</string>
     <string name="general_can_not_locate">Standort kann nicht bestimmt werden.</string>
     <string name="general_clock_to">Uhr Bis:&#160;</string>
     <string name="general_clock">Uhr</string>
+    <string name="general_not_implemented">Noch nicht Fertig Implementiert</string>
+    <string name="general_for">&#160;für&#160;</string>
+    <string name="general_next">Weiter</string>
+    <string name="general">Allgemein</string>
+    <string name="general_location_name">Location Name</string>
+    <string name="general_location">Standort</string>
+    <string name="general_opening_times">Öffnungszeiten</string>
+    <string name="general_hint_drink">Drink</string>
+    <string name="general_hint_price">Preis</string>
+    <string name="general_label_day">Tag:&#160;</string>
+    <string name="general_from_to_time">Zeit von bis</string>
     <string name="general_"></string>
 
     <!--SlideShowFragment-->
     <string name="slideshowfragment_picture_of">&#160;von&#160;</string>
+
+    <!--StartActivity-->
+    <string name="start_activity_login_with_facebook">Melde dich jetzt mit Facebook an.</string>
+    <string name="start_activity_can_not_login_error">Facebook Login nicht erfolgreich</string>
+    <string name="start_activity_can_not_login_cancle">Facebook Login abgebrochen</string>
+    <string name="start_activity_welcome_head">Willkommen bei Happy Hour</string>
+    <string name="start_activity_welcome">Bitte melde dich mit deinem Facebook-Account an, um teilzunehmen.</string>
+    <!--Location Details Activity-->
+    <string name="activity_location_details_opening_times">Öffnungszeiten:</string>
+    <string name="activity_location_details_happy_hours">Happy Hours:</string>
+    <string name="activity_location_details_"></string>
 </resources>

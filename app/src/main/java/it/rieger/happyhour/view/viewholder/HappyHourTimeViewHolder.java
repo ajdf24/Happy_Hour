@@ -3,7 +3,6 @@ package it.rieger.happyhour.view.viewholder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import butterknife.Bind;
@@ -15,7 +14,9 @@ import it.rieger.happyhour.R;
  */
 public class HappyHourTimeViewHolder extends RecyclerView.ViewHolder {
 
-    @Bind(R.id.list_item_happy_hour_time_day)
+    private final String LOG_TAG = getClass().getSimpleName();
+
+    @Bind(R.id.list_item_happy_hour_spinner_day)
     Spinner daySpinner;
 
     @Bind(R.id.list_item_happy_hour_time_time)
