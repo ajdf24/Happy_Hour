@@ -6,5 +6,5 @@ package it.rieger.happyhour.util.callbacks;
  */
 public interface LocationLoadedCallback {
 
-    public void locationLoaded();
+    void locationLoaded();
 }

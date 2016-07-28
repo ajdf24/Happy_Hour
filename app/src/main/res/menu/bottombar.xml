@@ -4,17 +4,17 @@
     <item
         android:id="@+id/bottomBarItemOne"
         android:icon="@mipmap/ic_room_black"
-        android:title="Map"
+        android:title="@string/bottom_bar_map"
         />
     <item
 
         android:id="@+id/bottomBarItemTwo"
         android:icon="@mipmap/ic_favorite"
-        android:title="Favoriten"/>
+        android:title="@string/bottom_bar_favorite"/>
 
     <item
         android:id="@+id/bottomBarItemThree"
         android:icon="@mipmap/ic_clock"
-        android:title="Aktuell"
+        android:title="@string/bottom_bar_now"
         />
 </menu>

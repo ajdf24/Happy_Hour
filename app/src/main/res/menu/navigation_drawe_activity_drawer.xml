@@ -5,19 +5,19 @@
         <item
             android:id="@+id/nav_general"
             android:icon="@mipmap/ic_general_black"
-            android:title="Allgemein" />
+            android:title="@string/general" />
         <item
             android:id="@+id/nav_open"
             android:icon="@mipmap/ic_clock"
-            android:title="Öffnungszeiten" />
+            android:title="@string/general_opening_times" />
         <item
             android:id="@+id/nav_happy_hour"
             android:icon="@mipmap/ic_local_bar_black"
-            android:title="Happy Hour" />
+            android:title="@string/general_happy_hour" />
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Fotos" />
+            android:title="@string/general_pictures" />
 
     </group>
 
@@ -26,11 +26,11 @@
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="@string/general_share" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="@string/general_send" />
         </menu>
     </item>
 

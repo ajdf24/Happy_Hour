@@ -15,8 +15,6 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:textColor="#FFFFFF"
         android:layout_gravity="center_horizontal|top" />
 </FrameLayout>

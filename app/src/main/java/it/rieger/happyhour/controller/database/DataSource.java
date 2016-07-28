@@ -6,13 +6,10 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
-import android.util.Log;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
-import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.database.FacebookLoginData;
 import it.rieger.happyhour.model.database.LikedLocation;
 
@@ -146,11 +143,11 @@ public class DataSource {
         open();
         Cursor cursor = database.query(DatabaseHelper.TABLE_FAVORITE_LOCATIONS,
                 allColumnsLikedLocations, DatabaseHelper.COLUMN_LOCATION_ID + " = " + id, null, null, null, null);
-        cursor.moveToFirst();
-
-        return cursorToLikedLocation(cursor);
-
-
+        if(cursor.moveToFirst()){
+            return cursorToLikedLocation(cursor);
+        }else{
+            return null;
+        }
     }
 
     /**

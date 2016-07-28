@@ -101,15 +101,15 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
         });
 
         holder.getLocationName().setText(location.getName());
-        Time today = location.getTodysOpeningTime();
+        Time today = location.getTodaysOpeningTime();
         if(today != null){
-            holder.getOpeningTime().setText(today.getStartTime() + CreateContextForResource.getStringFromID(R.string.general_time_till) + today.getEndTime());
+            holder.getOpeningTime().setText(String.format(CreateContextForResource.getContext().getString(R.string.general_adress_placeholder_adrees_city), today.getStartTime(), today.getEndTime()));
         }else{
             holder.getOpeningTime().setText(R.string.general_closed);
         }
 
         if (ActivityCompat.checkSelfPermission(holder.getView().getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(holder.getView().getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        }
+
             LocationManager locationManager = (LocationManager) holder.getView().getContext().getSystemService(Context.LOCATION_SERVICE);
 
             Criteria criteria = new Criteria();
@@ -122,19 +122,19 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
 
                 android.location.Location.distanceBetween(location.getAddressLatitude(), location.getAddressLongitude(), myLocation.getLatitude(), myLocation.getLongitude(), results);
 
-                String distance = "";
+                String distance;
 
-                if(results[0] > 999.9){
+                if (results[0] > 999.9) {
                     DecimalFormat df = new DecimalFormat("#.#");
                     df.setRoundingMode(RoundingMode.CEILING);
 
-                    results[0] = results[0]/1000;
+                    results[0] = results[0] / 1000;
 
                     distance = df.format(results[0]);
 
                     distance = distance + CreateContextForResource.getStringFromID(R.string.general_distance_kilometer);
 
-                }else {
+                } else {
                     DecimalFormat df = new DecimalFormat("#");
                     df.setRoundingMode(RoundingMode.CEILING);
 
@@ -148,6 +148,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
             } catch (NullPointerException e) {
                 Log.w(LOG_TAG, "Can not load current position");
 
+            }
         }
 
         String drinks = "";

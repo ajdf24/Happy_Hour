@@ -81,7 +81,7 @@ public class Location implements Serializable{
      * @param happyHours happy hours
      * @param imageKeyList image keys of this location
      */
-    public Location(@NonNull String name, @NonNull float rating, @NonNull String addressName, @NonNull float addressLongitude, @NonNull float addressLatitude, OpeningTimes openingTimes, List<HappyHour> happyHours, List<String> imageKeyList) {
+    public Location(@NonNull String name, float rating, String addressName, float addressLongitude, float addressLatitude, OpeningTimes openingTimes, List<HappyHour> happyHours, List<String> imageKeyList) {
         this.name = name;
         this.rating = rating;
         this.addressName = addressName;
@@ -102,7 +102,7 @@ public class Location implements Serializable{
      * @param openingTimes opening times of the location
      * @param happyHours happy hours
      */
-    public Location(@NonNull String name, @NonNull float rating, @NonNull String addressName, @NonNull float addressLongitude, @NonNull float addressLatitude, OpeningTimes openingTimes, List<HappyHour> happyHours) {
+    public Location(@NonNull String name, float rating, @NonNull String addressName, float addressLongitude,  float addressLatitude, OpeningTimes openingTimes, List<HappyHour> happyHours) {
         this(name, rating, addressName, addressLongitude, addressLatitude, openingTimes, null, null);
     }
 
@@ -115,7 +115,7 @@ public class Location implements Serializable{
      * @param addressLatitude latitude of the address
      * @param openingTimes opening times of the location
      */
-    public Location(@NonNull String name, @NonNull float rating, @NonNull String addressName, @NonNull float addressLongitude, @NonNull float addressLatitude, OpeningTimes openingTimes) {
+    public Location(@NonNull String name, float rating, @NonNull String addressName, float addressLongitude, float addressLatitude, OpeningTimes openingTimes) {
         this(name, rating, addressName, addressLongitude, addressLatitude, openingTimes, null, null);
     }
 
@@ -127,7 +127,7 @@ public class Location implements Serializable{
      * @param addressLongitude longitude of the address
      * @param addressLatitude latitude of the address
      */
-    public Location(@NonNull String name, @NonNull float rating, @NonNull String addressName, @NonNull float addressLongitude, @NonNull float addressLatitude) {
+    public Location(@NonNull String name, float rating, String addressName, float addressLongitude, float addressLatitude) {
         this(name, rating, addressName, addressLongitude, addressLatitude, null, null, null);
     }
 
@@ -143,7 +143,7 @@ public class Location implements Serializable{
         return rating;
     }
 
-    public void setRating(@NonNull float rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
@@ -159,7 +159,7 @@ public class Location implements Serializable{
         return addressLongitude;
     }
 
-    public void setAddressLongitude(@NonNull float addressLongitude) {
+    public void setAddressLongitude(float addressLongitude) {
         this.addressLongitude = addressLongitude;
     }
 
@@ -167,7 +167,7 @@ public class Location implements Serializable{
         return addressLatitude;
     }
 
-    public void setAddressLatitude(@NonNull float addressLatitude) {
+    public void setAddressLatitude(float addressLatitude) {
         this.addressLatitude = addressLatitude;
     }
 
@@ -207,7 +207,7 @@ public class Location implements Serializable{
         this.id = id;
     }
 
-    public Time getTodysOpeningTime(){
+    public Time getTodaysOpeningTime(){
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
 

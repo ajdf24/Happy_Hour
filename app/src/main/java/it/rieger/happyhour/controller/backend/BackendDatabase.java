@@ -128,7 +128,7 @@ public enum BackendDatabase {
 
         locationList.clear();
         Time timefriday = new Time();
-        timefriday.setDay(Day.FRIDAY);
+        timefriday.setDay(Day.THURSDAY);
         timefriday.setStartTime("23:00");
         timefriday.setEndTime("05:00");
         Time timesaturday = new Time();
@@ -205,7 +205,9 @@ public enum BackendDatabase {
                         Log.e(LOG_TAG, "String is not a url");
                     }
                     try {
-                        bitmapLRUCache.addBitmapToMemoryCache(url, BitmapFactory.decodeStream(newurl.openConnection().getInputStream()));
+                        if (newurl != null) {
+                            bitmapLRUCache.addBitmapToMemoryCache(url, BitmapFactory.decodeStream(newurl.openConnection().getInputStream()));
+                        }
                     } catch (IOException e) {
                         Log.e(LOG_TAG, "Can not load Image from URL");
                     }

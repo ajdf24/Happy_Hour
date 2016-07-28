@@ -2,15 +2,13 @@ package it.rieger.happyhour.view;
 
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
-
 
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
@@ -36,27 +34,13 @@ public class MainActivity extends AppCompatActivity {
         mBottomBar.setItemsFromMenu(R.menu.bottombar, new OnMenuTabClickListener() {
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
-                if (menuItemId == R.id.bottomBarItemOne) {
-                }
                 if (menuItemId == R.id.bottomBarItemTwo){
                     startActivity(new Intent(MainActivity.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NO_ANIMATION).putExtra(AppConstants.BUNDLE_LOAD_FAVORITE_LOCATIONS,true));
-                }
-                if (menuItemId == R.id.bottomBarItemThree) {
-
                 }
             }
 
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
-                if (menuItemId == R.id.bottomBarItemOne) {
-                    // The user reselected item number one, scroll your content to top.
-                }
-                if (menuItemId == R.id.bottomBarItemTwo) {
-
-                }
-                if (menuItemId == R.id.bottomBarItemThree) {
-
-                }
             }
         });
 

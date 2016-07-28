@@ -106,7 +106,7 @@ public class GeneralFragment extends Fragment {
                         String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                         String city = addresses.get(0).getLocality();
 
-                        place.setText(address + ", " + city);
+                        place.setText(String.format(getResources().getString(R.string.general_adress_placeholder_adrees_city),address,city));
 
                         //TODO: Places API Implementieren
                         locationName.setText("");

@@ -3,7 +3,6 @@ package it.rieger.happyhour.model;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Model class for a time on which is a happy hour.

@@ -28,7 +28,6 @@ public class SlideshowDialogFragment extends DialogFragment{
     private final String LOG_TAG = getClass().getSimpleName();
 
     private static List<String> imageList;
-    private ViewPagerAdapter viewPagerAdapter;
 
     @Bind(R.id.slide_show_fragment_image_count)
     TextView lblCount;
@@ -52,7 +51,7 @@ public class SlideshowDialogFragment extends DialogFragment{
 
         selectedPosition = getArguments().getInt(AppConstants.BUNDLE_CONTEXT_POSITION);
 
-        viewPagerAdapter = new ViewPagerAdapter();
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter();
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
@@ -77,7 +76,7 @@ public class SlideshowDialogFragment extends DialogFragment{
     };
 
     private void displayMetaInfo(int position) {
-        lblCount.setText((position + 1) + CreateContextForResource.getStringFromID(R.string.slideshowfragment_picture_of) + imageList.size());
+        lblCount.setText(String.format(CreateContextForResource.getContext().getString(R.string.slideshowfragment_picture_of_placeholder_x_from), (position + 1), imageList.size()));
     }
 
     @Override
@@ -122,7 +121,7 @@ public class SlideshowDialogFragment extends DialogFragment{
 
         @Override
         public boolean isViewFromObject(View view, Object obj) {
-            return view == ((View) obj);
+            return view == obj;
         }
 
 

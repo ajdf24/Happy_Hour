@@ -30,7 +30,8 @@
 
         <provider android:authorities="com.facebook.app.FacebookContentProvider2027885040770872"
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
+            android:exported="false"/>
+            <!--TODO ggf:True Setzten-->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

@@ -73,8 +73,6 @@ public class CameraFragment extends Fragment {
     private boolean isButtonsShow = false;
 
     private List<String> images;
-    private GalleryAdapter galleryAdapter;
-
 
 
     public CameraFragment() {
@@ -176,7 +174,7 @@ public class CameraFragment extends Fragment {
 
 
         images = location.getImageKeyList();
-        galleryAdapter = new GalleryAdapter(view.getContext(), images);
+        GalleryAdapter galleryAdapter = new GalleryAdapter(view.getContext(), images);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(view.getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -235,7 +233,7 @@ public class CameraFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+           Bitmap imageBitmap = (Bitmap) extras.get("data");
             //TODO: Upload to Server Show in Galery
 
         }

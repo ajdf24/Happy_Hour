@@ -127,8 +127,6 @@ public class LocationInformation extends Fragment {
             }
         });
 
-        DataSource db = new DataSource(this.getActivity());
-
         favoriteButton.setLocation(currentLocation);
         
         return view;

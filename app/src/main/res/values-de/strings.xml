@@ -19,8 +19,9 @@
     <string name="general_undo">Undo</string>
     <string name="general_distance_kilometer">&#160;km</string>
     <string name="general_distance_meter">&#160;m</string>
-    <string name="general_closed">geschlossen</string>
+    <string name="general_closed">heute geschlossen</string>
     <string name="general_time_till">&#160;bis&#160;</string>
+    <string name="general_time_placeholder_from_to">%1$s bis %2$s</string>
     <string name="general_added_to_favorites">Zu Favoriten hinzugefügt</string>
     <string name="general_removed_from_favorites">Favorit entfernt</string>
     <string name="general_day_sunday">Sonntag</string>
@@ -44,10 +45,15 @@
     <string name="general_hint_price">Preis</string>
     <string name="general_label_day">Tag:&#160;</string>
     <string name="general_from_to_time">Zeit von bis</string>
+    <string name="general_happy_hour">Happy Hour</string>
+    <string name="general_pictures">Fotos</string>
+    <string name="general_share">Teilen</string>
+    <string name="general_send">Senden</string>
+    <string name="general_adress_placeholder_adrees_city">%1$s, %2$s</string>
     <string name="general_"></string>
 
     <!--SlideShowFragment-->
-    <string name="slideshowfragment_picture_of">&#160;von&#160;</string>
+    <string name="slideshowfragment_picture_of_placeholder_x_from">%1$d von %2$d</string>
 
     <!--StartActivity-->
     <string name="start_activity_login_with_facebook">Melde dich jetzt mit Facebook an.</string>
@@ -55,8 +61,14 @@
     <string name="start_activity_can_not_login_cancle">Facebook Login abgebrochen</string>
     <string name="start_activity_welcome_head">Willkommen bei Happy Hour</string>
     <string name="start_activity_welcome">Bitte melde dich mit deinem Facebook-Account an, um teilzunehmen.</string>
+
     <!--Location Details Activity-->
     <string name="activity_location_details_opening_times">Öffnungszeiten:</string>
     <string name="activity_location_details_happy_hours">Happy Hours:</string>
     <string name="activity_location_details_"></string>
+
+    <!--BottomBar-->
+    <string name="bottom_bar_map">Map</string>
+    <string name="bottom_bar_favorite">Favoriten</string>
+    <string name="bottom_bar_now">Aktuell</string>
 </resources>
