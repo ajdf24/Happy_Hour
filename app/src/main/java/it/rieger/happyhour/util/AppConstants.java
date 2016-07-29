@@ -16,6 +16,7 @@ public interface AppConstants {
      */
     interface PermissionsIDs {
         int PERMISSION_ID_FOR_ACCESS_LOCATION = 1;
+        int PERMISSION_ID_FOR_WRITE_STORAGE = 2;
     }
 
     /**
@@ -32,6 +33,7 @@ public interface AppConstants {
     interface FragmentTags {
         String FRAGMENT_SLIDE_SHOW = "SlideShowFragment";
         String FRAGMENT_WELCOME = "Welcome";
+        String FRAGMENT_IMAGE_DIALOG = "Image Dialog";
         String FRAGMENT_LOCATION_INFORMATION = "Welcome";
         String FRAGMENT_CHANGE_LOCATION_GENERAL = "Change Location General";
         String FRAGMENT_CHANGE_LOCATION_CAMERA = "Change Location Camera";

@@ -1,8 +1,10 @@
 package it.rieger.happyhour.view.fragments.changelocation;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,6 +35,7 @@ import it.rieger.happyhour.controller.adapter.GalleryAdapter;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.listener.AnimationListener;
+import it.rieger.happyhour.view.dialogs.ImageContextMenuDialog;
 import it.rieger.happyhour.view.fragments.SlideshowDialogFragment;
 
 /**
@@ -174,7 +177,7 @@ public class CameraFragment extends Fragment {
 
 
         images = location.getImageKeyList();
-        GalleryAdapter galleryAdapter = new GalleryAdapter(view.getContext(), images);
+        GalleryAdapter galleryAdapter = new GalleryAdapter(view.getContext(), location);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(view.getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -199,7 +202,17 @@ public class CameraFragment extends Fragment {
 
             @Override
             public void onLongClick(View view, int position) {
-                //TODO: delete action
+
+                FragmentTransaction ft = ((Activity)view.getContext()).getFragmentManager().beginTransaction();
+                Fragment prev = ((Activity)view.getContext()).getFragmentManager().findFragmentByTag("dialog");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+
+                DialogFragment newFragment = ImageContextMenuDialog.newInstance(images.get(position));
+                newFragment.show(ft, AppConstants.FragmentTags.FRAGMENT_IMAGE_DIALOG);
             }
         }));
 

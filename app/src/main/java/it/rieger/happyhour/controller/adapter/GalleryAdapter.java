@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import java.util.List;
 
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.listener.OnItemTouchListener;
 import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
@@ -27,9 +28,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
     private List<String> images;
     private Context context;
 
-    public GalleryAdapter(Context context, List<String> images) {
+    Location location;
+
+    public GalleryAdapter(Context context, Location location) {
         this.context = context;
-        this.images = images;
+        this.location = location;
+        this.images = location.getImageKeyList();
     }
 
     @Override
@@ -48,6 +52,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.thumbnail);
+
     }
 
     @Override
@@ -66,7 +71,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
         private GestureDetector gestureDetector;
         private GalleryAdapter.ClickListener clickListener;
 
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final GalleryAdapter.ClickListener clickListener) {
+        public RecyclerTouchListener(final Context context, final RecyclerView recyclerView, final GalleryAdapter.ClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                 @Override
@@ -79,7 +84,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
                     View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
                     if (child != null && clickListener != null) {
                         clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
-                        //TODO: Delete action
                     }
                 }
             });

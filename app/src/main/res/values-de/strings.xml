@@ -71,4 +71,10 @@
     <string name="bottom_bar_map">Map</string>
     <string name="bottom_bar_favorite">Favoriten</string>
     <string name="bottom_bar_now">Aktuell</string>
+
+    <!--Image Dialog-->
+    <string name="image_dialog_save">Foto lokal speichern</string>
+    <string name="image_dialog_share">Foto teilen</string>
+    <string name="image_dialog_delete">Foto löschen</string>
+    <string name="image_dialog_permission_denied">Keine Berechtigung um Fotos zu speichern.</string>
 </resources>
