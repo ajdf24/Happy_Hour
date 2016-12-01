@@ -17,6 +17,9 @@ public class OpeningTimes implements Serializable{
      */
     private List<Time> times;
 
+    public OpeningTimes() {
+    }
+
     public OpeningTimes(@NonNull List<Time> times) {
         this.times = times;
     }

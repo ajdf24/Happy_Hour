@@ -204,7 +204,7 @@ public class CameraFragment extends Fragment {
             public void onLongClick(View view, int position) {
 
                 FragmentTransaction ft = ((Activity)view.getContext()).getFragmentManager().beginTransaction();
-                Fragment prev = ((Activity)view.getContext()).getFragmentManager().findFragmentByTag("dialog");
+                Fragment prev = ((Activity)view.getContext()).getFragmentManager().findFragmentByTag(AppConstants.FragmentTags.FRAGMENT_IMAGE_DIALOG);
                 if (prev != null) {
                     ft.remove(prev);
                 }

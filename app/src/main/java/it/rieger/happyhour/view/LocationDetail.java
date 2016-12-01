@@ -1,5 +1,6 @@
 package it.rieger.happyhour.view;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,22 +14,27 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.database.firebase.Firebase;
+import it.rieger.happyhour.controller.database.firebase.LocationsLoaded;
 import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
+import it.rieger.happyhour.view.fragments.SlideshowDialogFragment;
 
 /**
  * Activity which shows the details for the location
  */
-public class LocationDetail extends AppCompatActivity {
+public class LocationDetail extends AppCompatActivity implements LocationsLoaded {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
@@ -61,9 +67,60 @@ public class LocationDetail extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        currentLocation = (Location) this.getIntent().getSerializableExtra(AppConstants.BUNDLE_CONTEXT_LOCATION);
+//        currentLocation = (Location) this.getIntent().getSerializableExtra(AppConstants.BUNDLE_CONTEXT_LOCATION);
 
-        initializeGUI();
+//        currentLocation.setId(2);
+
+//        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+//        List<Address> addresses = null;
+//        try {
+//            addresses = gcd.getFromLocation(currentLocation.getAddressLatitude(), currentLocation.getAddressLongitude(), 1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        if (addresses.size() > 0)
+//        {
+//            System.out.println(addresses.get(0).getLocality());
+//        }
+
+
+//        DatabaseReference mDatabase;
+//        mDatabase = FirebaseDatabase.getInstance().getReference();
+//        DatabaseReference postsRef = mDatabase.child("posts/" + addresses.get(0).getLocality());
+//        DatabaseReference newPostRef = postsRef.push();
+//        newPostRef.setValue(currentLocation);
+
+
+//
+//        myRef.setValue(currentLocation);
+
+        List<Integer> locations = new ArrayList<>();
+        locations.add(1);
+//        Firebase.getLocations(locations);
+
+        Firebase.getLocations(locations, this);
+
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference("location");
+//
+//// Read from the database
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                // This method is called once with the initial value and again
+//                // whenever data at this location is updated.
+//                Location value = dataSnapshot.getValue(Location.class);
+//                Log.d("", "Value is: " + value);
+//                currentLocation = value;
+//                initializeGUI();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                // Failed to read value
+//                Log.w("", "Failed to read value.", error.toException());
+//            }
+//        });
 
     }
 
@@ -85,12 +142,33 @@ public class LocationDetail extends AppCompatActivity {
                     .image(file_maps.get(name))
                     .setScaleType(BaseSliderView.ScaleType.Fit);
             slider.addSlider(textSliderView);
+            slider.getCurrentSlider().setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                @Override
+                public void onSliderClick(BaseSliderView slider) {
+                }
+            });
         }
 
         slider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         slider.setCustomAnimation(new DescriptionAnimation());
         slider.setDuration(4000);
+
+        slider.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(AppConstants.BUNDLE_CONTEXT_POSITION, 0);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance(currentLocation.getImageKeyList());
+                newFragment.setArguments(bundle);
+                fragmentTransaction.add(R.id.fragment_container, newFragment, AppConstants.FragmentTags.FRAGMENT_SLIDE_SHOW).addToBackStack(AppConstants.FragmentTags.FRAGMENT_SLIDE_SHOW);
+                fragmentTransaction.commit();
+            }
+        });
 
         ratingBar.setRating(currentLocation.getRating());
 
@@ -119,5 +197,11 @@ public class LocationDetail extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void locationsLoaded(List<Location> locations) {
+        currentLocation = locations.get(0);
+        initializeGUI();
     }
 }

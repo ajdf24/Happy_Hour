@@ -78,7 +78,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        mapFragment.getMap().setOnMapClickListener(this);
+//        mapFragment.getMap().setOnMapClickListener(this);
 
         loadLocations();
 
@@ -111,7 +111,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
                 if (menuItemId == R.id.bottomBarItemOne) {
-                    focusMapToCurrentPosition(mapFragment.getMap());
+//                    focusMapToCurrentPosition(mapFragment.getMap());
                 }
             }
         });
@@ -122,11 +122,11 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
         bottomBar.selectTabAtPosition(0, false);
 
-        mapFragment.getMap().setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-            }
-        });
+//        mapFragment.getMap().setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+//            @Override
+//            public void onCameraChange(CameraPosition cameraPosition) {
+//            }
+//        });
     }
 
     /**
@@ -325,6 +325,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void locationLoaded() {
-        onMapReady(mapFragment.getMap());
+//        onMapReady(mapFragment.getMap());
     }
 }

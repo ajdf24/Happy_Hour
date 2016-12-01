@@ -1,6 +1,10 @@
 package it.rieger.happyhour.view.fragments;
 
+import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -22,6 +26,7 @@ import it.rieger.happyhour.R;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.listener.OnPageChangeListener;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
+import it.rieger.happyhour.view.dialogs.ImageContextMenuDialog;
 
 public class SlideshowDialogFragment extends DialogFragment{
 
@@ -94,10 +99,10 @@ public class SlideshowDialogFragment extends DialogFragment{
         }
 
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(ViewGroup container, final int position) {
 
             layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
+            final View view = layoutInflater.inflate(R.layout.image_fullscreen_preview, container, false);
 
             ImageView imageViewPreview = (ImageView) view.findViewById(R.id.image_preview);
 
@@ -110,6 +115,22 @@ public class SlideshowDialogFragment extends DialogFragment{
                     .into(imageViewPreview);
 
             container.addView(view);
+
+            imageViewPreview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentTransaction ft = ((Activity)view.getContext()).getFragmentManager().beginTransaction();
+                    Fragment prev = ((Activity)view.getContext()).getFragmentManager().findFragmentByTag(AppConstants.FragmentTags.FRAGMENT_IMAGE_DIALOG);
+                    if (prev != null) {
+                        ft.remove(prev);
+                    }
+                    ft.addToBackStack(null);
+
+
+                    DialogFragment newFragment = ImageContextMenuDialog.newInstance(imageList.get(position));
+                    newFragment.show(ft, AppConstants.FragmentTags.FRAGMENT_IMAGE_DIALOG);
+                }
+            });
 
             return view;
         }
