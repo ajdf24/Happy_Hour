@@ -3,6 +3,7 @@ package it.rieger.happyhour.model;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public class OpeningTimes implements Serializable{
     /**
      * list of opening times
      */
-    private List<Time> times;
+    private List<Time> times = new ArrayList<>();
 
     public OpeningTimes() {
     }

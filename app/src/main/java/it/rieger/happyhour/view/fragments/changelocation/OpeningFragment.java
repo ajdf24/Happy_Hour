@@ -17,7 +17,9 @@ import java.util.Calendar;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.model.OpeningTimes;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 
@@ -35,7 +37,7 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
 
     private static final String LOCATION = "Location";
 
-    private String location;
+    private Location location;
 
     @Bind(R.id.fragment_opening_monday_text)
     EditText mondayText;
@@ -78,7 +80,7 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = getArguments().getString(LOCATION);
+            location = (Location) getArguments().getSerializable(LOCATION);
         }
 
 
@@ -232,7 +234,9 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
     @Override
     public void onDetach() {
         super.onDetach();
-        listener = null;
+
+
+        BackendDatabase.getInstance().saveLocation(location);
     }
 
     @Override

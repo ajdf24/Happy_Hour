@@ -16,7 +16,7 @@ public class HappyHour implements Serializable {
 
     private String price;
 
-    private Time happyHourTime;
+    private Time happyHourTime = new Time();
 
     public HappyHour() {
     }

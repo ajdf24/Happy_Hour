@@ -47,4 +47,9 @@ public interface AppConstants {
         String FRAGMENT_TIME_PICKER_SATURDAY = "Timepickerdialog Saturday";
         String FRAGMENT_TIME_PICKER_SUNDAY = "Timepickerdialog Sunday";
     }
+
+    interface Firebase {
+        String LOCATIONS_PATH = "locations";
+        String LOCATIONS_CHILDS_PATH = "/locations/";
+    }
 }

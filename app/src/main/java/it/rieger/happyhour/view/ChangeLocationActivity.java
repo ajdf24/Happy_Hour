@@ -5,12 +5,14 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -42,8 +44,6 @@ public class ChangeLocationActivity extends AppCompatActivity
 
     Location location;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +52,10 @@ public class ChangeLocationActivity extends AppCompatActivity
 
         location = (Location) getIntent().getSerializableExtra(AppConstants.BUNDLE_CONTEXT_LOCATION);
 
+        if(location == null){
+            location = new Location();
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -59,6 +63,9 @@ public class ChangeLocationActivity extends AppCompatActivity
             drawer.addDrawerListener(toggle);
         }
         toggle.syncState();
+
+        drawer.openDrawer(Gravity.LEFT);
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {

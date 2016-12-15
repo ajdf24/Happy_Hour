@@ -3,10 +3,14 @@ package it.rieger.happyhour.model;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.rieger.happyhour.controller.cache.BitmapLRUCache;
 
@@ -20,7 +24,7 @@ public class Location implements Serializable{
     /**
      * database id of this location
      */
-    private long id;
+    private String id;
 
     /**
      * name of the locaton
@@ -37,6 +41,10 @@ public class Location implements Serializable{
      */
     private String addressName;
 
+    private String countryName;
+
+    private String cityName;
+
     /**
      * longitude of the location
      */
@@ -50,22 +58,17 @@ public class Location implements Serializable{
     /**
      * times when the location is open
      */
-    private OpeningTimes openingTimes;
+    private OpeningTimes openingTimes = new OpeningTimes();
 
     /**
      * happy hours of the location
      */
-    private List<HappyHour> happyHours;
+    private List<HappyHour> happyHours = new ArrayList<>();
 
     /**
      * list of image keys for the location
      */
     private List<String> imageKeyList = new ArrayList<>();
-
-    /**
-     * list of image keys which are not in the cache
-     */
-    private List<String> notCachedImages = new ArrayList<>();
 
     public Location() {
     }
@@ -199,12 +202,28 @@ public class Location implements Serializable{
         imageKeyList.add(key);
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public Time getTodaysOpeningTime(){
@@ -250,44 +269,6 @@ public class Location implements Serializable{
         return today;
     }
 
-    /**
-     * Return all cached images for a specific location.
-     * @return a list of {@link Bitmap} with the images which are in the cache
-     */
-    public List<Bitmap> getCachedImages(){
-        List<Bitmap> imageList = new ArrayList<>();
-
-        for(String key : imageKeyList){
-            Bitmap image = BitmapLRUCache.getInstance().getBitmapFromMemCache(key);
-            if(image != null) {
-                imageList.add(image);
-            }else {
-                notCachedImages.add(key);
-            }
-        }
-
-        return imageList;
-    }
-
-    /**
-     * Get a list of all keys of images which are not in the cache
-     * @return
-     */
-    public List<String> getNotCachedImages(){
-        List<Bitmap> imageList = new ArrayList<>();
-
-        for(String key : imageKeyList){
-            Bitmap image = BitmapLRUCache.getInstance().getBitmapFromMemCache(key);
-            if(image != null) {
-                imageList.add(image);
-            }else {
-                notCachedImages.add(key);
-            }
-        }
-
-        return notCachedImages;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -330,4 +311,23 @@ public class Location implements Serializable{
                 ", happyHours=" + happyHours +
                 '}';
     }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", id);
+        result.put("name", name);
+        result.put("rating", rating);
+        result.put("addressName", addressName);
+        result.put("countryName", countryName);
+        result.put("cityName", cityName);
+        result.put("addressLongitude", addressLongitude);
+        result.put("addressLatitude", addressLatitude);
+        result.put("openingTimes", openingTimes);
+        result.put("happyHours", happyHours);
+        result.put("imageKeyList", imageKeyList);
+
+        return result;
+    }
+
 }

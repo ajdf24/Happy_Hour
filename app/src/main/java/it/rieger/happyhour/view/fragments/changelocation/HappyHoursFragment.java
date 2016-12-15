@@ -16,6 +16,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.HappyHourAdapter;
+import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Location;
 
@@ -130,6 +131,9 @@ public class HappyHoursFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+
+        BackendDatabase.getInstance().saveLocation(location);
+
         listener = null;
     }
 

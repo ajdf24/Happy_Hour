@@ -71,6 +71,7 @@
     <string name="bottom_bar_map">Map</string>
     <string name="bottom_bar_favorite">Favoriten</string>
     <string name="bottom_bar_now">Aktuell</string>
+    <string name="bottom_bar_new">Blub</string>
 
     <!--Image Dialog-->
     <string name="image_dialog_save">Foto lokal speichern</string>

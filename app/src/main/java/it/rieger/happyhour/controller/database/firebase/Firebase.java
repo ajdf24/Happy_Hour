@@ -23,9 +23,7 @@ public enum  Firebase {
 
     FIREBASE;
 
-    static int connections = 0;
-
-    public static void getLocations(List<Integer> ids, final LocationsLoaded callback){
+    public static Location getLocation(Integer id){
 
         DatabaseReference mDatabase;
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -33,14 +31,12 @@ public enum  Firebase {
 
         final List<Location> locations = new ArrayList<>();
 
-        for(Integer id : ids){
-            connections++;
             Query postsRef = mDatabase.child("posts").orderByChild("id").equalTo((double) id);
             postsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    locations.add(dataSnapshot.getChildren().iterator().next().getValue(Location.class));
-                    connections--;
+//                    return dataSnapshot.getChildren().iterator().next().getValue(Location.class);
+
                 }
 
                 @Override
@@ -48,13 +44,14 @@ public enum  Firebase {
 
                 }
             });
-        }
-        
-        while (true){
-            if(connections == 0){
-                callback.locationsLoaded(locations);
-                break;
-            }
-        }
+
+//        while (true){
+//            if(connections == 0){
+//                callback.locationsLoaded(locations);
+//                break;
+//            }
+//        }
+
+        return null;
     }
 }

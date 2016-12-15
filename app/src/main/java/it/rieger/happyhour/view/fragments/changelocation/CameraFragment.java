@@ -32,6 +32,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.GalleryAdapter;
+import it.rieger.happyhour.controller.backend.BackendDatabase;
+import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.listener.AnimationListener;
@@ -249,6 +251,11 @@ public class CameraFragment extends Fragment {
            Bitmap imageBitmap = (Bitmap) extras.get("data");
             //TODO: Upload to Server Show in Galery
 
+            Image image = new Image();
+            image.setImage(imageBitmap);
+
+            BackendDatabase.getInstance().saveImage(image, location);
+
         }
         if(requestCode == SELECT_PHOTO && resultCode == Activity.RESULT_OK){
             Bundle extras = data.getExtras();
@@ -259,6 +266,12 @@ public class CameraFragment extends Fragment {
                 final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 //TODO: Upload to Server Show in Galery
+
+                Image image = new Image();
+                image.setImage(selectedImage);
+
+                BackendDatabase.getInstance().saveImage(image, location);
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

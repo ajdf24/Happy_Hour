@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -44,6 +45,7 @@ import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
 import it.rieger.happyhour.util.listener.AnimationListener;
 import it.rieger.happyhour.view.fragments.LocationInformation;
+import it.rieger.happyhour.view.fragments.firebase.CurrentLocationListActivity;
 
 /**
  * This activity shows a google map, with all locations which are in the intent.
@@ -61,6 +63,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
     private BottomBar bottomBar;
 
     private SupportMapFragment mapFragment;
+
+    private FloatingActionButton addNewLocation;
 
     private List<it.rieger.happyhour.model.Location> locations;
 
@@ -80,10 +84,23 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         mapFragment.getMapAsync(this);
 //        mapFragment.getMap().setOnMapClickListener(this);
 
+        addNewLocation = (FloatingActionButton) findViewById(R.id.activity_maps_new_location);
+
         loadLocations();
 
         createBottomBar(savedInstanceState);
 
+        initializeActiveElements();
+
+    }
+
+    private void initializeActiveElements(){
+        addNewLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Maps.this, ChangeLocationActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+            }
+        });
     }
 
     /**
@@ -101,7 +118,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                         startActivity(new Intent(Maps.this, FavoriteLocations.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                     }
                     if (menuItemId == R.id.bottomBarItemThree) {
-                        startActivity(new Intent(Maps.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                        startActivity(new Intent(Maps.this, CurrentLocationListActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                     }
                 }else{
                     start = false;

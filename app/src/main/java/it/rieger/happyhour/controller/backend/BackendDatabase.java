@@ -7,20 +7,30 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.cache.BitmapLRUCache;
 import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.HappyHour;
+import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.OpeningTimes;
 import it.rieger.happyhour.model.Time;
+import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
 
 /**
@@ -104,7 +114,7 @@ public enum BackendDatabase {
 
             OpeningTimes openingTimes = new OpeningTimes(times);
             Location location = new Location("Clubeins", 4.3f, "Steigerstraße 18", 11.0181322f, 50.9624967f, openingTimes, happyHours, imageKeys);
-            location.setId(1);
+            location.setId("");
 
             locationList.add(location);
             this.locationList.add(location);
@@ -117,6 +127,26 @@ public enum BackendDatabase {
         }
 
     }
+
+//    public synchronized void loadLocationsByCity(String city){
+//        DatabaseReference mDatabase;
+//        mDatabase = FirebaseDatabase.getInstance().getReference();
+//
+//        Query postsRef = mDatabase.child("posts").orderByChild("id").equalTo("test");
+//        postsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                currentLocation = (dataSnapshot.getChildren().iterator().next().getValue(Location.class));
+//                initializeGUI();
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     public synchronized void loadFavorites(@NonNull List<Location> locationList, @NonNull Context context) {
         if (!(context instanceof LocationLoadedCallback)) {
@@ -163,7 +193,7 @@ public enum BackendDatabase {
 
         OpeningTimes openingTimes = new OpeningTimes(times);
         Location location = new Location("Clubeins", 4.3f, "Steigerstraße 18", 11.0181322f, 50.9624967f, openingTimes, happyHours, imageKeys);
-        location.setId(1);
+        location.setId("");
 
         locationList.add(location);
         this.locationList.add(location);
@@ -188,7 +218,45 @@ public enum BackendDatabase {
      * @param location the location which should be saved
      */
     public void saveLocation(Location location) {
-        //TODO: implement
+        DatabaseReference mDatabase;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        if(location.getId() == null || location.getId().isEmpty()){
+            String key = mDatabase.child(AppConstants.Firebase.LOCATIONS_PATH).push().getKey();
+            location.setId(key);
+        }
+
+        Map<String, Object> postValues = location.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<String, Object>();
+
+        childUpdates.put(AppConstants.Firebase.LOCATIONS_CHILDS_PATH + location.getId(), postValues);
+        mDatabase.updateChildren(childUpdates);
+    }
+
+    public void saveImage(Image image, Location location){
+        DatabaseReference mDatabase;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        String key = null;
+
+        if (location != null){
+            key =mDatabase.child("images").push().getKey();
+        }
+
+        Map<String, Object> postValues = image.toMap();
+        Map<String, Object> childUpdates = new HashMap<String, Object>();
+
+        childUpdates.put("/images/" + key, postValues);
+
+        location.setImageKey(key);
+
+        Map<String, Object> locationValues = location.toMap();
+        Map<String, Object> childLocationUpdates = new HashMap<String, Object>();
+
+        childLocationUpdates.put(AppConstants.Firebase.LOCATIONS_CHILDS_PATH + location.getId(), locationValues);
+
+        mDatabase.updateChildren(childUpdates);
+        mDatabase.updateChildren(childLocationUpdates);
     }
 
     private class LoadImageTask extends AsyncTask<String, Integer, Integer>{

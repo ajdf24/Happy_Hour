@@ -168,9 +168,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
 
         holder.getRating().setRating(location.getRating());
 
-        if(location.getCachedImages().size() > 0) {
-            holder.getPicture().setImageBitmap(location.getCachedImages().get(0));
-        }
+        //TODO:Cached Images
+
+//        if(location.getCachedImages().size() > 0) {
+//            holder.getPicture().setImageBitmap(location.getCachedImages().get(0));
+//        }
     }
 
     /**

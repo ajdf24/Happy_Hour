@@ -10,6 +10,7 @@ import android.location.Geocoder;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,15 +20,24 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.nlopez.smartlocation.OnLocationUpdatedListener;
+import io.nlopez.smartlocation.SmartLocation;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.util.AppConstants;
 
 public class GeneralFragment extends Fragment {
 
@@ -47,6 +57,11 @@ public class GeneralFragment extends Fragment {
 
     @Bind(R.id.fragment_general_locate)
     ImageButton buttonGetLocation;
+
+    @Bind(R.id.activity_change_location_save)
+    FloatingActionButton save;
+
+    Context context;
 
     public GeneralFragment() {
         // Required empty public constructor
@@ -70,6 +85,7 @@ public class GeneralFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         location = (Location) getArguments().getSerializable(LOCATION);
+
     }
 
     @Override
@@ -79,7 +95,11 @@ public class GeneralFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_general, container, false);
 
+        context = view.getContext();
+
         ButterKnife.bind(this, view);
+
+//        initializeActiveElements();
 
         locationName.setText(location.getName());
         place.setText(location.getAddressName());
@@ -87,39 +107,39 @@ public class GeneralFragment extends Fragment {
         buttonGetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                SmartLocation.with(view.getContext()).location().oneFix().start(new OnLocationUpdatedListener() {
+                    @Override
+                    public void onLocationUpdated(android.location.Location location) {
+                        try {
+                            Geocoder geocoder;
+                            List<Address> addresses;
+                            geocoder = new Geocoder(view.getContext(), Locale.getDefault());
+
+                            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+                            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                            String city = addresses.get(0).getLocality();
+
+                            place.setText(String.format(getResources().getString(R.string.general_adress_placeholder_adrees_city),address,city));
+
+                            //TODO: Places API Implementieren
+                            locationName.setText("");
+
+                        } catch (NullPointerException e) {
+                            Log.w("Log", "Can not load current position");
+                            Toast.makeText(view.getContext(), R.string.general_can_not_locate, Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            Log.w("Log", "Can not load current position");
+                            Toast.makeText(view.getContext(), R.string.general_can_not_locate, Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
                 if (ActivityCompat.checkSelfPermission(view.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(view.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-                    LocationManager locationManager = (LocationManager) view.getContext().getSystemService(Context.LOCATION_SERVICE);
 
-                    Criteria criteria = new Criteria();
-
-                    String provider = locationManager.getBestProvider(criteria, true);
-                    try {
-                        android.location.Location myLocation = locationManager.getLastKnownLocation(provider);
-
-                        Geocoder geocoder;
-                        List<Address> addresses;
-                        geocoder = new Geocoder(view.getContext(), Locale.getDefault());
-
-                        addresses = geocoder.getFromLocation(myLocation.getLatitude(), myLocation.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-
-                        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                        String city = addresses.get(0).getLocality();
-
-                        place.setText(String.format(getResources().getString(R.string.general_adress_placeholder_adrees_city),address,city));
-
-                        //TODO: Places API Implementieren
-                        locationName.setText("");
-
-
-                    } catch (NullPointerException e) {
-                        Log.w("Log", "Can not load current position");
-                        Toast.makeText(view.getContext(), R.string.general_can_not_locate, Toast.LENGTH_SHORT).show();
-                    } catch (IOException e) {
-                        Log.w("Log", "Can not load current position");
-                        Toast.makeText(view.getContext(), R.string.general_can_not_locate, Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
                 }
             }
         });
@@ -131,6 +151,35 @@ public class GeneralFragment extends Fragment {
         if (listener != null) {
             listener.onFragmentInteraction(uri);
         }
+    }
+
+    private void initializeActiveElements(){
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+
+                DatabaseReference mDatabase;
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+
+                if(location.getId() == null || location.getId().isEmpty()){
+                    String key = mDatabase.child(AppConstants.Firebase.LOCATIONS_PATH).push().getKey();
+                    location.setId(key);
+                }
+
+                location.setName(locationName.getText().toString());
+                location.setAddressName(place.getText().toString());
+
+                Map<String, Object> postValues = location.toMap();
+
+                Map<String, Object> childUpdates = new HashMap<String, Object>();
+
+                childUpdates.put(AppConstants.Firebase.LOCATIONS_CHILDS_PATH + location.getId(), postValues);
+                mDatabase.updateChildren(childUpdates);
+
+            }
+        });
     }
 
     @Override
@@ -147,6 +196,51 @@ public class GeneralFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+
+        if(!place.getText().toString().isEmpty()){
+
+            location.setAddressName(place.getText().toString());
+            Geocoder coder = new Geocoder(context);
+            try {
+                ArrayList<Address> adresses = (ArrayList<Address>) coder.getFromLocationName(place.getText().toString(), 50);
+                if(adresses.size() > 0) {
+                    location.setAddressLongitude((float) adresses.get(0).getLongitude());
+                    location.setAddressLatitude((float) adresses.get(0).getLatitude());
+
+                    Geocoder gcd = new Geocoder(context, Locale.getDefault());
+                    List<Address> addresses = null;
+                    try {
+                        addresses = gcd.getFromLocation(adresses.get(0).getLatitude(), adresses.get(0).getLongitude(), 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (addresses.size() > 0) {
+                        location.setCityName(addresses.get(0).getLocality());
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            android.location.Location currentLocation = getLastBestLocation(context);
+            if(currentLocation != null) {
+                location.setAddressLongitude((float) currentLocation.getLongitude());
+                location.setAddressLatitude((float) currentLocation.getLatitude());
+                Geocoder gcd = new Geocoder(context, Locale.getDefault());
+                List<Address> addresses = null;
+                try {
+                    addresses = gcd.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (addresses.size() > 0) {
+                    location.setCityName(addresses.get(0).getLocality());
+                }
+            }
+        }
+
+        location.setName(locationName.getText().toString());
 
         BackendDatabase.getInstance().saveLocation(location);
 
@@ -165,5 +259,35 @@ public class GeneralFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    /**
+     * @return the last know best location
+     */
+    private android.location.Location getLastBestLocation(Context context) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationManager locationManager = (LocationManager)
+                    context.getSystemService(Context.LOCATION_SERVICE);
+
+            android.location.Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            android.location.Location locationNet = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            long GPSLocationTime = 0;
+            if (null != locationGPS) { GPSLocationTime = locationGPS.getTime(); }
+
+            long NetLocationTime = 0;
+
+            if (null != locationNet) {
+                NetLocationTime = locationNet.getTime();
+            }
+
+            if ( 0 < GPSLocationTime - NetLocationTime ) {
+                return locationGPS;
+            }
+            else {
+                return locationNet;
+            }
+        }
+        return null;
     }
 }

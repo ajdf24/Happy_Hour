@@ -95,7 +95,8 @@ public class FavoriteButton extends ImageButton  {
                 }
                 if(!isActive()){
                     Toast.makeText(context, R.string.general_added_to_favorites, Toast.LENGTH_LONG).show();
-                    likedLocation = db.createLikedLocation(location.getId());
+                    //TODO: check from Firebase
+//                    likedLocation = db.createLikedLocation(location.getId());
                     toggle();
                     new PostLocationOnFacebook().execute(location);
                 }else {
@@ -131,7 +132,8 @@ public class FavoriteButton extends ImageButton  {
 
         db = new DataSource(context);
 
-        likedLocation = db.getLikedLocation(location.getId());
+        //TODO: Write to firebase
+//        likedLocation = db.getLikedLocation(location.getId());
 
         if(likedLocation != null){
             this.setActive(true);

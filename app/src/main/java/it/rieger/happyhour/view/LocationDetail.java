@@ -13,6 +13,12 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,60 +73,23 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
 
         ButterKnife.bind(this);
 
-//        currentLocation = (Location) this.getIntent().getSerializableExtra(AppConstants.BUNDLE_CONTEXT_LOCATION);
+        DatabaseReference mDatabase;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-//        currentLocation.setId(2);
+            Query postsRef = mDatabase.child("posts").orderByChild("id").equalTo("test");
+            postsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    currentLocation = (dataSnapshot.getChildren().iterator().next().getValue(Location.class));
+                    initializeGUI();
 
-//        Geocoder gcd = new Geocoder(this, Locale.getDefault());
-//        List<Address> addresses = null;
-//        try {
-//            addresses = gcd.getFromLocation(currentLocation.getAddressLatitude(), currentLocation.getAddressLongitude(), 1);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        if (addresses.size() > 0)
-//        {
-//            System.out.println(addresses.get(0).getLocality());
-//        }
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-//        DatabaseReference mDatabase;
-//        mDatabase = FirebaseDatabase.getInstance().getReference();
-//        DatabaseReference postsRef = mDatabase.child("posts/" + addresses.get(0).getLocality());
-//        DatabaseReference newPostRef = postsRef.push();
-//        newPostRef.setValue(currentLocation);
-
-
-//
-//        myRef.setValue(currentLocation);
-
-        List<Integer> locations = new ArrayList<>();
-        locations.add(1);
-//        Firebase.getLocations(locations);
-
-        Firebase.getLocations(locations, this);
-
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("location");
-//
-//// Read from the database
-//        myRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                // This method is called once with the initial value and again
-//                // whenever data at this location is updated.
-//                Location value = dataSnapshot.getValue(Location.class);
-//                Log.d("", "Value is: " + value);
-//                currentLocation = value;
-//                initializeGUI();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                // Failed to read value
-//                Log.w("", "Failed to read value.", error.toException());
-//            }
-//        });
+                }
+            });
 
     }
 

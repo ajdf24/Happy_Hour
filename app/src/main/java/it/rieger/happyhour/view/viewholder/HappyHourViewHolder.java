@@ -43,7 +43,7 @@ public class HappyHourViewHolder extends RecyclerView.ViewHolder implements Time
 
     HappyHour happyHour;
 
-    Time time;
+    Time time = new Time();
 
     public HappyHourViewHolder(final View itemView) {
         super(itemView);

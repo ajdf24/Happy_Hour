@@ -17,4 +17,5 @@
         android:icon="@mipmap/ic_clock"
         android:title="@string/bottom_bar_now"
         />
+
 </menu>
