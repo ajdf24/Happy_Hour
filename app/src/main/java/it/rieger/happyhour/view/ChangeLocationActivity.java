@@ -3,17 +3,22 @@ package it.rieger.happyhour.view;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Process;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.share.model.ShareContent;
@@ -21,9 +26,11 @@ import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.view.fragments.changelocation.AbstractChangeLocationFragment;
 import it.rieger.happyhour.view.fragments.changelocation.CameraFragment;
 import it.rieger.happyhour.view.fragments.changelocation.GeneralFragment;
 import it.rieger.happyhour.view.fragments.changelocation.HappyHoursFragment;
@@ -40,15 +47,19 @@ public class ChangeLocationActivity extends AppCompatActivity
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-    Fragment currentFragment;
+    AbstractChangeLocationFragment currentFragment;
 
     Location location;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawe_activity);
         setSupportActionBar(toolbar);
+
+        ButterKnife.bind(this);
 
         location = (Location) getIntent().getSerializableExtra(AppConstants.BUNDLE_CONTEXT_LOCATION);
 
@@ -83,6 +94,13 @@ public class ChangeLocationActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//        // set title
+//        alertDialogBuilder.setTitle("Please logout after ");
+//        AlertDialog d = alertDialogBuilder.create();
+//        d.show();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer != null ? drawer.isDrawerOpen(GravityCompat.START) : false) {
             drawer.closeDrawer(GravityCompat.START);
@@ -99,26 +117,33 @@ public class ChangeLocationActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         if (id == R.id.nav_camera) {
-            if(currentFragment != null)
-                fragmentTransaction.remove(currentFragment);
-            final CameraFragment cameraFragment = CameraFragment.newInstance(location);
-            fragmentTransaction.add(R.id.fragment_container, cameraFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_CAMERA);
-            fragmentTransaction.commit();
-            currentFragment = cameraFragment;
+//            if(currentFragment != null)
+//                fragmentTransaction.remove(currentFragment);
+//            final CameraFragment cameraFragment = CameraFragment.newInstance(location);
+//            fragmentTransaction.add(R.id.fragment_container, cameraFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_CAMERA);
+//            fragmentTransaction.commit();
+//            currentFragment = cameraFragment;
         } else if (id == R.id.nav_general) {
-            if(currentFragment != null)
-                fragmentTransaction.remove(currentFragment);
+            if(currentFragment != null){
+                if(currentFragment.readyToSave()){
+                    currentFragment.saveLocation();
+                    fragmentTransaction.remove(currentFragment);
+                }else {
+                    Toast.makeText(this,"blub", Toast.LENGTH_LONG).show();
+                }
+            }
+
             final GeneralFragment generalFragment = GeneralFragment.newInstance(location);
             fragmentTransaction.add(R.id.fragment_container, generalFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_GENERAL);
             fragmentTransaction.commit();
             currentFragment = generalFragment;
         } else if (id == R.id.nav_open) {
-            if(currentFragment != null)
-                fragmentTransaction.remove(currentFragment);
-            final OpeningFragment openingFragment = OpeningFragment.newInstance(location);
-            fragmentTransaction.add(R.id.fragment_container, openingFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_OPENING);
-            fragmentTransaction.commit();
-            currentFragment = openingFragment;
+//            if(currentFragment != null)
+//                fragmentTransaction.remove(currentFragment);
+//            final OpeningFragment openingFragment = OpeningFragment.newInstance(location);
+//            fragmentTransaction.add(R.id.fragment_container, openingFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_OPENING);
+//            fragmentTransaction.commit();
+//            currentFragment = openingFragment;
         } else if (id == R.id.nav_share) {
 
             ShareDialog shareDialog = new ShareDialog(this);
@@ -138,8 +163,15 @@ public class ChangeLocationActivity extends AppCompatActivity
                 Toast.makeText(this, R.string.general_not_implemented,Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_happy_hour){
-            if(currentFragment != null)
-                fragmentTransaction.remove(currentFragment);
+            if(currentFragment != null){
+                if(currentFragment.readyToSave()){
+                    currentFragment.saveLocation();
+
+                    fragmentTransaction.remove(currentFragment);
+                }else {
+                    Toast.makeText(this,"blub", Toast.LENGTH_LONG).show();
+                }
+            }
             final HappyHoursFragment happyHoursFragment = HappyHoursFragment.newInstance(location);
             fragmentTransaction.add(R.id.fragment_container, happyHoursFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_Happy_HOURS);
             fragmentTransaction.commit();
@@ -153,9 +185,10 @@ public class ChangeLocationActivity extends AppCompatActivity
         return true;
     }
 
+
+
     @Override
     public void onFragmentInteraction(Uri uri) {
 
     }
-
 }

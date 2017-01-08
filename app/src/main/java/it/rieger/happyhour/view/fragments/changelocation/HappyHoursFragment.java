@@ -28,7 +28,7 @@ import it.rieger.happyhour.model.Location;
  * Use the {@link HappyHoursFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HappyHoursFragment extends Fragment {
+public class HappyHoursFragment extends AbstractChangeLocationFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String LOCATION = "location";
 
@@ -109,6 +109,21 @@ public class HappyHoursFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    protected void initializeGui() {
+
+    }
+
+    @Override
+    protected void initializeActiveElements() {
+
+    }
+
+    @Override
+    protected boolean checkReadyToSave() {
+        return false;
     }
 
     public void onButtonPressed(Uri uri) {
