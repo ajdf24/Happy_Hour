@@ -12,6 +12,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +74,15 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
         return fragment;
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        view = inflater.inflate(R.layout.fragment_general, container, false);
+
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        return view;
+    }
 
     @Override
     protected void initializeGui() {
@@ -123,10 +134,12 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
                             String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                             String city = addresses.get(0).getLocality();
 
+//                            place.setError(null);
                             place.setText(String.format(getResources().getString(R.string.general_adress_placeholder_adrees_city), address, city));
 
                             //TODO: Places API Implementieren
                             locationName.setText("");
+
 
                         } catch (NullPointerException e) {
                             Log.w("Log", "Can not load current position");
@@ -145,6 +158,23 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
                 }
             }
         });
+
+        place.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+//                place.setError(null);
+            }
+        });
     }
 
     @Override
@@ -157,8 +187,8 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
         try {
             address = coder.getFromLocationName(place.getText().toString(), 5);
             if (address == null) {
+                addressLocation = address.get(0);
             }
-            addressLocation = address.get(0);
 
             double lat = addressLocation.getLatitude();
             double log = addressLocation.getLongitude();
@@ -183,14 +213,13 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
+//        place.setError("Adresse nicht gefunden");
         return false;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-
     }
 
     @Override

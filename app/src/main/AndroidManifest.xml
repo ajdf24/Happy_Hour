@@ -73,7 +73,8 @@
         <activity
             android:name=".view.ChangeLocationActivity"
             android:label="@string/title_activity_navigation_drawer"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".view.FavoriteLocations"></activity>
     </application>
 

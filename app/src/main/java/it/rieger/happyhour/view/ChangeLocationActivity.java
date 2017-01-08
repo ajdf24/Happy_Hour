@@ -127,9 +127,15 @@ public class ChangeLocationActivity extends AppCompatActivity
             if(currentFragment != null){
                 if(currentFragment.readyToSave()){
                     currentFragment.saveLocation();
+
                     fragmentTransaction.remove(currentFragment);
+
+                    final GeneralFragment generalFragment = GeneralFragment.newInstance(location);
+                    fragmentTransaction.add(R.id.fragment_container, generalFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_GENERAL);
+                    fragmentTransaction.commit();
+                    currentFragment = generalFragment;
                 }else {
-                    Toast.makeText(this,"blub", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,"Fehler", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -138,12 +144,25 @@ public class ChangeLocationActivity extends AppCompatActivity
             fragmentTransaction.commit();
             currentFragment = generalFragment;
         } else if (id == R.id.nav_open) {
-//            if(currentFragment != null)
-//                fragmentTransaction.remove(currentFragment);
-//            final OpeningFragment openingFragment = OpeningFragment.newInstance(location);
-//            fragmentTransaction.add(R.id.fragment_container, openingFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_OPENING);
-//            fragmentTransaction.commit();
-//            currentFragment = openingFragment;
+            if(currentFragment != null) {
+                if(currentFragment.readyToSave()) {
+                    currentFragment.saveLocation();
+
+                    fragmentTransaction.remove(currentFragment);
+
+                    final OpeningFragment openingFragment = OpeningFragment.newInstance(location);
+                    fragmentTransaction.add(R.id.fragment_container, openingFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_OPENING);
+                    fragmentTransaction.commit();
+                    currentFragment = openingFragment;
+                }else {
+                    Toast.makeText(this,"Fehler", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            final OpeningFragment openingFragment = OpeningFragment.newInstance(location);
+            fragmentTransaction.add(R.id.fragment_container, openingFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_OPENING);
+            fragmentTransaction.commit();
+            currentFragment = openingFragment;
         } else if (id == R.id.nav_share) {
 
             ShareDialog shareDialog = new ShareDialog(this);
@@ -168,14 +187,16 @@ public class ChangeLocationActivity extends AppCompatActivity
                     currentFragment.saveLocation();
 
                     fragmentTransaction.remove(currentFragment);
+
+                    final HappyHoursFragment happyHoursFragment = HappyHoursFragment.newInstance(location);
+                    fragmentTransaction.add(R.id.fragment_container, happyHoursFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_Happy_HOURS);
+                    fragmentTransaction.commit();
+                    currentFragment = happyHoursFragment;
                 }else {
-                    Toast.makeText(this,"blub", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,"Fehler", Toast.LENGTH_LONG).show();
                 }
             }
-            final HappyHoursFragment happyHoursFragment = HappyHoursFragment.newInstance(location);
-            fragmentTransaction.add(R.id.fragment_container, happyHoursFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_Happy_HOURS);
-            fragmentTransaction.commit();
-            currentFragment = happyHoursFragment;
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -42,6 +42,8 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
 
     private OnFragmentInteractionListener listener;
 
+    private HappyHourAdapter happyHourAdapter;
+
     public HappyHoursFragment() {
         // Required empty public constructor
     }
@@ -72,17 +74,26 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_happy_hours, container, false);
 
-        ButterKnife.bind(this, view);
+        view = inflater.inflate(R.layout.fragment_happy_hours, container, false);
 
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        return view;
+    }
+
+    @Override
+    protected void initializeGui() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         happyHours.setLayoutManager(linearLayoutManager);
 
-        final HappyHourAdapter happyHourAdapter = new HappyHourAdapter(location, view);
+        happyHourAdapter = new HappyHourAdapter(location, view);
         happyHours.setAdapter(happyHourAdapter);
+    }
 
+    @Override
+    protected void initializeActiveElements() {
         ItemTouchHelper.SimpleCallback simpleItemTouchHelper = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT){
 
             @Override
@@ -107,23 +118,11 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
                 happyHours.scrollToPosition(happyHourAdapter.getItemCount() - 1);
             }
         });
-
-        return view;
-    }
-
-    @Override
-    protected void initializeGui() {
-
-    }
-
-    @Override
-    protected void initializeActiveElements() {
-
     }
 
     @Override
     protected boolean checkReadyToSave() {
-        return false;
+        return true;
     }
 
     public void onButtonPressed(Uri uri) {

@@ -31,7 +31,7 @@ import it.rieger.happyhour.util.standard.CreateContextForResource;
  * Use the {@link OpeningFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OpeningFragment extends Fragment implements TimePickerDialog.OnTimeSetListener{
+public class OpeningFragment extends AbstractChangeLocationFragment implements TimePickerDialog.OnTimeSetListener{
 
     private final String LOG_TAG = getClass().getSimpleName();
 
@@ -89,11 +89,22 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_opening, container, false);
+        view = inflater.inflate(R.layout.fragment_opening, container, false);
 
-        ButterKnife.bind(this, view);
+        super.onCreateView(inflater, container, savedInstanceState);
 
+        return view;
+    }
+
+    @Override
+    protected void initializeGui() {
+
+    }
+
+    @Override
+    protected void initializeActiveElements() {
 
         mondayText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,7 +228,11 @@ public class OpeningFragment extends Fragment implements TimePickerDialog.OnTime
             }
         });
 
-        return view;
+    }
+
+    @Override
+    protected boolean checkReadyToSave() {
+        return true;
     }
 
     @Override

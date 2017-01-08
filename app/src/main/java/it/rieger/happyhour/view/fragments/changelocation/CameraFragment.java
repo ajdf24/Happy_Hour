@@ -48,7 +48,7 @@ import it.rieger.happyhour.view.fragments.SlideshowDialogFragment;
  * Use the {@link CameraFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CameraFragment extends Fragment {
+public class CameraFragment extends AbstractChangeLocationFragment {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
@@ -78,6 +78,8 @@ public class CameraFragment extends Fragment {
     private boolean isButtonsShow = false;
 
     private List<String> images;
+
+    private GalleryAdapter galleryAdapter;
 
 
     public CameraFragment() {
@@ -113,9 +115,29 @@ public class CameraFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_camera, container, false);
-        ButterKnife.bind(this, view);
+        view = inflater.inflate(R.layout.fragment_camera, container, false);
+
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        images = location.getImageKeyList();
+
+        return view;
+    }
+
+    @Override
+    protected void initializeGui() {
+        galleryAdapter = new GalleryAdapter(view.getContext(), location);
+
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(view.getContext(), 2);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(galleryAdapter);
+    }
+
+    @Override
+    protected void initializeActiveElements() {
 
         takePictureIntent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,15 +199,6 @@ public class CameraFragment extends Fragment {
             }
         });
 
-
-        images = location.getImageKeyList();
-        GalleryAdapter galleryAdapter = new GalleryAdapter(view.getContext(), location);
-
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(view.getContext(), 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(galleryAdapter);
-
         recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener(view.getContext(), recyclerView, new GalleryAdapter.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -217,8 +230,11 @@ public class CameraFragment extends Fragment {
                 newFragment.show(ft, AppConstants.FragmentTags.FRAGMENT_IMAGE_DIALOG);
             }
         }));
+    }
 
-        return view;
+    @Override
+    protected boolean checkReadyToSave() {
+        return false;
     }
 
     public void onButtonPressed(Uri uri) {

@@ -73,23 +73,30 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
 
         ButterKnife.bind(this);
 
-        DatabaseReference mDatabase;
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        Bundle bundle = getIntent().getExtras();
 
-            Query postsRef = mDatabase.child("posts").orderByChild("id").equalTo("test");
-            postsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    currentLocation = (dataSnapshot.getChildren().iterator().next().getValue(Location.class));
-                    initializeGUI();
+        currentLocation = (Location) bundle.getSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION);
 
-                }
+        initializeGUI();
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
+//        DatabaseReference mDatabase;
+//        mDatabase = FirebaseDatabase.getInstance().getReference();
+//
+//            Query postsRef = mDatabase.child("posts").orderByChild("id").equalTo("test");
+//            postsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    currentLocation = (dataSnapshot.getChildren().iterator().next().getValue(Location.class));
+//                    initializeGUI();
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
 
     }
 
