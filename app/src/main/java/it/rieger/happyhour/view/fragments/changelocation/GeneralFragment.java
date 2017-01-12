@@ -186,7 +186,7 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
 
         try {
             address = coder.getFromLocationName(place.getText().toString(), 5);
-            if (address == null) {
+            if (address != null) {
                 addressLocation = address.get(0);
             }
 

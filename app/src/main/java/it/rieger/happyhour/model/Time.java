@@ -27,6 +27,8 @@ public class Time implements Serializable {
      */
     private String endTime;
 
+    int hourOfDay; int minute; int hourOfDayEnd; int minuteEnd;
+
     public Day getDay() {
         return day;
     }
@@ -49,6 +51,38 @@ public class Time implements Serializable {
 
     public void setEndTime(@NonNull String endTime) {
         this.endTime = endTime;
+    }
+
+    public int getHourOfDay() {
+        return hourOfDay;
+    }
+
+    public void setHourOfDay(int hourOfDay) {
+        this.hourOfDay = hourOfDay;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public void setMinute(int minute) {
+        this.minute = minute;
+    }
+
+    public int getHourOfDayEnd() {
+        return hourOfDayEnd;
+    }
+
+    public void setHourOfDayEnd(int hourOfDayEnd) {
+        this.hourOfDayEnd = hourOfDayEnd;
+    }
+
+    public int getMinuteEnd() {
+        return minuteEnd;
+    }
+
+    public void setMinuteEnd(int minuteEnd) {
+        this.minuteEnd = minuteEnd;
     }
 
     @Override

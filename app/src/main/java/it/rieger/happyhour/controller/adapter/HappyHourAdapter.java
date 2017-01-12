@@ -2,6 +2,8 @@ package it.rieger.happyhour.controller.adapter;
 
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +11,10 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.viewholder.HappyHourViewHolder;
 
 /**
@@ -46,7 +50,44 @@ public class HappyHourAdapter extends RecyclerView.Adapter<HappyHourViewHolder>{
         holder.setHappyHour(happyHour);
 
         holder.getDrink().setText(happyHour.getDrink());
+        holder.getDrink().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                happyHour.setDrink(s.toString());
+            }
+        });
+
         holder.getPrice().setText(happyHour.getPrice());
+        holder.getPrice().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                happyHour.setPrice(s.toString());
+            }
+        });
+
+        holder.getTimeField().setText(happyHour.getHappyHourTime().getStartTime() + CreateContextForResource.getStringFromID(R.string.general_clock_to) + happyHour.getHappyHourTime().getEndTime() + CreateContextForResource.getStringFromID(R.string.general_clock));
+
+        holder.getDaySpinner().setSelection(Day.daysToInt(happyHour.getHappyHourTime().getDay()));
     }
 
     @Override

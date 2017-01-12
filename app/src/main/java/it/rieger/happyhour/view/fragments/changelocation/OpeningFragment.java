@@ -13,13 +13,13 @@ import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
 import com.borax12.materialdaterangepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
-import it.rieger.happyhour.controller.backend.BackendDatabase;
+import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.Location;
-import it.rieger.happyhour.model.OpeningTimes;
+import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 
@@ -36,8 +36,6 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
     private final String LOG_TAG = getClass().getSimpleName();
 
     private static final String LOCATION = "Location";
-
-    private Location location;
 
     @Bind(R.id.fragment_opening_monday_text)
     EditText mondayText;
@@ -100,7 +98,35 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
 
     @Override
     protected void initializeGui() {
+        List<Time> openingTimes = location.getOpeningTimes().getTimes();
 
+        for(int i = 0; i < location.getOpeningTimes().getTimes().size(); i++){
+            if(openingTimes.get(i).getDay() == Day.SUNDAY){
+                sundayText.setText(generateTimeStringForInitialize(i));
+            }
+            if(openingTimes.get(i).getDay() == Day.MONDAY){
+                mondayText.setText(generateTimeStringForInitialize(i));
+            }
+            if(openingTimes.get(i).getDay() == Day.TUESDAY){
+                thusedayText.setText(generateTimeStringForInitialize(i));
+            }
+            if(openingTimes.get(i).getDay() == Day.WEDNESDAY){
+                wensdayText.setText(generateTimeStringForInitialize(i));
+            }
+            if(openingTimes.get(i).getDay() == Day.THURSDAY){
+                thusedayText.setText(generateTimeStringForInitialize(i));
+            }
+            if(openingTimes.get(i).getDay() == Day.FRIDAY){
+                fridayText.setText(generateTimeStringForInitialize(i));
+            }
+            if(openingTimes.get(i).getDay() == Day.SATURDAY){
+                sundayText.setText(generateTimeStringForInitialize(i));
+            }
+        }
+    }
+
+    private String generateTimeStringForInitialize(int index){
+        return location.getOpeningTimes().getTimes().get(index).getHourOfDay()+":"+location.getOpeningTimes().getTimes().get(index).getMinute() + CreateContextForResource.getStringFromID(R.string.general_clock_to) + location.getOpeningTimes().getTimes().get(index).getHourOfDayEnd() + ":" + location.getOpeningTimes().getTimes().get(index).getMinuteEnd() + CreateContextForResource.getStringFromID(R.string.general_clock);
     }
 
     @Override
@@ -122,7 +148,7 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
                 tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_MONDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
-                dayClickID = 0;
+                dayClickID = 1;
             }
         });
         thusedayText.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +165,7 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
                 tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_TUESDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
-                dayClickID = 1;
+                dayClickID = 2;
             }
         });
         wensdayText.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +182,7 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
                 tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_WEDNESDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
-                dayClickID = 2;
+                dayClickID = 3;
             }
         });
         thursdayText.setOnClickListener(new View.OnClickListener() {
@@ -173,7 +199,7 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
                 tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_THURSDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
-                dayClickID = 3;
+                dayClickID = 4;
             }
         });
         fridayText.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +216,7 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
                 tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_FRIDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
-                dayClickID = 4;
+                dayClickID = 5;
             }
         });
         saturdayText.setOnClickListener(new View.OnClickListener() {
@@ -207,7 +233,7 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
                 tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_SATURDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
-                dayClickID = 5;
+                dayClickID = 6;
             }
         });
         sundayText.setOnClickListener(new View.OnClickListener() {
@@ -224,7 +250,7 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
                 tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_SUNDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
 
-                dayClickID = 6;
+                dayClickID = 0;
             }
         });
 
@@ -247,40 +273,68 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-
-
-        BackendDatabase.getInstance().saveLocation(location);
-    }
-
-    @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
         String time = hourOfDay+":"+minute + CreateContextForResource.getStringFromID(R.string.general_clock_to) + hourOfDayEnd + ":" + minuteEnd + CreateContextForResource.getStringFromID(R.string.general_clock);
 
         switch (dayClickID){
-            case 0:
-                mondayText.setText(time);
-                break;
             case 1:
-                thusedayText.setText(time);
+                mondayText.setText(time);
+                addOpeningTime(dayClickID, hourOfDay, minute, hourOfDayEnd, minuteEnd);
                 break;
             case 2:
-                wensdayText.setText(time);
+                thusedayText.setText(time);
+                addOpeningTime(dayClickID, hourOfDay, minute, hourOfDayEnd, minuteEnd);
                 break;
             case 3:
-                thursdayText.setText(time);
+                wensdayText.setText(time);
+                addOpeningTime(dayClickID, hourOfDay, minute, hourOfDayEnd, minuteEnd);
                 break;
             case 4:
-                fridayText.setText(time);
+                thursdayText.setText(time);
+                addOpeningTime(dayClickID, hourOfDay, minute, hourOfDayEnd, minuteEnd);
                 break;
             case 5:
-                saturdayText.setText(time);
+                fridayText.setText(time);
+                addOpeningTime(dayClickID, hourOfDay, minute, hourOfDayEnd, minuteEnd);
                 break;
             case 6:
+                saturdayText.setText(time);
+                addOpeningTime(dayClickID, hourOfDay, minute, hourOfDayEnd, minuteEnd);
+                break;
+            case 0:
                 sundayText.setText(time);
+                addOpeningTime(dayClickID, hourOfDay, minute, hourOfDayEnd, minuteEnd);
                 break;
         }
+    }
+
+    private void addOpeningTime(int day, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd){
+        Day enumDay = Day.intToDays(day);
+
+        int timeListIndex = listContainsDay(enumDay);
+
+        if(timeListIndex > -1){
+            location.getOpeningTimes().getTimes().remove(timeListIndex);
+        }
+
+        Time newOpeningTime = new Time();
+        newOpeningTime.setDay(enumDay);
+        newOpeningTime.setHourOfDay(hourOfDay);
+        newOpeningTime.setMinute(minute);
+        newOpeningTime.setHourOfDayEnd(hourOfDayEnd);
+        newOpeningTime.setMinuteEnd(minuteEnd);
+        location.getOpeningTimes().getTimes().add(newOpeningTime);
+    }
+
+    private int listContainsDay(Day day){
+        List<Time> openingTimes = location.getOpeningTimes().getTimes();
+
+        for(int i = 0; i < location.getOpeningTimes().getTimes().size(); i++){
+            if(openingTimes.get(i).getDay() == day){
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**

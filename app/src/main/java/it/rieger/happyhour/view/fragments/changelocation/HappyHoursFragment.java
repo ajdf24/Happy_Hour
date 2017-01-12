@@ -38,8 +38,6 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
     @Bind(R.id.fragment_happy_hours_new_happy_hour)
     FloatingActionButton fab;
 
-    private Location location;
-
     private OnFragmentInteractionListener listener;
 
     private HappyHourAdapter happyHourAdapter;

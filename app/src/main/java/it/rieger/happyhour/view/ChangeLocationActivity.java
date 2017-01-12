@@ -139,10 +139,10 @@ public class ChangeLocationActivity extends AppCompatActivity
                 }
             }
 
-            final GeneralFragment generalFragment = GeneralFragment.newInstance(location);
-            fragmentTransaction.add(R.id.fragment_container, generalFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_GENERAL);
-            fragmentTransaction.commit();
-            currentFragment = generalFragment;
+//            final GeneralFragment generalFragment = GeneralFragment.newInstance(location);
+//            fragmentTransaction.add(R.id.fragment_container, generalFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_GENERAL);
+//            fragmentTransaction.commit();
+//            currentFragment = generalFragment;
         } else if (id == R.id.nav_open) {
             if(currentFragment != null) {
                 if(currentFragment.readyToSave()) {
@@ -159,10 +159,10 @@ public class ChangeLocationActivity extends AppCompatActivity
                 }
             }
 
-            final OpeningFragment openingFragment = OpeningFragment.newInstance(location);
-            fragmentTransaction.add(R.id.fragment_container, openingFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_OPENING);
-            fragmentTransaction.commit();
-            currentFragment = openingFragment;
+//            final OpeningFragment openingFragment = OpeningFragment.newInstance(location);
+//            fragmentTransaction.add(R.id.fragment_container, openingFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_OPENING);
+//            fragmentTransaction.commit();
+//            currentFragment = openingFragment;
         } else if (id == R.id.nav_share) {
 
             ShareDialog shareDialog = new ShareDialog(this);

@@ -54,8 +54,6 @@ public class CameraFragment extends AbstractChangeLocationFragment {
 
     private static final String ARG_LOCATION = "location";
 
-    private Location location;
-
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int SELECT_PHOTO = 2;
 
