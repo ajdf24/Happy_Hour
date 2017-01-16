@@ -1,6 +1,7 @@
 package it.rieger.happyhour.controller.adapter;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -10,11 +11,19 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.model.ThumbnailHolderClass;
 import it.rieger.happyhour.util.listener.OnItemTouchListener;
 import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
@@ -47,11 +56,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
     public void onBindViewHolder(ThumbnailViewHolder holder, int position) {
         String image = images.get(position);
 
-        Glide.with(context).load(image)
-                .thumbnail(0.5f)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.thumbnail);
+        ThumbnailHolderClass thumbnailHolderClass = new ThumbnailHolderClass(holder, image);
+
+        new DownloadImage().execute(thumbnailHolderClass);
 
     }
 
@@ -99,5 +106,33 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
             return false;
         }
 
+    }
+
+    private class DownloadImage extends AsyncTask<ThumbnailHolderClass, Integer, ThumbnailViewHolder>{
+
+        @Override
+        protected ThumbnailViewHolder doInBackground(final ThumbnailHolderClass... params) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+            DatabaseReference images = database.getReference("images");
+
+            images.orderByKey().equalTo(params[0].getImageKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                        Image image = dataSnapshot1.getValue(Image.class);
+                        params[0].getThumbnailViewHolder().progressBar.setVisibility(View.INVISIBLE);
+                        params[0].getThumbnailViewHolder().thumbnail.setImageBitmap(image.getImage());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            return null;
+        }
     }
 }

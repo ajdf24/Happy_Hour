@@ -202,6 +202,16 @@ public enum BackendDatabase {
 
     }
 
+    public void removeImage(Location location, String imageKey){
+        location.getImageKeyList().remove(imageKey);
+
+        DatabaseReference mDatabase;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("images/" + imageKey).removeValue();
+
+        saveLocation(location);
+    }
+
     /**
      * Get a new id from the backend database
      *
@@ -234,7 +244,7 @@ public enum BackendDatabase {
         mDatabase.updateChildren(childUpdates);
     }
 
-    public void saveImage(Image image, Location location){
+    public String saveImage(Image image, Location location){
         DatabaseReference mDatabase;
         mDatabase = FirebaseDatabase.getInstance().getReference();
         String key = null;
@@ -257,6 +267,8 @@ public enum BackendDatabase {
 
         mDatabase.updateChildren(childUpdates);
         mDatabase.updateChildren(childLocationUpdates);
+
+        return key;
     }
 
     private class LoadImageTask extends AsyncTask<String, Integer, Integer>{

@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,9 +24,14 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -33,10 +39,12 @@ import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.GalleryAdapter;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
+import it.rieger.happyhour.controller.callbacks.ReloadCallback;
 import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.listener.AnimationListener;
+import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.dialogs.ImageContextMenuDialog;
 import it.rieger.happyhour.view.fragments.SlideshowDialogFragment;
 
@@ -48,7 +56,7 @@ import it.rieger.happyhour.view.fragments.SlideshowDialogFragment;
  * Use the {@link CameraFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CameraFragment extends AbstractChangeLocationFragment {
+public class CameraFragment extends AbstractChangeLocationFragment implements ReloadCallback{
 
     private final String LOG_TAG = getClass().getSimpleName();
 
@@ -78,6 +86,11 @@ public class CameraFragment extends AbstractChangeLocationFragment {
     private List<String> images;
 
     private GalleryAdapter galleryAdapter;
+
+    private Uri imageToUploadUri;
+
+    String mCurrentPhotoPath;
+
 
 
     public CameraFragment() {
@@ -207,7 +220,7 @@ public class CameraFragment extends AbstractChangeLocationFragment {
                 FragmentManager fragmentManager = getFragmentManager();
                 android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance(images);
+                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance(images, location);
                 newFragment.setArguments(bundle);
                 fragmentTransaction.add(R.id.fragment_container, newFragment, AppConstants.FragmentTags.FRAGMENT_SLIDE_SHOW).addToBackStack(AppConstants.FragmentTags.FRAGMENT_SLIDE_SHOW);
                 fragmentTransaction.commit();
@@ -224,7 +237,7 @@ public class CameraFragment extends AbstractChangeLocationFragment {
                 ft.addToBackStack(null);
 
 
-                DialogFragment newFragment = ImageContextMenuDialog.newInstance(images.get(position));
+                DialogFragment newFragment = ImageContextMenuDialog.newInstance(images.get(position), location, CameraFragment.this);
                 newFragment.show(ft, AppConstants.FragmentTags.FRAGMENT_IMAGE_DIALOG);
             }
         }));
@@ -232,7 +245,7 @@ public class CameraFragment extends AbstractChangeLocationFragment {
 
     @Override
     protected boolean checkReadyToSave() {
-        return false;
+        return true;
     }
 
     public void onButtonPressed(Uri uri) {
@@ -263,12 +276,12 @@ public class CameraFragment extends AbstractChangeLocationFragment {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
            Bundle extras = data.getExtras();
            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            //TODO: Upload to Server Show in Galery
 
             Image image = new Image();
-            image.setImage(imageBitmap);
+            image.setBitmapToImage(imageBitmap);
 
             BackendDatabase.getInstance().saveImage(image, location);
+
 
         }
         if(requestCode == SELECT_PHOTO && resultCode == Activity.RESULT_OK){
@@ -282,7 +295,7 @@ public class CameraFragment extends AbstractChangeLocationFragment {
                 //TODO: Upload to Server Show in Galery
 
                 Image image = new Image();
-                image.setImage(selectedImage);
+                image.setBitmapToImage(selectedImage);
 
                 BackendDatabase.getInstance().saveImage(image, location);
 
@@ -290,6 +303,11 @@ public class CameraFragment extends AbstractChangeLocationFragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void reload() {
+        galleryAdapter.notifyDataSetChanged();
     }
 
     /**

@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -17,22 +18,33 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.model.Image;
+import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.model.ThumbnailHolderClass;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.listener.OnPageChangeListener;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.dialogs.ImageContextMenuDialog;
+import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
 public class SlideshowDialogFragment extends DialogFragment{
 
     private final String LOG_TAG = getClass().getSimpleName();
 
     private static List<String> imageList;
+
+    static Location currentLocation;
 
     @Bind(R.id.slide_show_fragment_image_count)
     TextView lblCount;
@@ -41,9 +53,10 @@ public class SlideshowDialogFragment extends DialogFragment{
     ViewPager viewPager;
     private int selectedPosition = 0;
 
-    public static SlideshowDialogFragment newInstance(List<String> images) {
+    public static SlideshowDialogFragment newInstance(List<String> images, Location location) {
         SlideshowDialogFragment f = new SlideshowDialogFragment();
         imageList = images;
+        currentLocation = location;
         return f;
     }
 
@@ -108,11 +121,15 @@ public class SlideshowDialogFragment extends DialogFragment{
 
             String image = imageList.get(position);
 
-            Glide.with(getActivity()).load(image)
-                    .thumbnail(0.5f)
-                    .crossFade()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(imageViewPreview);
+            ImageViewHolder imageViewHolder = new ImageViewHolder(imageViewPreview, image);
+
+            new DownloadImage().execute(imageViewHolder);
+
+//            Glide.with(getActivity()).load(image)
+//                    .thumbnail(0.5f)
+//                    .crossFade()
+//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                    .into(imageViewPreview);
 
             container.addView(view);
 
@@ -127,7 +144,7 @@ public class SlideshowDialogFragment extends DialogFragment{
                     ft.addToBackStack(null);
 
 
-                    DialogFragment newFragment = ImageContextMenuDialog.newInstance(imageList.get(position));
+                    DialogFragment newFragment = ImageContextMenuDialog.newInstance(imageList.get(position), currentLocation, null);
                     newFragment.show(ft, AppConstants.FragmentTags.FRAGMENT_IMAGE_DIALOG);
                 }
             });
@@ -149,6 +166,61 @@ public class SlideshowDialogFragment extends DialogFragment{
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
+        }
+    }
+
+    private class ImageViewHolder{
+        ImageView imageView = null;
+
+        String image = null;
+
+        public ImageViewHolder(ImageView imageView, String image) {
+            this.imageView = imageView;
+            this.image = image;
+        }
+
+        public ImageView getImageView() {
+            return imageView;
+        }
+
+        public void setImageView(ImageView imageView) {
+            this.imageView = imageView;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+    }
+
+    private class DownloadImage extends AsyncTask<ImageViewHolder, Integer, ThumbnailViewHolder> {
+
+        @Override
+        protected ThumbnailViewHolder doInBackground(final ImageViewHolder... params) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+            DatabaseReference images = database.getReference("images");
+
+            images.orderByKey().equalTo(params[0].getImage()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                        Image image = dataSnapshot1.getValue(Image.class);
+//                        params[0].getThumbnailViewHolder().progressBar.setVisibility(View.INVISIBLE);
+                        params[0].getImageView().setImageBitmap(image.getImage());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            return null;
         }
     }
 }

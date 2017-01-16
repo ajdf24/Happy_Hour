@@ -139,7 +139,7 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
                 FragmentManager fragmentManager = getFragmentManager();
                 android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance(currentLocation.getImageKeyList());
+                SlideshowDialogFragment newFragment = SlideshowDialogFragment.newInstance(currentLocation.getImageKeyList(), currentLocation);
                 newFragment.setArguments(bundle);
                 fragmentTransaction.add(R.id.fragment_container, newFragment, AppConstants.FragmentTags.FRAGMENT_SLIDE_SHOW).addToBackStack(AppConstants.FragmentTags.FRAGMENT_SLIDE_SHOW);
                 fragmentTransaction.commit();

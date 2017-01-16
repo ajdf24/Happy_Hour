@@ -26,7 +26,10 @@ import java.net.URL;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.controller.cache.BitmapLRUCache;
+import it.rieger.happyhour.controller.callbacks.ReloadCallback;
+import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
@@ -40,9 +43,15 @@ public class ImageContextMenuDialog extends DialogFragment {
     @Bind(R.id.image_dialog_list_view)
     ListView listView;
 
-    private static final String URI = "uri";
+    private static final String URI = "imageKey";
+    private static final String LOCATION = "location";
+    private static final String CALLBACK = "callback";
 
-    String uri;
+    String imageKey;
+
+    Location location;
+
+    static ReloadCallback callbackClass;
 
     /**
      * Use this factory method to create a new instance of
@@ -50,11 +59,14 @@ public class ImageContextMenuDialog extends DialogFragment {
      *
      * @return A new instance of fragment sender_selection_dialog.
      */
-    public static ImageContextMenuDialog newInstance(String uri) {
+    public static ImageContextMenuDialog newInstance(String uri, Location location, ReloadCallback callback) {
 
         ImageContextMenuDialog fragment = new ImageContextMenuDialog();
         Bundle args = new Bundle();
         args.putString(URI, uri);
+        args.putSerializable(LOCATION, location);
+
+        callbackClass = callback;
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,7 +75,8 @@ public class ImageContextMenuDialog extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        uri = getArguments().getString(URI);
+        imageKey = getArguments().getString(URI);
+        location = (Location) getArguments().getSerializable(LOCATION);
     }
 
     @Override
@@ -93,12 +106,12 @@ public class ImageContextMenuDialog extends DialogFragment {
 
                 switch (position) {
                     case 0:
-                        new SaveImageTask().execute(uri);
+                        new SaveImageTask().execute(imageKey);
                         dismiss();
                         break;
                     case 1:
                         try {
-                            String pathOfBmp = MediaStore.Images.Media.insertImage(CreateContextForResource.getContext().getContentResolver(), BitmapLRUCache.getInstance().getBitmapFromMemCache(uri), "title", null);
+                            String pathOfBmp = MediaStore.Images.Media.insertImage(CreateContextForResource.getContext().getContentResolver(), BitmapLRUCache.getInstance().getBitmapFromMemCache(imageKey), "title", null);
                             Uri bmpUri = Uri.parse(pathOfBmp);
                             final Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
                             shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -111,7 +124,8 @@ public class ImageContextMenuDialog extends DialogFragment {
                         dismiss();
                         break;
                     case 2:
-                        Toast.makeText(CreateContextForResource.getContext(), R.string.general_not_implemented, Toast.LENGTH_SHORT).show();
+                        BackendDatabase.getInstance().removeImage(location, imageKey);
+                        callbackClass.reload();
                         dismiss();
                         break;
                     default:

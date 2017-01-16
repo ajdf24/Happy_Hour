@@ -32,15 +32,20 @@ public class Image implements Serializable{
         return bitmap;
     }
 
-    public void setImage(Bitmap image) {
+    public void setBitmapToImage(Bitmap image) {
 
         ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
-        image.recycle();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, bYtE);
         byte[] byteArray = bYtE.toByteArray();
         String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
         this.image = imageFile;
+    }
+
+    public void setImage(String image) {
+
+
+        this.image = image;
     }
 
     @Exclude

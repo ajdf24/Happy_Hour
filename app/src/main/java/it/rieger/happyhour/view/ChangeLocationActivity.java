@@ -117,12 +117,18 @@ public class ChangeLocationActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         if (id == R.id.nav_camera) {
-//            if(currentFragment != null)
-//                fragmentTransaction.remove(currentFragment);
-//            final CameraFragment cameraFragment = CameraFragment.newInstance(location);
-//            fragmentTransaction.add(R.id.fragment_container, cameraFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_CAMERA);
-//            fragmentTransaction.commit();
-//            currentFragment = cameraFragment;
+            if(currentFragment.readyToSave()){
+                currentFragment.saveLocation();
+
+                fragmentTransaction.remove(currentFragment);
+
+                final CameraFragment cameraFragment = CameraFragment.newInstance(location);
+                fragmentTransaction.add(R.id.fragment_container, cameraFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_CAMERA);
+                fragmentTransaction.commit();
+                currentFragment = cameraFragment;
+            }else {
+                Toast.makeText(this,"Fehler", Toast.LENGTH_LONG).show();
+            }
         } else if (id == R.id.nav_general) {
             if(currentFragment != null){
                 if(currentFragment.readyToSave()){
