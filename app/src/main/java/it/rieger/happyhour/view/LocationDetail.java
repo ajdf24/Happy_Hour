@@ -2,6 +2,8 @@ package it.rieger.happyhour.view;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -31,11 +33,14 @@ import it.rieger.happyhour.controller.database.firebase.Firebase;
 import it.rieger.happyhour.controller.database.firebase.LocationsLoaded;
 import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.HappyHour;
+import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.model.ThumbnailHolderClass;
 import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.fragments.SlideshowDialogFragment;
+import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
 /**
  * Activity which shows the details for the location
@@ -64,6 +69,7 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
     /**
      * {@inheritDoc}
      * create the view
+     *
      * @param savedInstanceState the saved instance of the activity
      */
     @Override
@@ -103,27 +109,29 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
     /**
      * fill the ui with information
      */
-    private void initializeGUI(){
-        HashMap<String,String> file_maps = new HashMap<String, String>();
+    private void initializeGUI() {
+        HashMap<String, String> file_maps = new HashMap<String, String>();
         int numberOfPicture = 1;
-        for(String image : currentLocation.getImageKeyList()){
+        for (String image : currentLocation.getImageKeyList()) {
             file_maps.put(currentLocation.getName() + " " + numberOfPicture, image);
             numberOfPicture++;
         }
 
-        for(String name : file_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(this);
-            textSliderView
-                    .description(name)
-                    .image(file_maps.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit);
-            slider.addSlider(textSliderView);
-            slider.getCurrentSlider().setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
-                @Override
-                public void onSliderClick(BaseSliderView slider) {
-                }
-            });
-        }
+//        for(String name : file_maps.keySet()){
+//            BitmapSlider textSliderView = new BitmapSlider(this);
+//            textSliderView
+//                    .description(name)
+//                    .image(file_maps.get(name))
+//                    .setScaleType(BaseSliderView.ScaleType.Fit);
+//            slider.addSlider(textSliderView);
+//            slider.getCurrentSlider().setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+//                @Override
+//                public void onSliderClick(BaseSliderView slider) {
+//                }
+//            });
+//        }
+
+        new DownloadImage().execute((String[]) currentLocation.getImageKeyList().toArray(new String[]{}));
 
         slider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
@@ -149,14 +157,14 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
         ratingBar.setRating(currentLocation.getRating());
 
         String openingTimeSting = "";
-        for(Time time : currentLocation.getOpeningTimes().getTimes()){
-            openingTimeSting = openingTimeSting + Day.toString(time.getDay()) + ": "+ time.getStartTime() + CreateContextForResource.getStringFromID(R.string.general_time_till) + time.getEndTime() + "\n" ;
+        for (Time time : currentLocation.getOpeningTimes().getTimes()) {
+            openingTimeSting = openingTimeSting + Day.toString(time.getDay()) + ": " + time.getStartTime() + CreateContextForResource.getStringFromID(R.string.general_time_till) + time.getEndTime() + "\n";
         }
 
         openingTimes.setText(openingTimeSting);
 
         String happyHoursString = "";
-        for(HappyHour happyHour : currentLocation.getHappyHours()){
+        for (HappyHour happyHour : currentLocation.getHappyHours()) {
             happyHoursString = happyHoursString + happyHour.getDrink() + CreateContextForResource.getStringFromID(R.string.general_for) + happyHour.getPrice() + "\n";
         }
 
@@ -179,5 +187,43 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
     public void locationsLoaded(List<Location> locations) {
         currentLocation = locations.get(0);
         initializeGUI();
+    }
+
+    private class DownloadImage extends AsyncTask<String, Integer, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(final String... params) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+            DatabaseReference images = database.getReference("images");
+
+            for (String key : params) {
+                images.orderByKey().equalTo(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                            Image image = dataSnapshot1.getValue(Image.class);
+                            BitmapSlider textSliderView = new BitmapSlider(LocationDetail.this);
+                            textSliderView
+                                    .image(image.getImage())
+                                    .setScaleType(BaseSliderView.ScaleType.Fit);
+                            slider.addSlider(textSliderView);
+                            slider.getCurrentSlider().setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                                @Override
+                                public void onSliderClick(BaseSliderView slider) {
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            return null;
+        }
     }
 }
