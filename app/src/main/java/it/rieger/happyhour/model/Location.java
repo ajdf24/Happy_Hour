@@ -1,9 +1,17 @@
 package it.rieger.happyhour.model;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.view.View;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.rieger.happyhour.controller.cache.BitmapLRUCache;
+import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
 /**
  * Model class, which represents a Location, which all the data which are came from the the database.

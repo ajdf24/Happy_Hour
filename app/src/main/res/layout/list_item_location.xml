@@ -21,12 +21,21 @@
                 android:layout_height="wrap_content"
                 android:gravity="left" />
 
-            <it.rieger.happyhour.controller.widget.DynamicImageView
+            <ImageView
                 android:id="@+id/list_item_picture"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_below="@+id/list_item_location_name"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp">
+            </ImageView>
+
+            <ProgressBar
+                style="?android:attr/progressBarStyle"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/progressBar"
+
+                android:layout_below="@+id/list_item_location_name" />
 
     <TextView
 
@@ -52,15 +61,16 @@
         android:layout_below="@+id/list_item_location_name"
         android:layout_toRightOf="@id/list_item_picture" />
 
-    <RatingBar
-        style="?android:attr/ratingBarStyleSmall"
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/list_item_picture"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:clickable="false" />
+            <RatingBar
+                style="?android:attr/ratingBarStyleSmall"
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:layout_alignBottom="@+id/progressBar"
+                android:layout_alignRight="@+id/list_item_distance"
+                android:layout_alignEnd="@+id/list_item_distance" />
+
 
         </RelativeLayout>
 

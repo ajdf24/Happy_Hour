@@ -75,25 +75,25 @@ public enum Day implements Serializable {
         Day dayInt = null;
 
         switch (day){
-            case 6:
+            case 0:
                 dayInt = Day.SUNDAY;
                 break;
-            case 0:
+            case 1:
                 dayInt = Day.MONDAY;
                 break;
-            case 1:
+            case 2:
                 dayInt = Day.TUESDAY;
                 break;
-            case 2:
+            case 3:
                 dayInt = Day.WEDNESDAY;
                 break;
-            case 3:
+            case 4:
                 dayInt = Day.THURSDAY;
                 break;
-            case 4:
+            case 5:
                 dayInt = Day.FRIDAY;
                 break;
-            case 5:
+            case 6:
                 dayInt = Day.SATURDAY;
                 break;
         }

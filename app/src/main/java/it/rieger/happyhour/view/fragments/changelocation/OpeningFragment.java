@@ -323,6 +323,37 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
         newOpeningTime.setMinute(minute);
         newOpeningTime.setHourOfDayEnd(hourOfDayEnd);
         newOpeningTime.setMinuteEnd(minuteEnd);
+
+        String startTime = "";
+        if(hourOfDay < 10){
+            startTime = startTime + "0" + hourOfDay + ":";
+        }else {
+            startTime = startTime + hourOfDay + ":";
+        }
+
+        if(minute < 10){
+            startTime = startTime + "0" + minute;
+        }else {
+            startTime = startTime + minute;
+        }
+
+        newOpeningTime.setStartTime(startTime);
+
+        String endTime = "";
+        if(hourOfDayEnd < 10){
+            endTime = endTime + "0" + hourOfDayEnd + ":";
+        }else {
+            endTime = endTime + hourOfDayEnd + ":";
+        }
+
+        if(minuteEnd < 10){
+            endTime = endTime + "0" + minuteEnd;
+        }else {
+            endTime = endTime + minuteEnd;
+        }
+
+        newOpeningTime.setEndTime(endTime);
+
         location.getOpeningTimes().getTimes().add(newOpeningTime);
     }
 

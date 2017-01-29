@@ -2,6 +2,8 @@ package it.rieger.happyhour.view.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -34,7 +36,10 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
     RatingBar rating;
 
     @Bind(R.id.list_item_picture)
-    DynamicImageView picture;
+    ImageView picture;
+
+    @Bind(R.id.progressBar)
+    public ProgressBar progressBar;
 
     View itemView;
 
@@ -71,7 +76,7 @@ public class LocationViewHolder extends RecyclerView.ViewHolder {
         return rating;
     }
 
-    public DynamicImageView getPicture() {
+    public ImageView getPicture() {
         return picture;
     }
 
