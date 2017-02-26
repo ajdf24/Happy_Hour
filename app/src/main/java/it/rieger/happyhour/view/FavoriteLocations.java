@@ -25,6 +25,7 @@ import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
 import it.rieger.happyhour.util.listener.OnQueryTextListener;
+import it.rieger.happyhour.view.fragments.firebase.CurrentLocationListActivity;
 
 public class FavoriteLocations extends AppCompatActivity implements LocationLoadedCallback {
 
@@ -114,7 +115,7 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
                                     addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             break;
                         case R.id.bottomBarItemThree:
-                            startActivity(new Intent(FavoriteLocations.this, LocationList.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+                            startActivity(new Intent(FavoriteLocations.this, CurrentLocationListActivity.class).setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
                             break;
                         default:
                             break;
