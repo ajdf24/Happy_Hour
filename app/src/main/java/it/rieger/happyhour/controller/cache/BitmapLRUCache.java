@@ -54,6 +54,7 @@ public enum BitmapLRUCache {
      */
     public synchronized void addBitmapToMemoryCache(String key, Bitmap bitmap) {
         if (getBitmapFromMemCache(key) == null) {
+            if(key != null && bitmap != null)
             bitmapLruCache.put(key, bitmap);
         }
     }

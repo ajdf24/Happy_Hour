@@ -93,7 +93,7 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
 //            postsRef.addListenerForSingleValueEvent(new ValueEventListener() {
 //                @Override
 //                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    currentLocation = (dataSnapshot.getChildren().iterator().next().getValue(Location.class));
+//                    currentLocation = (dataSnapshot.getChildren().iterator().loginButton().getValue(Location.class));
 //                    initializeGUI();
 //
 //                }
