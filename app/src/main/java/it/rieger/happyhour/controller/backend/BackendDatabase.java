@@ -30,6 +30,7 @@ import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.OpeningTimes;
 import it.rieger.happyhour.model.Time;
+import it.rieger.happyhour.model.User;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
 
@@ -244,19 +245,35 @@ public enum BackendDatabase {
         mDatabase.updateChildren(childUpdates);
     }
 
+    public void saveUser(User user){
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+
+        if(user.getId() == null || user.getId().isEmpty()){
+            String key = database.child(AppConstants.Firebase.USERS_PATH).push().getKey();
+            user.setId(key);
+        }
+
+        Map<String, Object> postValues = user.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<String, Object>();
+
+        childUpdates.put(AppConstants.Firebase.USERS_CHILDS_PATH + user.getId(), postValues);
+        database.updateChildren(childUpdates);
+    }
+
     public String saveImage(Image image, Location location){
         DatabaseReference mDatabase;
         mDatabase = FirebaseDatabase.getInstance().getReference();
         String key = null;
 
         if (location != null){
-            key =mDatabase.child("images").push().getKey();
+            key =mDatabase.child(AppConstants.Firebase.IMAGES_PATH).push().getKey();
         }
 
         Map<String, Object> postValues = image.toMap();
         Map<String, Object> childUpdates = new HashMap<String, Object>();
 
-        childUpdates.put("/images/" + key, postValues);
+        childUpdates.put(AppConstants.Firebase.IMAGES_CHILDS_PATH + key, postValues);
 
         location.setImageKey(key);
 

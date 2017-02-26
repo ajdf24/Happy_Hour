@@ -202,7 +202,7 @@ public class SlideshowDialogFragment extends DialogFragment{
         protected ThumbnailViewHolder doInBackground(final ImageViewHolder... params) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-            DatabaseReference images = database.getReference("images");
+            DatabaseReference images = database.getReference(AppConstants.Firebase.IMAGES_PATH);
 
             images.orderByKey().equalTo(params[0].getImage()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

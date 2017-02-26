@@ -21,34 +21,28 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
-import it.rieger.happyhour.controller.database.firebase.Firebase;
-import it.rieger.happyhour.controller.database.firebase.LocationsLoaded;
+import it.rieger.happyhour.controller.widget.FavoriteButton;
 import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
-import it.rieger.happyhour.model.ThumbnailHolderClass;
 import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.fragments.SlideshowDialogFragment;
-import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
 /**
  * Activity which shows the details for the location
  */
-public class LocationDetail extends AppCompatActivity implements LocationsLoaded {
+public class LocationDetail extends AppCompatActivity  {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
@@ -66,6 +60,9 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
 
     @Bind(R.id.activity_location_details_ratingBar)
     RatingBar ratingBar;
+
+    @Bind(R.id.activity_location_details_button_favorite)
+    FavoriteButton favoriteButton;
 
     Location currentLocation;
 
@@ -85,6 +82,8 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
         Bundle bundle = getIntent().getExtras();
 
         currentLocation = (Location) bundle.getSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION);
+
+        favoriteButton.setLocation(currentLocation);
 
         initializeGUI();
 
@@ -212,12 +211,6 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
 
             return rating / (numberOfRatings + 1);
         }
-    }
-
-    @Override
-    public void locationsLoaded(List<Location> locations) {
-        currentLocation = locations.get(0);
-        initializeGUI();
     }
 
     private class DownloadImage extends AsyncTask<String, Integer, Bitmap> {

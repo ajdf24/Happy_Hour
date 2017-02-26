@@ -18,11 +18,24 @@ import com.facebook.share.ShareApi;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareContent;
 import com.facebook.share.model.ShareLinkContent;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.controller.database.DataSource;
+import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.model.User;
 import it.rieger.happyhour.model.database.LikedLocation;
+import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
@@ -39,8 +52,6 @@ public class FavoriteButton extends ImageButton  {
     private Location location;
 
     private DataSource db;
-
-    private LikedLocation likedLocation;
 
     public FavoriteButton(Context context) {
         super(context);
@@ -95,13 +106,48 @@ public class FavoriteButton extends ImageButton  {
                 }
                 if(!isActive()){
                     Toast.makeText(context, R.string.general_added_to_favorites, Toast.LENGTH_LONG).show();
-                    //TODO: check from Firebase
-//                    likedLocation = db.createLikedLocation(location.getId());
+                    //TODO: write to Firebase
+
+                    final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                    database.child(AppConstants.Firebase.USERS_PATH).orderByChild("uID").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot dataSnapshotUser : dataSnapshot.getChildren()){
+                                User user = dataSnapshotUser.getValue(User.class);
+
+                                user.getLikedLocations().add(location.getId());
+
+                                BackendDatabase.getInstance().saveUser(user);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                     toggle();
-                    new PostLocationOnFacebook().execute(location);
                 }else {
                     Toast.makeText(context, R.string.general_removed_from_favorites, Toast.LENGTH_LONG).show();
-                    db.deleteLikedLocation(likedLocation);
+
+                    final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+                    database.child(AppConstants.Firebase.USERS_PATH).orderByChild("uID").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot dataSnapshotUser : dataSnapshot.getChildren()){
+                               User user = dataSnapshotUser.getValue(User.class);
+
+                               user.getLikedLocations().remove(location.getId());
+
+                               BackendDatabase.getInstance().saveUser(user);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
                     toggle();
                 }
             }
@@ -127,17 +173,28 @@ public class FavoriteButton extends ImageButton  {
         return isActive;
     }
 
-    public void setLocation(Location location){
+    public void setLocation(final Location location){
         this.location = location;
 
         db = new DataSource(context);
 
-        //TODO: Write to firebase
-//        likedLocation = db.getLikedLocation(location.getId());
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        database.child(AppConstants.Firebase.USERS_PATH).orderByChild("uID").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshotUser : dataSnapshot.getChildren()){
+                    User user = dataSnapshotUser.getValue(User.class);
 
-        if(likedLocation != null){
-            this.setActive(true);
-        }
+                    if(user.getLikedLocations().contains(location.getId())){
+                        FavoriteButton.this.setActive(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override
@@ -155,42 +212,5 @@ public class FavoriteButton extends ImageButton  {
         }
     }
 
-    /**
-     * This class posts the new favorite location on facebook
-     */
-    private class PostLocationOnFacebook extends AsyncTask<Location, Integer, Boolean>{
-
-        private final String LOG_TAG = getClass().getSimpleName();
-        /**
-         * post location as favorite on facebook
-         * @param params the location
-         * @return always true
-         */
-        @Override
-        protected Boolean doInBackground(Location... params) {
-            ShareContent content = new ShareLinkContent.Builder()
-            //TODO: Hier muss später ein realer Link erscheinen
-                    .setContentUrl(Uri.parse("http:xxx-platzhalter.de"))
-                    .setContentTitle("... Hat hat " + location.getName() + " zu seinen Favoriten hinzugefügt")
-                    .build();
-
-            ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
-                @Override
-                public void onSuccess(Sharer.Result result) {
-                }
-
-                @Override
-                public void onCancel() {
-                    Log.e(LOG_TAG, "Can not post Location");
-                }
-
-                @Override
-                public void onError(FacebookException error) {
-                    Log.e(LOG_TAG, "Can not post Location");
-                }
-            });
-            return true;
-        }
-    }
 }
 

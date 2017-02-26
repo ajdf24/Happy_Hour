@@ -10,13 +10,25 @@
         android:layout_width="match_parent"
         android:layout_height="200dp" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/activity_location_details_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:src="@android:drawable/ic_menu_edit" />
+
     <ScrollView
         android:id="@+id/activity_location_details_scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/activity_location_details_pictures_list_view">
+        android:layout_below="@+id/activity_location_details_pictures_list_view"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -67,21 +79,17 @@
                 android:layout_marginLeft="@dimen/activity_vertical_margin"
                 android:layout_marginRight="@dimen/activity_vertical_margin" />
 
+            <it.rieger.happyhour.controller.widget.FavoriteButton
+                android:id="@+id/activity_location_details_button_favorite"
+                android:src="@mipmap/ic_favorite_border"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@null"
+                android:layout_alignParentRight="true"/>
+
 
 
         </RelativeLayout>
     </ScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/activity_location_details_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_vertical_margin"
-        android:src="@android:drawable/ic_menu_edit" />
 
 </RelativeLayout>

@@ -51,5 +51,9 @@ public interface AppConstants {
     interface Firebase {
         String LOCATIONS_PATH = "locations";
         String LOCATIONS_CHILDS_PATH = "/locations/";
+        String IMAGES_PATH = "images";
+        String IMAGES_CHILDS_PATH = "/images/";
+        String USERS_PATH = "users";
+        String USERS_CHILDS_PATH = "/users/";
     }
 }

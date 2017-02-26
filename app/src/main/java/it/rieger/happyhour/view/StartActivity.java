@@ -34,7 +34,9 @@ import com.google.firebase.auth.GetTokenResult;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.controller.widget.DynamicImageView;
+import it.rieger.happyhour.model.User;
 import it.rieger.happyhour.util.listener.AnimationListener;
 
 /**
@@ -279,6 +281,10 @@ public class StartActivity extends AppCompatActivity {
                                                     Toast.makeText(StartActivity.this, "Authentication failed.",
                                                             Toast.LENGTH_SHORT).show();
                                                 }else {
+                                                    User user = new User();
+                                                    user.setuID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                                                    BackendDatabase.getInstance().saveUser(user);
                                                     goToMainActivity();
                                                 }
 
