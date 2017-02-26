@@ -17,8 +17,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import it.rieger.happyhour.controller.cache.BitmapLRUCache;
 import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
@@ -78,6 +80,8 @@ public class Location implements Serializable{
      * list of image keys for the location
      */
     private List<String> imageKeyList = new ArrayList<>();
+
+    private List<String> ratedUser = new ArrayList<>();
 
     public Location() {
     }
@@ -335,8 +339,16 @@ public class Location implements Serializable{
         result.put("openingTimes", openingTimes);
         result.put("happyHours", happyHours);
         result.put("imageKeyList", imageKeyList);
+        result.put("ratedUser", ratedUser);
 
         return result;
     }
 
+    public List<String> getRatedUser() {
+        return ratedUser;
+    }
+
+    public void setRatedUser(List<String> ratedUser) {
+        this.ratedUser = ratedUser;
+    }
 }

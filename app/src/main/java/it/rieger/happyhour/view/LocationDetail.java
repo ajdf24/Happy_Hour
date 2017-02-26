@@ -10,11 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +31,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
+import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.controller.database.firebase.Firebase;
 import it.rieger.happyhour.controller.database.firebase.LocationsLoaded;
 import it.rieger.happyhour.model.Day;
@@ -156,6 +159,23 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
 
         ratingBar.setRating(currentLocation.getRating());
 
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+
+                if(currentLocation.getRatedUser().contains(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                    Toast.makeText(LocationDetail.this, "Schon bewertet", Toast.LENGTH_SHORT).show();
+                    ratingBar.setRating(currentLocation.getRating());
+                }else {
+                    currentLocation.setRating(calculateNewRating(currentLocation.getRating(), currentLocation.getRatedUser().size(), rating));
+                    currentLocation.getRatedUser().add(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                }
+
+                BackendDatabase.getInstance().saveLocation(currentLocation);
+
+            }
+        });
+
         String openingTimeSting = "";
         for (Time time : currentLocation.getOpeningTimes().getTimes()) {
             openingTimeSting = openingTimeSting + Day.toString(time.getDay()) + ": " + time.getStartTime() + CreateContextForResource.getStringFromID(R.string.general_time_till) + time.getEndTime() + "\n";
@@ -181,6 +201,17 @@ public class LocationDetail extends AppCompatActivity implements LocationsLoaded
                 startActivity(intent);
             }
         });
+    }
+
+    private float calculateNewRating(float currentRating, int numberOfRatings, float newRating){
+        if(numberOfRatings == 0){
+            return newRating;
+        }else {
+            float rating = currentRating * numberOfRatings;
+            rating = rating + newRating;
+
+            return rating / (numberOfRatings + 1);
+        }
     }
 
     @Override
