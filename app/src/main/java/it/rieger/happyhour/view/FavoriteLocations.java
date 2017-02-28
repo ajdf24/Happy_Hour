@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,6 +49,9 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
 
     @Bind(R.id.activity_favorite_location_progressBar)
     ProgressBar progressBar;
+
+    @Bind(R.id.textView2)
+    TextView noLocations;
 
     List<Location> locationList = new ArrayList<>();
 
@@ -101,8 +105,12 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
                 for (DataSnapshot userSnap : dataSnapshot.getChildren()){
                     User user = userSnap.getValue(User.class);
 
-                    for (String locationKey : user.getLikedLocations()){
+                    if(user.getLikedLocations().size() == 0){
+                        progressBar.setVisibility(View.INVISIBLE);
+                        noLocations.setVisibility(View.VISIBLE);
+                    }
 
+                    for (String locationKey : user.getLikedLocations()){
                         database.child(AppConstants.Firebase.LOCATIONS_PATH).orderByChild("id").equalTo(locationKey).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {

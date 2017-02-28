@@ -157,7 +157,7 @@ public class ChangeLocationActivity extends AppCompatActivity
                 bundle.putSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION, location);
                 Intent intent = new Intent();
                 intent.putExtras(bundle);
-                intent.setClass(ChangeLocationActivity.this, LocationDetail.class);
+                intent.setClass(ChangeLocationActivity.this, Maps.class);
                 startActivity(intent);
                 finish();
             }
@@ -196,7 +196,7 @@ public class ChangeLocationActivity extends AppCompatActivity
                     fragmentTransaction.commit();
                     currentFragment = generalFragment;
                 }else {
-                    Toast.makeText(this,"Fehler", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,"Bitte trage eine gültige Adresse ein", Toast.LENGTH_LONG).show();
                 }
             }
 
