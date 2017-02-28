@@ -434,5 +434,6 @@ public class StartActivity extends AppCompatActivity {
         intent.setClass(StartActivity.this, Maps.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
+        finish();
     }
 }

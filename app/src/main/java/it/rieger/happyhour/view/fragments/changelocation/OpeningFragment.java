@@ -98,6 +98,9 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
 
     @Override
     protected void initializeGui() {
+
+
+
         List<Time> openingTimes = location.getOpeningTimes().getTimes();
 
         for(int i = 0; i < location.getOpeningTimes().getTimes().size(); i++){
@@ -126,7 +129,40 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
     }
 
     private String generateTimeStringForInitialize(int index){
-        return location.getOpeningTimes().getTimes().get(index).getHourOfDay()+":"+location.getOpeningTimes().getTimes().get(index).getMinute() + CreateContextForResource.getStringFromID(R.string.general_clock_to) + location.getOpeningTimes().getTimes().get(index).getHourOfDayEnd() + ":" + location.getOpeningTimes().getTimes().get(index).getMinuteEnd() + CreateContextForResource.getStringFromID(R.string.general_clock);
+
+        String minuteString = "";
+
+        if(location.getOpeningTimes().getTimes().get(index).getMinute() < 10){
+            minuteString = "0" + location.getOpeningTimes().getTimes().get(index).getMinute();
+        }else {
+            minuteString = "" + location.getOpeningTimes().getTimes().get(index).getMinute();
+        }
+
+        String hourOfDayString = "";
+
+        if(location.getOpeningTimes().getTimes().get(index).getHourOfDay() < 10){
+            hourOfDayString = "0" + location.getOpeningTimes().getTimes().get(index).getHourOfDay();
+        }else {
+            hourOfDayString = "" + location.getOpeningTimes().getTimes().get(index).getHourOfDay();
+        }
+
+        String minuteEndString = "";
+
+        if(location.getOpeningTimes().getTimes().get(index).getMinuteEnd() < 10){
+            minuteEndString = "0" + location.getOpeningTimes().getTimes().get(index).getMinuteEnd();
+        }else {
+            minuteEndString = "" + location.getOpeningTimes().getTimes().get(index).getMinuteEnd();
+        }
+
+        String hourOfDayEndString = "";
+
+        if (location.getOpeningTimes().getTimes().get(index).getHourOfDayEnd() < 10){
+            hourOfDayEndString = "0" + location.getOpeningTimes().getTimes().get(index).getHourOfDayEnd();
+        }else {
+            hourOfDayEndString = "" + location.getOpeningTimes().getTimes().get(index).getHourOfDayEnd();
+        }
+
+        return hourOfDayString+":"+minuteString + CreateContextForResource.getStringFromID(R.string.general_clock_to) + hourOfDayEndString + ":" + minuteEndString + CreateContextForResource.getStringFromID(R.string.general_clock);
     }
 
     @Override
@@ -274,7 +310,40 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
-        String time = hourOfDay+":"+minute + CreateContextForResource.getStringFromID(R.string.general_clock_to) + hourOfDayEnd + ":" + minuteEnd + CreateContextForResource.getStringFromID(R.string.general_clock);
+
+        String minuteString = "";
+
+        if(minute < 10){
+            minuteString = "0" + minute;
+        }else {
+            minuteString = "" + minute;
+        }
+
+        String hourOfDayString = "";
+
+        if(hourOfDay < 10){
+            hourOfDayString = "0" + hourOfDay;
+        }else {
+            hourOfDayString = "" + hourOfDay;
+        }
+
+        String minuteEndString = "";
+
+        if(minuteEnd < 10){
+            minuteEndString = "0" + minuteEnd;
+        }else {
+            minuteEndString = "" + minuteEnd;
+        }
+
+        String hourOfDayEndString = "";
+
+        if (hourOfDayEnd < 10){
+            hourOfDayEndString = "0" + hourOfDayEnd;
+        }else {
+            hourOfDayEndString = "" + hourOfDayEnd;
+        }
+
+        String time = hourOfDayString+":"+minuteString + CreateContextForResource.getStringFromID(R.string.general_clock_to) + hourOfDayEndString + ":" + minuteEndString + CreateContextForResource.getStringFromID(R.string.general_clock);
 
         switch (dayClickID){
             case 1:
