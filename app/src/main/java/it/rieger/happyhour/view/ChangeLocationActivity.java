@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Process;
@@ -120,14 +121,26 @@ public class ChangeLocationActivity extends AppCompatActivity
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 currentFragment.saveLocation();
-                                ChangeLocationActivity.super.onBackPressed();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION, location);
+                                Intent intent = new Intent();
+                                intent.putExtras(bundle);
+                                intent.setClass(ChangeLocationActivity.this, LocationDetail.class);
+                                startActivity(intent);
+                                finish();
                             }
                         })
                         .setCancelable(false)
                         .setNegativeButton("Nein", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                ChangeLocationActivity.super.onBackPressed();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION, location);
+                                Intent intent = new Intent();
+                                intent.putExtras(bundle);
+                                intent.setClass(ChangeLocationActivity.this, LocationDetail.class);
+                                startActivity(intent);
+                                finish();
                             }
                         });
 
@@ -140,7 +153,13 @@ public class ChangeLocationActivity extends AppCompatActivity
                 });
                 dialog.show();
             }else {
-                super.onBackPressed();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION, location);
+                Intent intent = new Intent();
+                intent.putExtras(bundle);
+                intent.setClass(ChangeLocationActivity.this, LocationDetail.class);
+                startActivity(intent);
+                finish();
             }
         }
     }

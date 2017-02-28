@@ -79,13 +79,9 @@ public class LocationDetail extends AppCompatActivity  {
 
         ButterKnife.bind(this);
 
-        Bundle bundle = getIntent().getExtras();
 
-        currentLocation = (Location) bundle.getSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION);
 
-        favoriteButton.setLocation(currentLocation);
 
-        initializeGUI();
 
 
 //        DatabaseReference mDatabase;
@@ -108,11 +104,24 @@ public class LocationDetail extends AppCompatActivity  {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Bundle bundle = getIntent().getExtras();
+
+        currentLocation = (Location) bundle.getSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION);
+
+        favoriteButton.setLocation(currentLocation);
+
+        initializeGUI();
+    }
+
     /**
      * fill the ui with information
      */
     private void initializeGUI() {
-        HashMap<String, String> file_maps = new HashMap<String, String>();
+        final HashMap<String, String> file_maps = new HashMap<String, String>();
         int numberOfPicture = 1;
         for (String image : currentLocation.getImageKeyList()) {
             file_maps.put(currentLocation.getName() + " " + numberOfPicture, image);
@@ -198,6 +207,7 @@ public class LocationDetail extends AppCompatActivity  {
                 intent.putExtras(bundle);
                 intent.setClass(LocationDetail.this, ChangeLocationActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
