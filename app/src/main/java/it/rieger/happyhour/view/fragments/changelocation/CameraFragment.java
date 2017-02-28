@@ -162,7 +162,7 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
         photoPickerIntent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
             }
@@ -285,23 +285,39 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
 
         }
         if(requestCode == SELECT_PHOTO && resultCode == Activity.RESULT_OK){
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
+
+            Uri uri = data.getData();
+
             try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                //TODO: Upload to Server Show in Galery
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+                // Log.d(TAG, String.valueOf(bitmap));
 
                 Image image = new Image();
-                image.setBitmapToImage(selectedImage);
+                image.setBitmapToImage(bitmap);
 
                 BackendDatabase.getInstance().saveImage(image, location);
-
-            } catch (FileNotFoundException e) {
+                galleryAdapter.notifyDataSetChanged();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            mImageView.setImageBitmap(imageBitmap);
+//            try {
+//                final Uri imageUri = data.getData();
+//                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+//                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+//                //TODO: Upload to Server Show in Galery
+//
+//                Image image = new Image();
+//                image.setBitmapToImage(selectedImage);
+//
+//                BackendDatabase.getInstance().saveImage(image, location);
+//
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 

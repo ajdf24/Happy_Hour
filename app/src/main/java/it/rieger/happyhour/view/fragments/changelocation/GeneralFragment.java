@@ -53,9 +53,6 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
     @Bind(R.id.fragment_general_locate)
     ImageButton buttonGetLocation;
 
-    @Bind(R.id.activity_change_location_save)
-    FloatingActionButton save;
-
     public GeneralFragment() {
         // Required empty public constructor
     }
@@ -92,30 +89,6 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
 
     @Override
     protected void initializeActiveElements() {
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                DatabaseReference mDatabase;
-                mDatabase = FirebaseDatabase.getInstance().getReference();
-
-                if (location.getId() == null || location.getId().isEmpty()) {
-                    String key = mDatabase.child(AppConstants.Firebase.LOCATIONS_PATH).push().getKey();
-                    location.setId(key);
-                }
-
-                location.setName(locationName.getText().toString());
-                location.setAddressName(place.getText().toString());
-
-                Map<String, Object> postValues = location.toMap();
-
-                Map<String, Object> childUpdates = new HashMap<String, Object>();
-
-                childUpdates.put(AppConstants.Firebase.LOCATIONS_CHILDS_PATH + location.getId(), postValues);
-                mDatabase.updateChildren(childUpdates);
-
-            }
-        });
 
         buttonGetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
