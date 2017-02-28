@@ -6,7 +6,9 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -24,6 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,12 +36,21 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import io.nlopez.smartlocation.OnLocationUpdatedListener;
+import io.nlopez.smartlocation.SmartLocation;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.util.AppConstants;
@@ -70,6 +82,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
     private boolean start = true;
 
+    GoogleMap googleMap = null;
+
+    String city = "";
+
     /**
      * {@inheritDoc}
      * load the ui
@@ -82,6 +98,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 //        mapFragment.getMap().setOnMapClickListener(this);
 
         addNewLocation = (FloatingActionButton) findViewById(R.id.activity_maps_new_location);
@@ -162,23 +179,71 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION);
             }else {
-                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//
+//                Criteria criteria = new Criteria();
+//
+//                String provider = locationManager.getBestProvider(criteria, true);
+//                try {
+//                    Location myLocation = locationManager.getLastKnownLocation(provider);
+//
+//                    LatLng currentPosition = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+//                    BackendDatabase.getInstance().loadLocations(locations, this, currentPosition, 10);
+//
+//                } catch (NullPointerException e) {
+//                    Log.w(LOG_TAG, "Can not load current position");
+//                    BackendDatabase.getInstance().loadLocations(locations, this, new LatLng(0.0, 0.0), 10);
+//                }
 
-                Criteria criteria = new Criteria();
+                final List<Address> addresses = new ArrayList<>();
 
-                String provider = locationManager.getBestProvider(criteria, true);
-                try {
-                    Location myLocation = locationManager.getLastKnownLocation(provider);
+                SmartLocation.with(this).location().oneFix().start(new OnLocationUpdatedListener() {
+                    @Override
+                    public void onLocationUpdated(android.location.Location location) {
+                        try {
+                            Geocoder geocoder;
+                            geocoder = new Geocoder(Maps.this, Locale.getDefault());
 
-                    LatLng currentPosition = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-                    BackendDatabase.getInstance().loadLocations(locations, this, currentPosition, 10);
+                            addresses.addAll(geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1)); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
-                } catch (NullPointerException e) {
-                    Log.w(LOG_TAG, "Can not load current position");
-                    BackendDatabase.getInstance().loadLocations(locations, this, new LatLng(0.0, 0.0), 10);
-                }
+                            city = addresses.get(0).getLocality();
+
+                            cityLoaded();
+
+                        } catch (NullPointerException e) {
+                            Log.w("Log", "Can not load current position");
+                            Toast.makeText(Maps.this, R.string.general_can_not_locate, Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            Log.w("Log", "Can not load current position");
+                            Toast.makeText(Maps.this, R.string.general_can_not_locate, Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
             }
         }
+    }
+
+    private void cityLoaded(){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child(AppConstants.Firebase.LOCATIONS_PATH).orderByChild("cityName").equalTo(city).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot locationSnap : dataSnapshot.getChildren()){
+
+                    it.rieger.happyhour.model.Location location = locationSnap.getValue(it.rieger.happyhour.model.Location.class);
+                    locations.add(location);
+                    googleMap.addMarker(new MarkerOptions().position(new LatLng(location.getAddressLatitude(), location.getAddressLongitude())).title(location.getName())).showInfoWindow();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**
@@ -188,6 +253,8 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        this.googleMap = googleMap;
 
         focusMapToCurrentPosition(googleMap);
 
@@ -268,7 +335,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         final LocationInformation information = LocationInformation.newInstance(location);
-        fragmentTransaction.add(R.id.fragment_container, information, AppConstants.FragmentTags.FRAGMENT_LOCATION_INFORMATION);
+        fragmentTransaction.replace(R.id.fragment_container, information, AppConstants.FragmentTags.FRAGMENT_LOCATION_INFORMATION);
         fragmentTransaction.commit();
 
         Animation slideDown = AnimationUtils.loadAnimation(Maps.this, R.anim.slide_down);

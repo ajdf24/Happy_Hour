@@ -3,8 +3,10 @@ package it.rieger.happyhour.view.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,11 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -23,9 +30,11 @@ import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.database.DataSource;
 import it.rieger.happyhour.controller.widget.FavoriteButton;
+import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
+import it.rieger.happyhour.view.BitmapSlider;
 import it.rieger.happyhour.view.LocationDetail;
 
 /**
@@ -47,6 +56,8 @@ public class LocationInformation extends Fragment {
     FavoriteButton favoriteButton;
 
     static Location currentLocation;
+
+    View view;
 
     /**
      * constructor, which is required
@@ -86,27 +97,29 @@ public class LocationInformation extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_location_information_fragment, container, false);
+        view = inflater.inflate(R.layout.fragment_location_information_fragment, container, false);
 
         ButterKnife.bind(this, view);
 
-        HashMap<String,String> file_maps = new HashMap<String, String>();
-        int numberOfPicture = 1;
-        for(String image : currentLocation.getImageKeyList()){
-            file_maps.put(currentLocation.getName() + " " + numberOfPicture, image);
-            numberOfPicture++;
-        }
+//        HashMap<String,String> file_maps = new HashMap<String, String>();
+//        int numberOfPicture = 1;
+//        for(String image : currentLocation.getImageKeyList()){
+//            file_maps.put(currentLocation.getName() + " " + numberOfPicture, image);
+//            numberOfPicture++;
+//        }
 
-        for(String name : file_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(getActivity());
-            // initialize a SliderLayout
-            textSliderView
-                    .description(name)
-                    .image(file_maps.get(name))
-                    .setScaleType(BaseSliderView.ScaleType.Fit);
+        new DownloadImage().execute((String[]) currentLocation.getImageKeyList().toArray(new String[]{}));
 
-            mDemoSlider.addSlider(textSliderView);
-        }
+//        for(String name : file_maps.keySet()){
+//            TextSliderView textSliderView = new TextSliderView(getActivity());
+//            // initialize a SliderLayout
+//            textSliderView
+//                    .description(name)
+//                    .image(file_maps.get(name))
+//                    .setScaleType(BaseSliderView.ScaleType.Fit);
+//
+//            mDemoSlider.addSlider(textSliderView);
+//        }
 
         mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
@@ -132,6 +145,44 @@ public class LocationInformation extends Fragment {
         return view;
     }
 
+    private class DownloadImage extends AsyncTask<String, Integer, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(final String... params) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+            DatabaseReference images = database.getReference(AppConstants.Firebase.IMAGES_PATH);
+
+            for (String key : params) {
+                images.orderByKey().equalTo(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                            Image image = dataSnapshot1.getValue(Image.class);
+                            BitmapSlider textSliderView = new BitmapSlider(LocationInformation.this.getActivity());
+                            textSliderView
+                                    .image(image.getImage())
+                                    .setScaleType(BaseSliderView.ScaleType.Fit);
+                            mDemoSlider.addSlider(textSliderView);
+                            mDemoSlider.getCurrentSlider().setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                                @Override
+                                public void onSliderClick(BaseSliderView slider) {
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            return null;
+        }
+    }
+
     /**
      * {@inheritDoc}
      * @param context the called context
@@ -149,6 +200,13 @@ public class LocationInformation extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mDemoSlider = (SliderLayout) view.findViewById(R.id.fragment_location_details_pictures_list_view);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -156,6 +214,12 @@ public class LocationInformation extends Fragment {
     public void onDetach() {
         super.onDetach();
         listener = null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mDemoSlider = null;
     }
 
     /**
