@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Process;
@@ -101,11 +102,46 @@ public class ChangeLocationActivity extends AppCompatActivity
 //        AlertDialog d = alertDialogBuilder.create();
 //        d.show();
 
+//        currentFragment.
+
+
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer != null ? drawer.isDrawerOpen(GravityCompat.START) : false) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if(currentFragment.readyToSave()){
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder
+                        .setTitle("Speichern?")
+                        .setMessage("Möchtest du die aktuellen Änderungen vor dem schließen speichern?")
+                        .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                currentFragment.saveLocation();
+                                ChangeLocationActivity.super.onBackPressed();
+                            }
+                        })
+                        .setCancelable(false)
+                        .setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ChangeLocationActivity.super.onBackPressed();
+                            }
+                        });
+
+                AlertDialog dialog = alertDialogBuilder.create();
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+
+                    }
+                });
+                dialog.show();
+            }else {
+                super.onBackPressed();
+            }
         }
     }
 
