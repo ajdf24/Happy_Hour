@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
@@ -16,18 +17,28 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.nlopez.smartlocation.OnLocationUpdatedListener;
+import io.nlopez.smartlocation.SmartLocation;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.HappyHour;
+import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.LocationDetail;
+import it.rieger.happyhour.view.fragments.firebase.LocationList;
 import it.rieger.happyhour.view.viewholder.LocationViewHolder;
 
 /**
@@ -77,8 +88,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
      * @param position position of the viewholder
      */
     @Override
-    public void onBindViewHolder(LocationViewHolder holder, final int position) {
-        Location location = locationList.get(position);
+    public void onBindViewHolder(final LocationViewHolder holder, final int position) {
+
+        final Location location = locationList.get(position);
 
         holder.getView().setOnClickListener(new View.OnClickListener() {
             /**
@@ -90,34 +102,28 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
 
-                bundle.putSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION, locationList.get(position));
+                bundle.putSerializable(AppConstants.BUNDLE_CONTEXT_LOCATION, location);
 
                 intent.putExtras(bundle);
-                intent.setClass(new CreateContextForResource().getContext(), LocationDetail.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                new CreateContextForResource().getContext().startActivity(intent);
+                intent.setClass(CreateContextForResource.getContext(), LocationDetail.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                CreateContextForResource.getContext().startActivity(intent);
 
             }
         });
 
         holder.getLocationName().setText(location.getName());
         Time today = location.getTodaysOpeningTime();
-        if(today != null){
+        if (today != null) {
             holder.getOpeningTime().setText(String.format(CreateContextForResource.getContext().getString(R.string.general_adress_placeholder_adrees_city), today.getStartTime(), today.getEndTime()));
-        }else{
+        } else {
             holder.getOpeningTime().setText(R.string.general_closed);
         }
 
-
-        if (ActivityCompat.checkSelfPermission(holder.getView().getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(holder.getView().getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            LocationManager locationManager = (LocationManager) holder.getView().getContext().getSystemService(Context.LOCATION_SERVICE);
-
-            Criteria criteria = new Criteria();
-
-            String provider = locationManager.getBestProvider(criteria, true);
-            try {
-                android.location.Location myLocation = locationManager.getLastKnownLocation(provider);
+        SmartLocation.with(holder.getView().getContext()).location().oneFix().start(new OnLocationUpdatedListener() {
+            @Override
+            public void onLocationUpdated(android.location.Location currentlocation) {
+                android.location.Location myLocation = currentlocation;
 
                 float[] results = new float[1];
 
@@ -144,25 +150,25 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
                     distance = distance + CreateContextForResource.getStringFromID(R.string.general_distance_meter);
                 }
 
-
                 holder.getDistance().setText(distance);
-            } catch (NullPointerException e) {
-                Log.w(LOG_TAG, "Can not load current position");
-
             }
-        }
+        });
 
         String drinks = "";
-        int maxNumberOffDrinks = 3;
-        int currentDrink = 0;
+        try {
+            int maxNumberOffDrinks = 3;
+            int currentDrink = 0;
 
-        for(HappyHour happyHour : location.getHappyHours()){
-            if(currentDrink < maxNumberOffDrinks) {
-                drinks = drinks + happyHour.getDrink() + ",\n";
-                currentDrink++;
+            for (HappyHour happyHour : location.getHappyHours()) {
+                if (currentDrink < maxNumberOffDrinks) {
+                    drinks = drinks + happyHour.getDrink() + ",\n";
+                    currentDrink++;
+                }
             }
+            drinks = drinks.substring(0, drinks.length() - 2);
+        } catch (StringIndexOutOfBoundsException e) {
+
         }
-        drinks = drinks.substring(0, drinks.length()-2);
 
         holder.getDrinks().setText(drinks);
 
@@ -171,9 +177,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
 
         //TODO:Cached Images
 
-//        if(location.getCachedImages().size() > 0) {
-//            holder.getPicture().setImageBitmap(location.getCachedImages().get(0));
-//        }
+        if (location.getImageKeyList().size() > 0) {
+            new DownloadImage().execute(new HolderContainerClass(holder, location.getImageKeyList().get(0)));
+        }else {
+            holder.progressBar.setVisibility(View.INVISIBLE);
+        }
     }
 
     /**
@@ -228,5 +236,61 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
         };
 
         return filter;
+    }
+
+    private class HolderContainerClass {
+
+        private LocationViewHolder thumbnailViewHolder = null;
+
+        private String imageKey = null;
+
+        public HolderContainerClass(LocationViewHolder thumbnailViewHolder, String imageKey) {
+            this.thumbnailViewHolder = thumbnailViewHolder;
+            this.imageKey = imageKey;
+        }
+
+        public LocationViewHolder getThumbnailViewHolder() {
+            return thumbnailViewHolder;
+        }
+
+        public void setThumbnailViewHolder(LocationViewHolder thumbnailViewHolder) {
+            this.thumbnailViewHolder = thumbnailViewHolder;
+        }
+
+        public String getImageKey() {
+            return imageKey;
+        }
+
+        public void setImageKey(String imageKey) {
+            this.imageKey = imageKey;
+        }
+    }
+
+    private class DownloadImage extends AsyncTask<HolderContainerClass, Integer, HolderContainerClass> {
+
+        @Override
+        protected HolderContainerClass doInBackground(final HolderContainerClass... params) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+            DatabaseReference images = database.getReference(AppConstants.Firebase.IMAGES_PATH);
+
+            images.orderByKey().equalTo(params[0].getImageKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                        Image image = dataSnapshot1.getValue(Image.class);
+                        params[0].getThumbnailViewHolder().progressBar.setVisibility(View.INVISIBLE);
+                        params[0].getThumbnailViewHolder().getPicture().setImageBitmap(image.getImage());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            return null;
+        }
     }
 }

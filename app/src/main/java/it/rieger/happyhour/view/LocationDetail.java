@@ -219,7 +219,7 @@ public class LocationDetail extends AppCompatActivity  {
         protected Bitmap doInBackground(final String... params) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-            DatabaseReference images = database.getReference("images");
+            DatabaseReference images = database.getReference(AppConstants.Firebase.IMAGES_PATH);
 
             for (String key : params) {
                 images.orderByKey().equalTo(key).addListenerForSingleValueEvent(new ValueEventListener() {

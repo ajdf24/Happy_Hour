@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -26,8 +28,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
@@ -47,7 +51,7 @@ import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
  * Created by sebastian on 11.12.16.
  */
 
-public abstract class LocationListFragment extends AppCompatActivity {
+public abstract class LocationList extends AppCompatActivity {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
@@ -59,7 +63,7 @@ public abstract class LocationListFragment extends AppCompatActivity {
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
 
-    public LocationListFragment() {
+    public LocationList() {
     }
 
     @Override
@@ -79,6 +83,70 @@ public abstract class LocationListFragment extends AppCompatActivity {
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
         mRecycler.setLayoutManager(mManager);
+
+
+    }
+
+    public abstract Query getQuery(DatabaseReference databaseReference);
+
+
+    private class DownloadImage extends AsyncTask<HolderContainerClass, Integer, HolderContainerClass>{
+
+        @Override
+        protected HolderContainerClass doInBackground(final HolderContainerClass... params) {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+            DatabaseReference images = database.getReference("images");
+
+            images.orderByKey().equalTo(params[0].getImageKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                        Image image = dataSnapshot1.getValue(Image.class);
+                        params[0].getThumbnailViewHolder().progressBar.setVisibility(View.INVISIBLE);
+                        params[0].getThumbnailViewHolder().getPicture().setImageBitmap(image.getImage());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            return null;
+        }
+    }
+
+    private class HolderContainerClass {
+
+        private LocationViewHolder thumbnailViewHolder = null;
+
+        private String imageKey = null;
+
+        public HolderContainerClass(LocationViewHolder thumbnailViewHolder, String imageKey) {
+            this.thumbnailViewHolder = thumbnailViewHolder;
+            this.imageKey = imageKey;
+        }
+
+        public LocationViewHolder getThumbnailViewHolder() {
+            return thumbnailViewHolder;
+        }
+
+        public void setThumbnailViewHolder(LocationViewHolder thumbnailViewHolder) {
+            this.thumbnailViewHolder = thumbnailViewHolder;
+        }
+
+        public String getImageKey() {
+            return imageKey;
+        }
+
+        public void setImageKey(String imageKey) {
+            this.imageKey = imageKey;
+        }
+    }
+
+    protected void cityLoaded(){
 
         // Set up FirebaseRecyclerAdapter with the Query
         Query locationQuery = getQuery(mDatabase);
@@ -180,62 +248,4 @@ public abstract class LocationListFragment extends AppCompatActivity {
         mRecycler.setAdapter(mAdapter);
     }
 
-    public abstract Query getQuery(DatabaseReference databaseReference);
-
-
-    private class DownloadImage extends AsyncTask<HolderContainerClass, Integer, HolderContainerClass>{
-
-        @Override
-        protected HolderContainerClass doInBackground(final HolderContainerClass... params) {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-            DatabaseReference images = database.getReference("images");
-
-            images.orderByKey().equalTo(params[0].getImageKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-                        Image image = dataSnapshot1.getValue(Image.class);
-                        params[0].getThumbnailViewHolder().progressBar.setVisibility(View.INVISIBLE);
-                        params[0].getThumbnailViewHolder().getPicture().setImageBitmap(image.getImage());
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-            return null;
-        }
-    }
-
-    private class HolderContainerClass {
-
-        private LocationViewHolder thumbnailViewHolder = null;
-
-        private String imageKey = null;
-
-        public HolderContainerClass(LocationViewHolder thumbnailViewHolder, String imageKey) {
-            this.thumbnailViewHolder = thumbnailViewHolder;
-            this.imageKey = imageKey;
-        }
-
-        public LocationViewHolder getThumbnailViewHolder() {
-            return thumbnailViewHolder;
-        }
-
-        public void setThumbnailViewHolder(LocationViewHolder thumbnailViewHolder) {
-            this.thumbnailViewHolder = thumbnailViewHolder;
-        }
-
-        public String getImageKey() {
-            return imageKey;
-        }
-
-        public void setImageKey(String imageKey) {
-            this.imageKey = imageKey;
-        }
-    }
 }

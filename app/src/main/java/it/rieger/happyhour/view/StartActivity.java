@@ -95,16 +95,17 @@ public class StartActivity extends AppCompatActivity {
         };
 
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mUser.getToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            String idToken = task.getResult().getToken();
-                            goToMainActivity();
+        if(mUser != null) {
+            mUser.getToken(true)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String idToken = task.getResult().getToken();
+                                goToMainActivity();
+                            }
                         }
-                    }
-                });
-
+                    });
+        }
 
         mAuth.addAuthStateListener(mAuthListener);
 
@@ -236,6 +237,7 @@ public class StartActivity extends AppCompatActivity {
                                         Log.w(LOG_TAG, "signInWithEmail", task.getException());
                                         Toast.makeText(StartActivity.this, "Authentication failed.",
                                                 Toast.LENGTH_SHORT).show();
+                                        hideProgressBar();
                                     }else {
                                         goToMainActivity();
                                     }
@@ -268,6 +270,8 @@ public class StartActivity extends AppCompatActivity {
                                 }
                                 Toast.makeText(StartActivity.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
+
+                                hideProgressBar();
                             }else {
                                 mAuth.signInWithEmailAndPassword(eMail.getText().toString(), password.getText().toString())
                                         .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
@@ -328,6 +332,17 @@ public class StartActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
         progressBar.startAnimation(AnimationUtils.loadAnimation(StartActivity.this, R.anim.fade_in));
+    }
+
+    private void hideProgressBar(){
+        eMail.setVisibility(View.VISIBLE);
+        eMail.startAnimation(AnimationUtils.loadAnimation(StartActivity.this, R.anim.fade_in));
+
+        password.setVisibility(View.VISIBLE);
+        password.startAnimation(AnimationUtils.loadAnimation(StartActivity.this, R.anim.fade_in));
+
+        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.startAnimation(AnimationUtils.loadAnimation(StartActivity.this, R.anim.fade_out));
     }
 
     @Override

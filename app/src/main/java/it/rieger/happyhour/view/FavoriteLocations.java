@@ -11,6 +11,13 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
@@ -22,7 +29,10 @@ import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.LocationAdapter;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
+import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
+import it.rieger.happyhour.model.User;
+import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
 import it.rieger.happyhour.util.listener.OnQueryTextListener;
 import it.rieger.happyhour.view.fragments.firebase.CurrentLocationListActivity;
@@ -44,6 +54,8 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
 
     private BottomBar bottomBar;
 
+    LocationAdapter locationAdapter = null;
+
     private boolean start = true;
 
     /**
@@ -58,7 +70,68 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
 
         ButterKnife.bind(this);
 
-        BackendDatabase.getInstance().loadFavorites(locationList, this);
+//        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+//
+//        database.child(AppConstants.Firebase.LOCATIONS_PATH).orderByChild("cityName").equalTo("Erfurt").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+//                    createLocationList();
+//
+//                    locationLoaded();
+//
+//                    locationList.add(dataSnapshot1.getValue(Location.class));
+//
+//                    locationAdapter.notifyDataSetChanged();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+
+        database.child(AppConstants.Firebase.USERS_PATH).orderByChild("uID").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnap : dataSnapshot.getChildren()){
+                    User user = userSnap.getValue(User.class);
+
+                    for (String locationKey : user.getLikedLocations()){
+
+                        database.child(AppConstants.Firebase.LOCATIONS_PATH).orderByChild("id").equalTo(locationKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                                    createLocationList();
+
+                                    locationLoaded();
+
+                                    locationList.add(dataSnapshot1.getValue(Location.class));
+
+                                    locationAdapter.notifyDataSetChanged();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         createBottomBar(savedInstanceState);
 
@@ -70,9 +143,11 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
     private void createLocationList(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
         locationListView.setLayoutManager(linearLayoutManager);
 
-        final LocationAdapter locationAdapter = new LocationAdapter(locationList);
+        locationAdapter = new LocationAdapter(locationList);
         locationListView.setAdapter(locationAdapter);
 
         searchView.setOnQueryTextListener(new OnQueryTextListener() {

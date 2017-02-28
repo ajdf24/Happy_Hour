@@ -29,6 +29,7 @@ import it.rieger.happyhour.util.listener.OnQueryTextListener;
 
 /**
  * activity which shows a list of locations
+ * @deprecated
  */
 public class LocationList {
 
