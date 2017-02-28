@@ -114,13 +114,13 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
                 wensdayText.setText(generateTimeStringForInitialize(i));
             }
             if(openingTimes.get(i).getDay() == Day.THURSDAY){
-                thusedayText.setText(generateTimeStringForInitialize(i));
+                thursdayText.setText(generateTimeStringForInitialize(i));
             }
             if(openingTimes.get(i).getDay() == Day.FRIDAY){
                 fridayText.setText(generateTimeStringForInitialize(i));
             }
             if(openingTimes.get(i).getDay() == Day.SATURDAY){
-                sundayText.setText(generateTimeStringForInitialize(i));
+                saturdayText.setText(generateTimeStringForInitialize(i));
             }
         }
     }

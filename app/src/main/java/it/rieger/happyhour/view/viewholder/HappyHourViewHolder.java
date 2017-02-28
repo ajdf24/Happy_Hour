@@ -128,11 +128,44 @@ public class HappyHourViewHolder extends RecyclerView.ViewHolder implements Time
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
-        String timeString = hourOfDay+":"+minute + CreateContextForResource.getStringFromID(R.string.general_clock_to) + hourOfDayEnd + ":" + minuteEnd + CreateContextForResource.getStringFromID(R.string.general_clock);
+
+        String minuteString = "";
+
+        if(minute < 10){
+            minuteString = "0" + minute;
+        }else {
+            minuteString = "" + minute;
+        }
+
+        String hourOfDayString = "";
+
+        if(hourOfDay < 10){
+            hourOfDayString = "0" + hourOfDay;
+        }else {
+            hourOfDayString = "" + hourOfDay;
+        }
+
+        String minuteEndString = "";
+
+        if(minuteEnd < 10){
+            minuteEndString = "0" + minuteEnd;
+        }else {
+            minuteEndString = "" + minuteEnd;
+        }
+
+        String hourOfDayEndString = "";
+
+        if (hourOfDayEnd < 10){
+            hourOfDayEndString = "0" + hourOfDayEnd;
+        }else {
+            hourOfDayEndString = "" + hourOfDayEnd;
+        }
+
+        String timeString = hourOfDayString+":"+minuteString + CreateContextForResource.getStringFromID(R.string.general_clock_to) + hourOfDayEndString + ":" + minuteEndString + CreateContextForResource.getStringFromID(R.string.general_clock);
         timeField.setText(timeString);
 
-        time.setStartTime(hourOfDay+":"+minute);
-        time.setEndTime(hourOfDayEnd + ":" + minuteEnd);
+        time.setStartTime(hourOfDayString+":"+minuteString);
+        time.setEndTime(hourOfDayEndString + ":" + minuteEndString);
 
         happyHour.setHappyHourTime(time);
     }

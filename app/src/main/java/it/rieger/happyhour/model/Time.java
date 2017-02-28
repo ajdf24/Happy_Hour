@@ -15,7 +15,7 @@ public class Time implements Serializable {
     /**
      * day of the opening
      */
-    private Day day;
+    private Day day = Day.MONDAY;
 
     /**
      * start time for the opening

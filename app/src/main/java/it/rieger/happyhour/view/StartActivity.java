@@ -223,80 +223,90 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                showProgressBar();
+                if(eMail.getText().toString().isEmpty()){
+                    eMail.setError("Bitte ausfüllen");
+                }
 
-                if(!login){
-                    mAuth.signInWithEmailAndPassword(eMail.getText().toString(), password.getText().toString())
-                            .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    Log.d(LOG_TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+                if(password.getText().toString().isEmpty()){
+                    password.setError("Bitte ausfüllen");
+                }
 
-                                    if (!task.isSuccessful()) {
+                if(!eMail.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
+                    showProgressBar();
 
-                                        Log.w(LOG_TAG, "signInWithEmail", task.getException());
-                                        Toast.makeText(StartActivity.this, "Authentication failed.",
-                                                Toast.LENGTH_SHORT).show();
-                                        hideProgressBar();
-                                    }else {
-                                        goToMainActivity();
+                    if (!login) {
+                        mAuth.signInWithEmailAndPassword(eMail.getText().toString(), password.getText().toString())
+                                .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        Log.d(LOG_TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+
+                                        if (!task.isSuccessful()) {
+
+                                            Log.w(LOG_TAG, "signInWithEmail", task.getException());
+                                            Toast.makeText(StartActivity.this, "Authentication failed.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            hideProgressBar();
+                                        } else {
+                                            goToMainActivity();
+                                        }
+
                                     }
+                                });
+                    } else {
+                        mAuth.createUserWithEmailAndPassword(eMail.getText().toString(), password.getText().toString()).addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                Log.d(LOG_TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
-                                }
-                            });
-                }else{
-                    mAuth.createUserWithEmailAndPassword(eMail.getText().toString(), password.getText().toString()).addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            Log.d(LOG_TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+                                if (!task.isSuccessful()) {
+                                    try {
+                                        throw task.getException();
+                                    } catch (FirebaseAuthWeakPasswordException e) {
+                                        password.setError(getString(R.string.error_weak_password));
+                                        password.requestFocus();
+                                    } catch (FirebaseAuthInvalidCredentialsException e) {
+                                        eMail.setError(getString(R.string.title_confirm_recover_password_activity));
+                                        eMail.requestFocus();
+                                    } catch (FirebaseAuthUserCollisionException e) {
+                                        eMail.setError(getString(R.string.error_user_collision));
+                                        eMail.requestFocus();
+                                    } catch (FirebaseException e) {
+                                        password.setError(getString(R.string.error_weak_password));
+                                        password.requestFocus();
+                                    } catch (Exception e) {
+                                        Log.e(LOG_TAG, e.getMessage());
+                                    }
+                                    Toast.makeText(StartActivity.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
 
-                            if (!task.isSuccessful()) {
-                                try {
-                                    throw task.getException();
-                                } catch(FirebaseAuthWeakPasswordException e) {
-                                    password.setError(getString(R.string.error_weak_password));
-                                    password.requestFocus();
-                                } catch(FirebaseAuthInvalidCredentialsException e) {
-                                    eMail.setError(getString(R.string.title_confirm_recover_password_activity));
-                                    eMail.requestFocus();
-                                } catch(FirebaseAuthUserCollisionException e) {
-                                    eMail.setError(getString(R.string.error_user_collision));
-                                    eMail.requestFocus();
-                                } catch(FirebaseException e){
-                                    password.setError(getString(R.string.error_weak_password));
-                                    password.requestFocus();
-                                } catch(Exception e) {
-                                    Log.e(LOG_TAG, e.getMessage());
-                                }
-                                Toast.makeText(StartActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                    hideProgressBar();
+                                } else {
+                                    mAuth.signInWithEmailAndPassword(eMail.getText().toString(), password.getText().toString())
+                                            .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    Log.d(LOG_TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
 
-                                hideProgressBar();
-                            }else {
-                                mAuth.signInWithEmailAndPassword(eMail.getText().toString(), password.getText().toString())
-                                        .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                                Log.d(LOG_TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+                                                    if (!task.isSuccessful()) {
 
-                                                if (!task.isSuccessful()) {
+                                                        Log.w(LOG_TAG, "signInWithEmail", task.getException());
+                                                        Toast.makeText(StartActivity.this, "Authentication failed.",
+                                                                Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        User user = new User();
+                                                        user.setuID(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-                                                    Log.w(LOG_TAG, "signInWithEmail", task.getException());
-                                                    Toast.makeText(StartActivity.this, "Authentication failed.",
-                                                            Toast.LENGTH_SHORT).show();
-                                                }else {
-                                                    User user = new User();
-                                                    user.setuID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                        BackendDatabase.getInstance().saveUser(user);
+                                                        goToMainActivity();
+                                                    }
 
-                                                    BackendDatabase.getInstance().saveUser(user);
-                                                    goToMainActivity();
                                                 }
-
-                                            }
-                                        });
+                                            });
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         });

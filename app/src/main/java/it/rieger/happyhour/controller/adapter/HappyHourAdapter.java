@@ -85,6 +85,15 @@ public class HappyHourAdapter extends RecyclerView.Adapter<HappyHourViewHolder>{
             }
         });
 
+        if(happyHour.getHappyHourTime().getStartTime() == null){
+            happyHour.getHappyHourTime().setStartTime("00:00");
+        }
+
+        if(happyHour.getHappyHourTime().getEndTime() == null){
+            happyHour.getHappyHourTime().setEndTime("00:00");
+        }
+
+
         holder.getTimeField().setText(happyHour.getHappyHourTime().getStartTime() + CreateContextForResource.getStringFromID(R.string.general_clock_to) + happyHour.getHappyHourTime().getEndTime() + CreateContextForResource.getStringFromID(R.string.general_clock));
 
         holder.getDaySpinner().setSelection(Day.daysToInt(happyHour.getHappyHourTime().getDay()));
