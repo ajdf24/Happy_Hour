@@ -49,7 +49,7 @@
     <string name="general_pictures">Fotos</string>
     <string name="general_share">Teilen</string>
     <string name="general_send">Senden</string>
-    <string name="general_adress_placeholder_adrees_city">%1$s, %2$s</string>
+    <string name="general_adress_placeholder_adrees_city">%1$sUhr bis %2$sUhr</string>
     <string name="general_"></string>
 
     <!--SlideShowFragment-->
