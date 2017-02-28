@@ -22,6 +22,7 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -29,6 +30,7 @@ import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.LocationAdapter;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
+import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.User;
@@ -44,13 +46,12 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
     @Bind(R.id.activity_favorite_location_recycler_view)
     RecyclerView locationListView;
 
-    @Bind(R.id.activity_favorite_location_searchView)
-    SearchView searchView;
-
     @Bind(R.id.activity_favorite_location_progressBar)
     ProgressBar progressBar;
 
     List<Location> locationList = new ArrayList<>();
+
+    List<Location> searchBackupLocationList = new ArrayList<>();
 
     private BottomBar bottomBar;
 
@@ -135,6 +136,46 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
 
         createBottomBar(savedInstanceState);
 
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//
+//                locationList.clear();
+//
+//                for (Location location : searchBackupLocationList){
+//                    locationList.add(location);
+//                }
+//
+////                locationList = new ArrayList<Location>(searchBackupLocationList);
+//
+////                Collections.copy(locationList, searchBackupLocationList);
+//
+//                if(!newText.isEmpty()) {
+//
+//                    for (Location location : locationList) {
+//                        if (!location.getName().contains(newText)) {
+//                            for (HappyHour happyHour : location.getHappyHours()) {
+//                                if (!happyHour.getDrink().contains(newText)) {
+//                                    locationList.remove(location);
+//                                }
+//                            }
+//                        }
+//                    }
+//
+////                }else {
+////                    locationList = searchBackupLocationList;
+//                }
+//                locationAdapter.notifyDataSetChanged();
+//
+//                return true;
+//            }
+//        });
+
     }
 
     /**
@@ -150,14 +191,17 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
         locationAdapter = new LocationAdapter(locationList);
         locationListView.setAdapter(locationAdapter);
 
-        searchView.setOnQueryTextListener(new OnQueryTextListener() {
+//        searchBackupLocationList = new ArrayList<Location>(locationList);
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                locationAdapter.getFilter().filter(newText);
-                return true;
-            }
-        });
+        searchBackupLocationList.clear();
+
+        for (Location location : locationList){
+            searchBackupLocationList.add(location);
+        }
+
+//        Collections.copy(searchBackupLocationList, locationList);
+
+//        searchBackupLocationList = locationList;
 
     }
 
