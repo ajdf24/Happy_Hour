@@ -30,6 +30,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"
-        android:id="@+id/textView2" />
+        android:id="@+id/activtiy_favorite_no_favorites_textView" />
 
 </RelativeLayout>

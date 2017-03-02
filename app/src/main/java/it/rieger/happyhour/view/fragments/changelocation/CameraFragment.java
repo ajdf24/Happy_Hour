@@ -87,12 +87,6 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
 
     private GalleryAdapter galleryAdapter;
 
-    private Uri imageToUploadUri;
-
-    String mCurrentPhotoPath;
-
-
-
     public CameraFragment() {
         // Required empty public constructor
     }
@@ -290,7 +284,6 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
 
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-                // Log.d(TAG, String.valueOf(bitmap));
 
                 Image image = new Image();
                 image.setBitmapToImage(bitmap);
@@ -301,23 +294,6 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
                 e.printStackTrace();
             }
 
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            mImageView.setImageBitmap(imageBitmap);
-//            try {
-//                final Uri imageUri = data.getData();
-//                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-//                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-//                //TODO: Upload to Server Show in Galery
-//
-//                Image image = new Image();
-//                image.setBitmapToImage(selectedImage);
-//
-//                BackendDatabase.getInstance().saveImage(image, location);
-//
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            }
         }
     }
 

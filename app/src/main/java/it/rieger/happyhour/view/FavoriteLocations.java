@@ -9,10 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,21 +21,16 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.LocationAdapter;
-import it.rieger.happyhour.controller.backend.BackendDatabase;
-import it.rieger.happyhour.model.HappyHour;
-import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.User;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
-import it.rieger.happyhour.util.listener.OnQueryTextListener;
 import it.rieger.happyhour.view.fragments.firebase.CurrentLocationListActivity;
 
 public class FavoriteLocations extends AppCompatActivity implements LocationLoadedCallback {
@@ -50,7 +43,7 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
     @Bind(R.id.activity_favorite_location_progressBar)
     ProgressBar progressBar;
 
-    @Bind(R.id.textView2)
+    @Bind(R.id.activtiy_favorite_no_favorites_textView)
     TextView noLocations;
 
     List<Location> locationList = new ArrayList<>();

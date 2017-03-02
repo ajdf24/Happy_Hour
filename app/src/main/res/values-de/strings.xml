@@ -78,4 +78,7 @@
     <string name="image_dialog_share">Foto teilen</string>
     <string name="image_dialog_delete">Foto löschen</string>
     <string name="image_dialog_permission_denied">Keine Berechtigung um Fotos zu speichern.</string>
+
+    <!--Start Activity-->
+    <string name="activity_start_fill">Bitte Ausfüllen</string>
 </resources>

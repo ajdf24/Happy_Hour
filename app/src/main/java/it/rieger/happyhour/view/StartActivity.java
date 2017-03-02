@@ -38,6 +38,7 @@ import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.controller.widget.DynamicImageView;
 import it.rieger.happyhour.model.User;
 import it.rieger.happyhour.util.listener.AnimationListener;
+import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
  * Start activity on which the user can login with facebook.
@@ -224,7 +225,7 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(eMail.getText().toString().isEmpty()){
-                    eMail.setError("Bitte ausfüllen");
+                    eMail.setError(CreateContextForResource.getStringFromID(R.string.activity_start_fill));
                 }
 
                 if(password.getText().toString().isEmpty()){

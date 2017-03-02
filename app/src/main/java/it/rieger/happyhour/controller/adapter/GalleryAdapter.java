@@ -24,6 +24,7 @@ import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.ThumbnailHolderClass;
+import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.listener.OnItemTouchListener;
 import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
@@ -114,13 +115,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
         protected ThumbnailViewHolder doInBackground(final ThumbnailHolderClass... params) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-            DatabaseReference images = database.getReference("images");
+            DatabaseReference images = database.getReference(AppConstants.Firebase.IMAGES_PATH);
 
             images.orderByKey().equalTo(params[0].getImageKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-                        Image image = dataSnapshot1.getValue(Image.class);
+                    for (DataSnapshot imageSnap : dataSnapshot.getChildren()){
+                        Image image = imageSnap.getValue(Image.class);
                         params[0].getThumbnailViewHolder().progressBar.setVisibility(View.INVISIBLE);
                         params[0].getThumbnailViewHolder().thumbnail.setImageBitmap(image.getImage());
                     }
