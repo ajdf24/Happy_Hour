@@ -3,26 +3,93 @@
     <string translatable="false" name="title_activity_maps">Map</string>
     <string translatable="false" name="title_activity_location_detail">LocationDetail</string>
 
-    <!--<string name="activity_maps_main_text">Main Text der Activity</string>-->
-
-    <string translatable="false" name="facebook_app_id">2027885040770872</string>
-    <string name="message_permission_location_denied">Message permission Location denied</string>
-
     <string translatable="false" name="title_activity_navigation_drawer">Navigation_Drawe_Activity</string>
-    <!---->
     <string translatable="false" name="navigation_drawer_open">Open navigation drawer</string>
     <string translatable="false" name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!--<string name="action_settings">Settings</string>-->
     <array name="Weekdays">
-        <item>Montag</item>
-        <item>Dienstag</item>
-        <item>Mittwoch</item>
-        <item>Donnerstag</item>
-        <item>Freitag</item>
-        <item>Samstag</item>
-        <item>Sonntag</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
     </array>
 
-    <!--<string name="change_image">Photo</string>-->
+    <string name="message_permission_location_denied">Location can not be queried</string>
+
+    <!--GeneralStrings for all activitys-->
+    <string name="general_undo_action">Undo?</string>
+    <string name="general_undo">Undo</string>
+    <string name="general_distance_kilometer">&#160;km</string>
+    <string name="general_distance_meter">&#160;m</string>
+    <string name="general_closed">closed today</string>
+    <string name="general_time_till">&#160; till &#160;</string>
+    <string name="general_time_placeholder_from_to">%1$s till %2$s</string>
+    <string name="general_added_to_favorites">Added to favorites</string>
+    <string name="general_removed_from_favorites">Removed from favorites</string>
+    <string name="general_day_sunday">Sunday</string>
+    <string name="general_day_monday">Monday</string>
+    <string name="general_day_tuesday">Tuesday</string>
+    <string name="general_day_wednesday">Wednesday</string>
+    <string name="general_day_thursday">Thursday</string>
+    <string name="general_day_friday">Friday</string>
+    <string name="general_day_saturday">Saturday</string>
+    <string name="general_can_not_locate">Location can not be determined.</string>
+    <string name="general_clock_to">clock till:&#160;</string>
+    <string name="general_clock">clock</string>
+    <string name="general_not_implemented">Not yet implemented</string>
+    <string name="general_for">&#160; for &#160;</string>
+    <string name="general_next">Next</string>
+    <string name="general">General</string>
+    <string name="general_location_name">Location Name</string>
+    <string name="general_location">Location</string>
+    <string name="general_opening_times">Business Hours</string>
+    <string name="general_hint_drink">Drink</string>
+    <string name="general_hint_price">Price</string>
+    <string name="general_label_day">Day:&#160;</string>
+    <string name="general_from_to_time">Time from till</string>
+    <string name="general_happy_hour">Happy Hour</string>
+    <string name="general_pictures">Images</string>
+    <string name="general_share">Share</string>
+    <string name="general_send">Send</string>
+    <string name="general_adress_placeholder_adrees_city">%1$s, %2$s</string>
+    <string name="general_yes">Yes</string>
+    <string name="general_no">No</string>
+    <string name="general_error">Error</string>
+    <string name="general_real_address">Please enter a valid address</string>
+    <string name="general_already_voted">Already evaluated</string>
+    <string name="general_"></string>
+
+    <!--SlideShowFragment-->
+    <string name="slideshowfragment_picture_of_placeholder_x_from">%1$d from %2$d</string>
+
+    <!--StartActivity-->
+    <string name="start_activity_login_with_facebook">Sign up now.</string>
+    <string name="start_activity_welcome_head">Welcome to Happy Hour</string>
+    <string name="start_activity_welcome">Bitte melde dich an, um teilzunehmen.</string>
+
+    <!--Location Details Activity-->
+    <string name="activity_location_details_opening_times">Business Hours:</string>
+    <string name="activity_location_details_happy_hours">Happy Hours:</string>
+    <string name="activity_location_details_"></string>
+
+    <!--BottomBar-->
+    <string name="bottom_bar_map">Map</string>
+    <string name="bottom_bar_favorite">Favorite</string>
+    <string name="bottom_bar_now">Current</string>
+
+    <!--Image Dialog-->
+    <string name="image_dialog_delete">Delete Picture</string>
+
+    <!--Start Activity-->
+    <string name="activity_start_fill">Please fill in</string>
+    <string name="error_weak_password">Password not strong enough. Use at least 6 characters and a mix of letters and numbers.</string>
+    <string name="check_your_email">Check your email</string>
+    <string name="error_user_collision">An account already exists with that email address.</string>
+
+    <!--save dialog-->
+    <string name="save_dialog_title">Save?</string>
+    <string name="save_dialog_message">Do you want to save the current changes before closing?</string>
 </resources>
