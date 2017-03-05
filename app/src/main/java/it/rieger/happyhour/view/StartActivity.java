@@ -1,14 +1,11 @@
 package it.rieger.happyhour.view;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -38,6 +35,7 @@ import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.controller.widget.DynamicImageView;
 import it.rieger.happyhour.model.User;
 import it.rieger.happyhour.util.listener.AnimationListener;
+import it.rieger.happyhour.util.listener.TextWatcher;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
@@ -47,9 +45,9 @@ public class StartActivity extends AppCompatActivity {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
 
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseAuth.AuthStateListener authListener;
 
     private boolean login = false;
 
@@ -73,6 +71,9 @@ public class StartActivity extends AppCompatActivity {
     @Bind(R.id.start_activity_progressBar)
     ProgressBar progressBar;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,9 +82,9 @@ public class StartActivity extends AppCompatActivity {
 
         ifFirstBackPress = true;
 
-        mAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
+        authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -95,9 +96,9 @@ public class StartActivity extends AppCompatActivity {
             }
         };
 
-        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(mUser != null) {
-            mUser.getToken(true)
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null) {
+            user.getToken(true)
                     .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                             if (task.isSuccessful()) {
@@ -108,24 +109,30 @@ public class StartActivity extends AppCompatActivity {
                     });
         }
 
-        mAuth.addAuthStateListener(mAuthListener);
+        auth.addAuthStateListener(authListener);
 
         ButterKnife.bind(this);
 
         initializeElementsAndAnimations();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onStart() {
         super.onStart();
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
+        if (authListener != null) {
+            auth.removeAuthStateListener(authListener);
         }
     }
 
@@ -200,15 +207,6 @@ public class StartActivity extends AppCompatActivity {
         });
 
         eMail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -236,7 +234,7 @@ public class StartActivity extends AppCompatActivity {
                     showProgressBar();
 
                     if (!login) {
-                        mAuth.signInWithEmailAndPassword(eMail.getText().toString(), password.getText().toString())
+                        auth.signInWithEmailAndPassword(eMail.getText().toString(), password.getText().toString())
                                 .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -255,7 +253,7 @@ public class StartActivity extends AppCompatActivity {
                                     }
                                 });
                     } else {
-                        mAuth.createUserWithEmailAndPassword(eMail.getText().toString(), password.getText().toString()).addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
+                        auth.createUserWithEmailAndPassword(eMail.getText().toString(), password.getText().toString()).addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 Log.d(LOG_TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
@@ -283,7 +281,7 @@ public class StartActivity extends AppCompatActivity {
 
                                     hideProgressBar();
                                 } else {
-                                    mAuth.signInWithEmailAndPassword(eMail.getText().toString(), password.getText().toString())
+                                    auth.signInWithEmailAndPassword(eMail.getText().toString(), password.getText().toString())
                                             .addOnCompleteListener(StartActivity.this, new OnCompleteListener<AuthResult>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -313,6 +311,11 @@ public class StartActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * check if email is valid
+     * @param target the email which should be checked
+     * @return <code>true</code> if the mail is valid <code>false</code> otherwise
+     */
     public final static boolean isValidEmail(CharSequence target) {
         if (TextUtils.isEmpty(target)) {
             return false;
@@ -321,6 +324,9 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * show the login
+     */
     public void showLogin(DynamicImageView imageView, TextView explanation, TextView mainText, TranslateAnimation animation){
         if (imageView != null) {
             imageView.startAnimation(animation);
@@ -334,6 +340,9 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * show the progress bar
+     */
     private void showProgressBar(){
         eMail.setVisibility(View.INVISIBLE);
         eMail.startAnimation(AnimationUtils.loadAnimation(StartActivity.this, R.anim.fade_out));
@@ -345,6 +354,9 @@ public class StartActivity extends AppCompatActivity {
         progressBar.startAnimation(AnimationUtils.loadAnimation(StartActivity.this, R.anim.fade_in));
     }
 
+    /**
+     * hide the progress bar
+     */
     private void hideProgressBar(){
         eMail.setVisibility(View.VISIBLE);
         eMail.startAnimation(AnimationUtils.loadAnimation(StartActivity.this, R.anim.fade_in));
@@ -356,6 +368,9 @@ public class StartActivity extends AppCompatActivity {
         progressBar.startAnimation(AnimationUtils.loadAnimation(StartActivity.this, R.anim.fade_out));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onBackPressed() {
 
@@ -374,6 +389,10 @@ public class StartActivity extends AppCompatActivity {
         animation.setFillAfter(false);
 
         animation.setAnimationListener(new AnimationListener() {
+
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void onAnimationStart(Animation animation) {
                 if (imageView != null) {
@@ -404,6 +423,9 @@ public class StartActivity extends AppCompatActivity {
                 signUpButton.setVisibility(View.VISIBLE);
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void onAnimationEnd(Animation animation) {
                 if (explanation != null) {

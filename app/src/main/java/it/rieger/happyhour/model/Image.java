@@ -14,6 +14,7 @@ import java.util.Map;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
+ * container class for a bitmap image
  * Created by sebastian on 11.12.16.
  */
 

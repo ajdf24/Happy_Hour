@@ -3,6 +3,7 @@ package it.rieger.happyhour.model;
 import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
 /**
+ * holder class for a thumbnail view holder
  * Created by sebastian on 16.01.17.
  */
 

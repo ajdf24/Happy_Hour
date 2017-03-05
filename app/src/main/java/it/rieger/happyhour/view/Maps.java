@@ -32,15 +32,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
@@ -52,10 +49,10 @@ import java.util.Locale;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
 import it.rieger.happyhour.R;
-import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.util.AppConstants;
-import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
+import it.rieger.happyhour.controller.callbacks.LocationLoadedCallback;
 import it.rieger.happyhour.util.listener.AnimationListener;
+import it.rieger.happyhour.util.listener.ValueEventListener;
 import it.rieger.happyhour.view.fragments.LocationInformation;
 import it.rieger.happyhour.view.fragments.firebase.CurrentLocationListActivity;
 
@@ -111,6 +108,9 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
     }
 
+    /**
+     * initialize the active elements
+     */
     private void initializeActiveElements(){
         addNewLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +128,10 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         bottomBar = BottomBar.attach(this, savedInstanceState);
 
         bottomBar.setItemsFromMenu(R.menu.bottombar, new OnMenuTabClickListener() {
+
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 if (!start) {
@@ -142,11 +146,11 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                 }
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
-                if (menuItemId == R.id.bottomBarItemOne) {
-
-                }
             }
         });
 
@@ -175,7 +179,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION);
             }else {
-                }
 
                 final List<Address> addresses = new ArrayList<>();
 
@@ -207,6 +210,9 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         }
     }
 
+    /**
+     * callback method which is called when the current city is loaded
+     */
     private void cityLoaded(){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -219,11 +225,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                     locations.add(location);
                     googleMap.addMarker(new MarkerOptions().position(new LatLng(location.getAddressLatitude(), location.getAddressLongitude())).title(location.getName())).showInfoWindow();
                 }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
@@ -378,17 +379,22 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
     /**
      * {@inheritDoc}
-     * @param uri the uri for interaction
      */
     @Override
     public void onFragmentInteraction(Uri uri) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onMapClick(LatLng latLng) {
         removeInfoFragment();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void locationLoaded() {
 

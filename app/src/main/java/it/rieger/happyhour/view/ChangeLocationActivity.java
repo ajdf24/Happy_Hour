@@ -1,15 +1,11 @@
 package it.rieger.happyhour.view;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Process;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,13 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.facebook.share.model.ShareContent;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,6 +28,9 @@ import it.rieger.happyhour.view.fragments.changelocation.GeneralFragment;
 import it.rieger.happyhour.view.fragments.changelocation.HappyHoursFragment;
 import it.rieger.happyhour.view.fragments.changelocation.OpeningFragment;
 
+/**
+ * class which handle all change location fragments for changing a location
+ */
 public class ChangeLocationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GeneralFragment.OnFragmentInteractionListener,
@@ -53,8 +46,9 @@ public class ChangeLocationActivity extends AppCompatActivity
 
     Location location;
 
-
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,19 +88,11 @@ public class ChangeLocationActivity extends AppCompatActivity
         currentFragment = generalFragment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onBackPressed() {
-
-//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-//        // set title
-//        alertDialogBuilder.setTitle("Please logout after ");
-//        AlertDialog d = alertDialogBuilder.create();
-//        d.show();
-
-//        currentFragment.
-
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer != null ? drawer.isDrawerOpen(GravityCompat.START) : false) {
@@ -115,9 +101,9 @@ public class ChangeLocationActivity extends AppCompatActivity
             if(currentFragment.readyToSave()){
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder
-                        .setTitle("Speichern?")
-                        .setMessage("Möchtest du die aktuellen Änderungen vor dem schließen speichern?")
-                        .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.save_dialog_title)
+                        .setMessage(R.string.save_dialog_message)
+                        .setPositiveButton(R.string.general_yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 currentFragment.saveLocation();
@@ -131,7 +117,7 @@ public class ChangeLocationActivity extends AppCompatActivity
                             }
                         })
                         .setCancelable(false)
-                        .setNegativeButton("Nein", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.general_no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Bundle bundle = new Bundle();
@@ -145,12 +131,6 @@ public class ChangeLocationActivity extends AppCompatActivity
                         });
 
                 AlertDialog dialog = alertDialogBuilder.create();
-                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface dialog) {
-
-                    }
-                });
                 dialog.show();
             }else {
                 Bundle bundle = new Bundle();
@@ -164,6 +144,9 @@ public class ChangeLocationActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -182,7 +165,7 @@ public class ChangeLocationActivity extends AppCompatActivity
                 fragmentTransaction.commit();
                 currentFragment = cameraFragment;
             }else {
-                Toast.makeText(this,"Fehler", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.general_error , Toast.LENGTH_LONG).show();
             }
         } else if (id == R.id.nav_general) {
             if(currentFragment != null){
@@ -196,14 +179,10 @@ public class ChangeLocationActivity extends AppCompatActivity
                     fragmentTransaction.commit();
                     currentFragment = generalFragment;
                 }else {
-                    Toast.makeText(this,"Bitte trage eine gültige Adresse ein", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.general_real_address , Toast.LENGTH_LONG).show();
                 }
             }
 
-//            final GeneralFragment generalFragment = GeneralFragment.newInstance(location);
-//            fragmentTransaction.add(R.id.fragment_container, generalFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_GENERAL);
-//            fragmentTransaction.commit();
-//            currentFragment = generalFragment;
         } else if (id == R.id.nav_open) {
             if(currentFragment != null) {
                 if(currentFragment.readyToSave()) {
@@ -216,30 +195,13 @@ public class ChangeLocationActivity extends AppCompatActivity
                     fragmentTransaction.commit();
                     currentFragment = openingFragment;
                 }else {
-                    Toast.makeText(this,"Fehler", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
                 }
             }
 
-//            final OpeningFragment openingFragment = OpeningFragment.newInstance(location);
-//            fragmentTransaction.add(R.id.fragment_container, openingFragment, AppConstants.FragmentTags.FRAGMENT_CHANGE_LOCATION_OPENING);
-//            fragmentTransaction.commit();
-//            currentFragment = openingFragment;
         } else if (id == R.id.nav_share) {
-
-            ShareDialog shareDialog = new ShareDialog(this);
-            if (ShareDialog.canShow(ShareLinkContent.class)) {
-
-                //TODO: Change with real Share Data
-                ShareContent shareContent = new ShareLinkContent.Builder()
-                        .setContentDescription("TEst")
-                        .build();
-
-                shareDialog.show(shareContent);  // Show facebook ShareDialog
-
                 Toast.makeText(this, R.string.general_not_implemented,Toast.LENGTH_SHORT).show();
-            }
         } else if (id == R.id.nav_send) {
-                //TODO: Implement and send a real Backend Link
                 Toast.makeText(this, R.string.general_not_implemented,Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_happy_hour){
@@ -254,7 +216,7 @@ public class ChangeLocationActivity extends AppCompatActivity
                     fragmentTransaction.commit();
                     currentFragment = happyHoursFragment;
                 }else {
-                    Toast.makeText(this,"Fehler", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -267,8 +229,9 @@ public class ChangeLocationActivity extends AppCompatActivity
         return true;
     }
 
-
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onFragmentInteraction(Uri uri) {
 

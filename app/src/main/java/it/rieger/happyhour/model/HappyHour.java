@@ -21,12 +21,6 @@ public class HappyHour implements Serializable {
     public HappyHour() {
     }
 
-    public HappyHour(@NonNull String drink, @NonNull String price, @NonNull Time happyHourTime) {
-        this.drink = drink;
-        this.price = price;
-        this.happyHourTime = happyHourTime;
-    }
-
     public String getDrink() {
         return drink;
     }

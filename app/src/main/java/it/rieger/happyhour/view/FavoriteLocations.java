@@ -16,7 +16,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
@@ -30,9 +29,13 @@ import it.rieger.happyhour.controller.adapter.LocationAdapter;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.User;
 import it.rieger.happyhour.util.AppConstants;
-import it.rieger.happyhour.util.callbacks.LocationLoadedCallback;
+import it.rieger.happyhour.controller.callbacks.LocationLoadedCallback;
+import it.rieger.happyhour.util.listener.ValueEventListener;
 import it.rieger.happyhour.view.fragments.firebase.CurrentLocationListActivity;
 
+/**
+ * activity class which shows favorite locations of the user
+ */
 public class FavoriteLocations extends AppCompatActivity implements LocationLoadedCallback {
 
     private final String LOG_TAG = getClass().getSimpleName();
@@ -72,6 +75,10 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 
         database.child(AppConstants.Firebase.USERS_PATH).orderByChild("uID").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot userSnap : dataSnapshot.getChildren()){
@@ -84,6 +91,10 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
 
                     for (String locationKey : user.getLikedLocations()){
                         database.child(AppConstants.Firebase.LOCATIONS_PATH).orderByChild("id").equalTo(locationKey).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                            /**
+                             * {@inheritDoc}
+                             */
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
@@ -97,10 +108,6 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
                                 }
                             }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
                         });
 
                     }
@@ -108,53 +115,10 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
                 }
             }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
         });
 
         createBottomBar(savedInstanceState);
 
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//
-//                locationList.clear();
-//
-//                for (Location location : searchBackupLocationList){
-//                    locationList.add(location);
-//                }
-//
-////                locationList = new ArrayList<Location>(searchBackupLocationList);
-//
-////                Collections.copy(locationList, searchBackupLocationList);
-//
-//                if(!newText.isEmpty()) {
-//
-//                    for (Location location : locationList) {
-//                        if (!location.getName().contains(newText)) {
-//                            for (HappyHour happyHour : location.getHappyHours()) {
-//                                if (!happyHour.getDrink().contains(newText)) {
-//                                    locationList.remove(location);
-//                                }
-//                            }
-//                        }
-//                    }
-//
-////                }else {
-////                    locationList = searchBackupLocationList;
-//                }
-//                locationAdapter.notifyDataSetChanged();
-//
-//                return true;
-//            }
-//        });
 
     }
 
@@ -171,17 +135,11 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
         locationAdapter = new LocationAdapter(locationList);
         locationListView.setAdapter(locationAdapter);
 
-//        searchBackupLocationList = new ArrayList<Location>(locationList);
-
         searchBackupLocationList.clear();
 
         for (Location location : locationList){
             searchBackupLocationList.add(location);
         }
-
-//        Collections.copy(searchBackupLocationList, locationList);
-
-//        searchBackupLocationList = locationList;
 
     }
 

@@ -15,23 +15,48 @@ public class SquareLayout extends RelativeLayout {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
+    /**
+     * constructor
+     * @param context current context
+     */
     public SquareLayout(Context context) {
         super(context);
     }
 
+    /**
+     * constructor
+     * @param context current context
+     * @param attrs additional attributes
+     */
     public SquareLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
+    /**
+     * constructor
+     * @param context current context
+     * @param attrs additional attributes
+     * @param defStyleAttr style attributes
+     */
     public SquareLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
+    /**
+     * constructor
+     * @param context current context
+     * @param attrs additional attributes
+     * @param defStyleAttr style attributes
+     * @param defStyleRes style references
+     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public SquareLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // Set a square layout.

@@ -1,4 +1,4 @@
-package it.rieger.happyhour.view;
+package it.rieger.happyhour.controller.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,6 +16,7 @@ import com.squareup.picasso.RequestCreator;
 import java.io.File;
 
 /**
+ * own implementation of a slider view which can handle bitmaps
  * Created by sebastian on 29.01.17.
  */
 

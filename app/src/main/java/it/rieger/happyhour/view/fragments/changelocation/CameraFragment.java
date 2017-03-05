@@ -8,10 +8,8 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -24,18 +22,11 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.GalleryAdapter;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
@@ -44,7 +35,6 @@ import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.listener.AnimationListener;
-import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.dialogs.ImageContextMenuDialog;
 import it.rieger.happyhour.view.fragments.SlideshowDialogFragment;
 
@@ -88,7 +78,6 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
     private GalleryAdapter galleryAdapter;
 
     public CameraFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -106,6 +95,9 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
         return fragment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,11 +109,13 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_camera, container, false);
 
         super.onCreateView(inflater, container, savedInstanceState);
@@ -131,6 +125,9 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
         return view;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void initializeGui() {
         galleryAdapter = new GalleryAdapter(view.getContext(), location);
@@ -141,6 +138,9 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
         recyclerView.setAdapter(galleryAdapter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void initializeActiveElements() {
 
@@ -205,6 +205,10 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
         });
 
         recyclerView.addOnItemTouchListener(new GalleryAdapter.RecyclerTouchListener(view.getContext(), recyclerView, new GalleryAdapter.ClickListener() {
+
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void onClick(View view, int position) {
 
@@ -220,6 +224,9 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
                 fragmentTransaction.commit();
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void onLongClick(View view, int position) {
 
@@ -237,17 +244,17 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
         }));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected boolean checkReadyToSave() {
         return true;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -259,12 +266,18 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK){
@@ -297,6 +310,9 @@ public class CameraFragment extends AbstractChangeLocationFragment implements Re
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reload() {
         galleryAdapter.notifyDataSetChanged();

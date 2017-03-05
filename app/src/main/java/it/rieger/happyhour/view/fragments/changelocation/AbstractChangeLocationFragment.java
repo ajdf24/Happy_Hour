@@ -1,29 +1,17 @@
 package it.rieger.happyhour.view.fragments.changelocation;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import butterknife.ButterKnife;
-import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
 import it.rieger.happyhour.model.Location;
-import it.rieger.happyhour.model.exception.NotSavedException;
-
-/**
- * Created by sebastian on 31.12.16.
- */
 
 /**
  * Abstract class for fragments, which change a location.
@@ -34,11 +22,6 @@ import it.rieger.happyhour.model.exception.NotSavedException;
  * All views should bind with the @Bind annotation from Butterknife
  */
 public abstract class AbstractChangeLocationFragment extends Fragment {
-
-    /**
-     * interactionListener
-     */
-    private OnFragmentInteractionListener listener;
 
     /**
      * log tag
@@ -61,16 +44,6 @@ public abstract class AbstractChangeLocationFragment extends Fragment {
     private boolean readyToSaveCalled = false;
 
     /**
-     * is location saved
-     */
-    private boolean locationSaved = false;
-
-    /**
-     * delete changes anyway
-     */
-    private boolean deleteAnyway = false;
-
-    /**
      * current view
      */
     protected View view;
@@ -79,8 +52,6 @@ public abstract class AbstractChangeLocationFragment extends Fragment {
      * current context
      */
     protected Context context;
-
-    ProgressDialog progress;
 
     /**
      * check if the fragment is ready to save and to detach.
@@ -101,12 +72,6 @@ public abstract class AbstractChangeLocationFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
-        }else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     /**
@@ -128,8 +93,6 @@ public abstract class AbstractChangeLocationFragment extends Fragment {
     @CallSuper
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
 
         context = view.getContext();
 
@@ -172,7 +135,6 @@ public abstract class AbstractChangeLocationFragment extends Fragment {
 
         BackendDatabase.getInstance().saveLocation(location);
 
-        locationSaved = true;
     }
 
     /**
@@ -187,8 +149,6 @@ public abstract class AbstractChangeLocationFragment extends Fragment {
 
     }
 
-
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -200,7 +160,6 @@ public abstract class AbstractChangeLocationFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 

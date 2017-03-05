@@ -30,9 +30,11 @@ public interface AppConstants {
         String PUBLISH_ACTIONS= "publish_actions";
     }
 
+    /**
+     * interface for fragment tags
+     */
     interface FragmentTags {
         String FRAGMENT_SLIDE_SHOW = "SlideShowFragment";
-        String FRAGMENT_WELCOME = "Welcome";
         String FRAGMENT_IMAGE_DIALOG = "Image Dialog";
         String FRAGMENT_LOCATION_INFORMATION = "Welcome";
         String FRAGMENT_CHANGE_LOCATION_GENERAL = "Change Location General";
@@ -48,6 +50,9 @@ public interface AppConstants {
         String FRAGMENT_TIME_PICKER_SUNDAY = "Timepickerdialog Sunday";
     }
 
+    /**
+     * interface for firebase paths
+     */
     interface Firebase {
         String LOCATIONS_PATH = "locations";
         String LOCATIONS_CHILDS_PATH = "/locations/";

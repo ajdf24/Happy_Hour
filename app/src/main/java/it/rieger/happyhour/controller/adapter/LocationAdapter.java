@@ -1,16 +1,9 @@
 package it.rieger.happyhour.controller.adapter;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +14,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -36,9 +28,9 @@ import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.listener.ValueEventListener;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.LocationDetail;
-import it.rieger.happyhour.view.fragments.firebase.LocationList;
 import it.rieger.happyhour.view.viewholder.LocationViewHolder;
 
 /**
@@ -193,7 +185,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
         return locationList.size();
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Filter getFilter() {
         Filter filter = new Filter() {
@@ -238,36 +232,49 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
         return filter;
     }
 
+    /**
+     * private container class, which bundles a view holder and a image key
+     */
     private class HolderContainerClass {
 
         private LocationViewHolder thumbnailViewHolder = null;
 
         private String imageKey = null;
 
-        public HolderContainerClass(LocationViewHolder thumbnailViewHolder, String imageKey) {
+        /**
+         * constructor
+         * @param thumbnailViewHolder current view holder
+         * @param imageKey image key for the view holder
+         */
+        HolderContainerClass(LocationViewHolder thumbnailViewHolder, String imageKey) {
             this.thumbnailViewHolder = thumbnailViewHolder;
             this.imageKey = imageKey;
         }
 
-        public LocationViewHolder getThumbnailViewHolder() {
+        /**
+         * get view holder
+         */
+        LocationViewHolder getThumbnailViewHolder() {
             return thumbnailViewHolder;
         }
 
-        public void setThumbnailViewHolder(LocationViewHolder thumbnailViewHolder) {
-            this.thumbnailViewHolder = thumbnailViewHolder;
-        }
-
-        public String getImageKey() {
+        /**
+         * get image key
+         */
+        String getImageKey() {
             return imageKey;
         }
 
-        public void setImageKey(String imageKey) {
-            this.imageKey = imageKey;
-        }
     }
 
+    /**
+     * inner task for downloading images
+     */
     private class DownloadImage extends AsyncTask<HolderContainerClass, Integer, HolderContainerClass> {
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected HolderContainerClass doInBackground(final HolderContainerClass... params) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -284,10 +291,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationViewHolder> im
                     }
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
             });
 
             return null;

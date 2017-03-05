@@ -3,7 +3,6 @@ package it.rieger.happyhour.view.fragments;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -16,13 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -31,13 +27,16 @@ import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
-import it.rieger.happyhour.model.ThumbnailHolderClass;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.listener.OnPageChangeListener;
+import it.rieger.happyhour.util.listener.ValueEventListener;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.dialogs.ImageContextMenuDialog;
 import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
+/**
+ * fragment for image slide show
+ */
 public class SlideshowDialogFragment extends DialogFragment{
 
     private final String LOG_TAG = getClass().getSimpleName();
@@ -60,6 +59,9 @@ public class SlideshowDialogFragment extends DialogFragment{
         return f;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,14 +80,20 @@ public class SlideshowDialogFragment extends DialogFragment{
         return v;
     }
 
+    /**
+     * set the current item
+     * @param position location for item
+     */
     private void setCurrentItem(int position) {
         viewPager.setCurrentItem(position, false);
         displayMetaInfo(selectedPosition);
     }
 
-    //  page change listener
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new OnPageChangeListener() {
+    private ViewPager.OnPageChangeListener viewPagerPageChangeListener = new OnPageChangeListener() {
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void onPageSelected(int position) {
             displayMetaInfo(position);
@@ -97,13 +105,18 @@ public class SlideshowDialogFragment extends DialogFragment{
         lblCount.setText(String.format(CreateContextForResource.getContext().getString(R.string.slideshowfragment_picture_of_placeholder_x_from), (position + 1), imageList.size()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
     }
 
-    //  adapter
+    /**
+     * internal pager adapter
+     */
     public class ViewPagerAdapter extends PagerAdapter {
 
         private LayoutInflater layoutInflater;
@@ -111,6 +124,9 @@ public class SlideshowDialogFragment extends DialogFragment{
         public ViewPagerAdapter() {
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
 
@@ -148,23 +164,34 @@ public class SlideshowDialogFragment extends DialogFragment{
             return view;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public int getCount() {
             return imageList.size();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean isViewFromObject(View view, Object obj) {
             return view == obj;
         }
 
-
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
     }
 
+    /**
+     * internal container for a image view and a image key
+     */
     private class ImageViewHolder{
         ImageView imageView = null;
 
@@ -192,6 +219,9 @@ public class SlideshowDialogFragment extends DialogFragment{
         }
     }
 
+    /**
+     * internal task for downloading imaged
+     */
     private class DownloadImage extends AsyncTask<ImageViewHolder, Integer, ThumbnailViewHolder> {
 
         @Override
@@ -201,19 +231,18 @@ public class SlideshowDialogFragment extends DialogFragment{
             DatabaseReference images = database.getReference(AppConstants.Firebase.IMAGES_PATH);
 
             images.orderByKey().equalTo(params[0].getImage()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                /**
+                 * {@inheritDoc}
+                 */
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
                         Image image = dataSnapshot1.getValue(Image.class);
-//                        params[0].getThumbnailViewHolder().progressBar.setVisibility(View.INVISIBLE);
                         params[0].getImageView().setImageBitmap(image.getImage());
                     }
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
             });
 
             return null;

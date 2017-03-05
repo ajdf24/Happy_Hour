@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 
 /**
+ * View holder for happy hour time
  * Created by sebastian on 05.07.16.
  */
 public class HappyHourTimeViewHolder extends RecyclerView.ViewHolder {

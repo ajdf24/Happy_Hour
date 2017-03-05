@@ -29,6 +29,7 @@ import it.rieger.happyhour.util.listener.OnItemTouchListener;
 import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
 /**
+ * Adapter class for gallery view
  * Created by Admin on 08.07.2016.
  */
 public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
@@ -40,12 +41,20 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
 
     Location location;
 
+    /**
+     * Contructor
+     * @param context current context
+     * @param location current Location
+     */
     public GalleryAdapter(Context context, Location location) {
         this.context = context;
         this.location = location;
         this.images = location.getImageKeyList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ThumbnailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.gallery_thumbnail, parent, false);
@@ -53,6 +62,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
         return new ThumbnailViewHolder(itemView);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onBindViewHolder(ThumbnailViewHolder holder, int position) {
         String image = images.get(position);
@@ -63,6 +75,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getItemCount() {
         return images.size();
@@ -74,19 +89,35 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
         void onLongClick(View view, int position);
     }
 
+    /**
+     * Internal class for touches
+     */
     public static class RecyclerTouchListener extends OnItemTouchListener {
 
         private GestureDetector gestureDetector;
         private GalleryAdapter.ClickListener clickListener;
 
+        /**
+         * Listener for touches
+         * @param context current context
+         * @param recyclerView current view
+         * @param clickListener listener
+         */
         public RecyclerTouchListener(final Context context, final RecyclerView recyclerView, final GalleryAdapter.ClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+
+                /**
+                 * {@inheritDoc}
+                 */
                 @Override
                 public boolean onSingleTapUp(MotionEvent e) {
                     return true;
                 }
 
+                /**
+                 * {@inheritDoc}
+                 */
                 @Override
                 public void onLongPress(MotionEvent e) {
                     View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
@@ -97,6 +128,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
             });
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent motionEvent) {
 
@@ -109,8 +143,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<ThumbnailViewHolder> {
 
     }
 
+    /**
+     * Task for downloading images
+     */
     private class DownloadImage extends AsyncTask<ThumbnailHolderClass, Integer, ThumbnailViewHolder>{
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected ThumbnailViewHolder doInBackground(final ThumbnailHolderClass... params) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();

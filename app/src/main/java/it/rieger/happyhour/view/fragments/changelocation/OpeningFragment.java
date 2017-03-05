@@ -58,12 +58,9 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
     @Bind(R.id.fragment_opening_sunday_text)
     EditText sundayText;
 
-    private OnFragmentInteractionListener listener;
-
     private int dayClickID;
 
     public OpeningFragment() {
-        // Required empty public constructor
     }
 
     public static OpeningFragment newInstance(Location location) {
@@ -74,6 +71,9 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
         return fragment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +84,9 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -96,10 +99,11 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
         return view;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void initializeGui() {
-
-
 
         List<Time> openingTimes = location.getOpeningTimes().getTimes();
 
@@ -128,6 +132,9 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     private String generateTimeStringForInitialize(int index){
 
         String minuteString = "";
@@ -165,6 +172,9 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
         return hourOfDayString+":"+minuteString + CreateContextForResource.getStringFromID(R.string.general_clock_to) + hourOfDayEndString + ":" + minuteEndString + CreateContextForResource.getStringFromID(R.string.general_clock);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void initializeActiveElements() {
 
@@ -178,8 +188,6 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
                         now.get(Calendar.MINUTE),
                         true
                 );
-
-
 
                 tpd.show(getFragmentManager(), AppConstants.FragmentTags.FRAGMENT_TIME_PICKER_MONDAY);
                 tpd.setOnTimeSetListener(OpeningFragment.this);
@@ -292,20 +300,20 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected boolean checkReadyToSave() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
@@ -426,6 +434,11 @@ public class OpeningFragment extends AbstractChangeLocationFragment implements T
         location.getOpeningTimes().getTimes().add(newOpeningTime);
     }
 
+    /**
+     * ceck if the list contains a specific day
+     * @param day the day
+     * @return the position of the day, is not in list -1
+     */
     private int listContainsDay(Day day){
         List<Time> openingTimes = location.getOpeningTimes().getTimes();
 

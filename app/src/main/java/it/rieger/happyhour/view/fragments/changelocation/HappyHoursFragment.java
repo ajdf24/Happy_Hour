@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.adapter.HappyHourAdapter;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
@@ -29,7 +28,7 @@ import it.rieger.happyhour.model.Location;
  * create an instance of this fragment.
  */
 public class HappyHoursFragment extends AbstractChangeLocationFragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String LOCATION = "location";
 
     @Bind(R.id.fragment_happy_hours_cardList)
@@ -43,7 +42,6 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
     private HappyHourAdapter happyHourAdapter;
 
     public HappyHoursFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -61,6 +59,9 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
         return fragment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +70,9 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -80,6 +84,9 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
         return view;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void initializeGui() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
@@ -90,6 +97,9 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
         happyHours.setAdapter(happyHourAdapter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void initializeActiveElements() {
         ItemTouchHelper.SimpleCallback simpleItemTouchHelper = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT){
@@ -118,6 +128,9 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected boolean checkReadyToSave() {
         return true;
@@ -129,6 +142,9 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -140,6 +156,9 @@ public class HappyHoursFragment extends AbstractChangeLocationFragment {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDetach() {
         super.onDetach();

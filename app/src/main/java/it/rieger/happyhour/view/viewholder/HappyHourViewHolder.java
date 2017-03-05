@@ -20,9 +20,11 @@ import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.listener.OnItemSelectedListener;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
+ * view holder for happy hour
  * Created by sebastian on 05.07.16.
  */
 public class HappyHourViewHolder extends RecyclerView.ViewHolder implements TimePickerDialog.OnTimeSetListener{
@@ -66,7 +68,11 @@ public class HappyHourViewHolder extends RecyclerView.ViewHolder implements Time
             }
         });
 
-        daySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        daySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
@@ -98,10 +104,6 @@ public class HappyHourViewHolder extends RecyclerView.ViewHolder implements Time
                 }
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
         });
     }
 
@@ -126,6 +128,9 @@ public class HappyHourViewHolder extends RecyclerView.ViewHolder implements Time
         return timeField;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
 

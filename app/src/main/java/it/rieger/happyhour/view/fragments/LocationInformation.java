@@ -16,25 +16,22 @@ import android.widget.ImageButton;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
-import it.rieger.happyhour.controller.database.DataSource;
 import it.rieger.happyhour.controller.widget.FavoriteButton;
 import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.util.AppConstants;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
-import it.rieger.happyhour.view.BitmapSlider;
+import it.rieger.happyhour.controller.widget.BitmapSlider;
 import it.rieger.happyhour.view.LocationDetail;
 
 /**
@@ -44,10 +41,8 @@ public class LocationInformation extends Fragment {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
-    private OnFragmentInteractionListener listener;
-
     @Bind(R.id.fragment_location_details_pictures_list_view)
-    SliderLayout mDemoSlider;
+    SliderLayout demoSlider;
 
     @Bind(R.id.fragment_location_information_information_button)
     ImageButton infoButton;
@@ -96,7 +91,6 @@ public class LocationInformation extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_location_information_fragment, container, false);
 
         ButterKnife.bind(this, view);
@@ -106,10 +100,10 @@ public class LocationInformation extends Fragment {
 
 
 
-        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
-        mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-        mDemoSlider.setDuration(4000);
+        demoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        demoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        demoSlider.setCustomAnimation(new DescriptionAnimation());
+        demoSlider.setDuration(4000);
 
         infoButton.setColorFilter(Color.parseColor(new CreateContextForResource().getStringFromID(R.color.colorAccent)));
         infoButton.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +124,9 @@ public class LocationInformation extends Fragment {
         return view;
     }
 
+    /**
+     * internal task for downloading images
+     */
     private class DownloadImage extends AsyncTask<String, Integer, Bitmap> {
 
         @Override
@@ -148,8 +145,8 @@ public class LocationInformation extends Fragment {
                             textSliderView
                                     .image(image.getImage())
                                     .setScaleType(BaseSliderView.ScaleType.Fit);
-                            mDemoSlider.addSlider(textSliderView);
-                            mDemoSlider.getCurrentSlider().setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                            demoSlider.addSlider(textSliderView);
+                            demoSlider.getCurrentSlider().setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                                 @Override
                                 public void onSliderClick(BaseSliderView slider) {
                                 }
@@ -175,21 +172,16 @@ public class LocationInformation extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onResume() {
         super.onResume();
 
-        mDemoSlider = (SliderLayout) view.findViewById(R.id.fragment_location_details_pictures_list_view);
+        demoSlider = (SliderLayout) view.findViewById(R.id.fragment_location_details_pictures_list_view);
     }
 
     /**
@@ -198,13 +190,15 @@ public class LocationInformation extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        listener = null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onPause() {
         super.onPause();
-        mDemoSlider = null;
+        demoSlider = null;
     }
 
     /**

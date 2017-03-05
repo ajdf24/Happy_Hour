@@ -3,42 +3,29 @@ package it.rieger.happyhour.controller.widget;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.share.ShareApi;
-import com.facebook.share.Sharer;
-import com.facebook.share.model.ShareContent;
-import com.facebook.share.model.ShareLinkContent;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
-import it.rieger.happyhour.controller.database.DataSource;
-import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.User;
-import it.rieger.happyhour.model.database.LikedLocation;
 import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.listener.ValueEventListener;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 
 /**
+ * Button for liking a location.
+ *
+ * this button writes the liked or unliked state to the database without other actions are needed
  * Created by sebastian on 16.05.16.
  */
 public class FavoriteButton extends ImageButton  {
@@ -51,8 +38,10 @@ public class FavoriteButton extends ImageButton  {
 
     private Location location;
 
-    private DataSource db;
-
+    /**
+     * constructor
+     * @param context current context
+     */
     public FavoriteButton(Context context) {
         super(context);
         this.context = context;
@@ -63,6 +52,11 @@ public class FavoriteButton extends ImageButton  {
         setListener();
     }
 
+    /**
+     * constructor
+     * @param context current context
+     * @param attrs additional attributes
+     */
     public FavoriteButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
@@ -73,6 +67,12 @@ public class FavoriteButton extends ImageButton  {
         setListener();
     }
 
+    /**
+     * constructor
+     * @param context current context
+     * @param attrs additional attributes
+     * @param defStyleAttr style attributes
+     */
     public FavoriteButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
@@ -83,6 +83,13 @@ public class FavoriteButton extends ImageButton  {
         setListener();
     }
 
+    /**
+     * constructor
+     * @param context current context
+     * @param attrs additional attributes
+     * @param defStyleAttr style attributes
+     * @param defStyleRes style references
+     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public FavoriteButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -94,6 +101,9 @@ public class FavoriteButton extends ImageButton  {
         setListener();
     }
 
+    /**
+     * set a listener to the button which writes the current state to the database
+     */
     private void setListener(){
         this.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,15 +111,15 @@ public class FavoriteButton extends ImageButton  {
                 if(location == null){
                     throw new RuntimeException("Location not set");
                 }
-                if(db == null){
-                    throw new RuntimeException("Database not set");
-                }
                 if(!isActive()){
                     Toast.makeText(context, R.string.general_added_to_favorites, Toast.LENGTH_LONG).show();
-                    //TODO: write to Firebase
 
                     final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                     database.child(AppConstants.Firebase.USERS_PATH).orderByChild("uID").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        /**
+                         * {@inheritDoc}
+                         */
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot dataSnapshotUser : dataSnapshot.getChildren()){
@@ -121,10 +131,6 @@ public class FavoriteButton extends ImageButton  {
                             }
                         }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
                     });
 
                     toggle();
@@ -133,6 +139,10 @@ public class FavoriteButton extends ImageButton  {
 
                     final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                     database.child(AppConstants.Firebase.USERS_PATH).orderByChild("uID").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        /**
+                         * {@inheritDoc}
+                         */
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for (DataSnapshot dataSnapshotUser : dataSnapshot.getChildren()){
@@ -144,9 +154,6 @@ public class FavoriteButton extends ImageButton  {
                             }
                         }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
                     });
                     toggle();
                 }
@@ -154,6 +161,9 @@ public class FavoriteButton extends ImageButton  {
         });
     }
 
+    /**
+     * toggle the button state
+     */
     private void toggle(){
         if(isActive){
             isActive = false;
@@ -164,22 +174,35 @@ public class FavoriteButton extends ImageButton  {
         }
     }
 
+    /**
+     * set the button active or inactive
+     * @param isActive the state which should be set
+     */
     public void setActive(boolean isActive){
         this.isActive = isActive;
         setImage();
     }
 
+    /**
+     * is button active
+     */
     public boolean isActive() {
         return isActive;
     }
 
+    /**
+     * connect the button with a specific location
+     * @param location the location for the button
+     */
     public void setLocation(final Location location){
         this.location = location;
 
-        db = new DataSource(context);
-
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         database.child(AppConstants.Firebase.USERS_PATH).orderByChild("uID").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            /**
+             * {@inheritDoc}
+             */
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshotUser : dataSnapshot.getChildren()){
@@ -191,18 +214,21 @@ public class FavoriteButton extends ImageButton  {
                 }
             }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onVisibilityChanged(View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
         setImage();
     }
 
+    /**
+     * the the correct image for the button
+     */
     private void setImage(){
 
         if(isActive){

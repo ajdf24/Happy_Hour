@@ -3,7 +3,6 @@ package it.rieger.happyhour.view.fragments.firebase;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
@@ -28,6 +27,7 @@ import it.rieger.happyhour.view.FavoriteLocations;
 import it.rieger.happyhour.view.Maps;
 
 /**
+ * List all locations for the current city
  * Created by sebastian on 11.12.16.
  */
 
@@ -35,15 +35,21 @@ public class CurrentLocationListActivity extends LocationList {
 
     String city = "";
 
+    private BottomBar bottomBar;
+
+    private boolean start = true;
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Query getQuery(DatabaseReference databaseReference) {
         return databaseReference.child(AppConstants.Firebase.LOCATIONS_PATH).orderByChild("cityName").equalTo(city);
     }
 
-    private BottomBar bottomBar;
-
-    private boolean start = true;
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,9 +107,6 @@ public class CurrentLocationListActivity extends LocationList {
 
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
-                if (menuItemId == R.id.bottomBarItemOne) {
-//                    focusMapToCurrentPosition(mapFragment.getMap());
-                }
             }
         });
 
@@ -113,7 +116,6 @@ public class CurrentLocationListActivity extends LocationList {
 
         bottomBar.selectTabAtPosition(2, false);
 
-//
     }
 
     /**
@@ -127,5 +129,4 @@ public class CurrentLocationListActivity extends LocationList {
         bottomBar.onSaveInstanceState(outState);
     }
 
-//
 }

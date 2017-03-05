@@ -14,6 +14,11 @@ public enum Day implements Serializable {
     SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
     THURSDAY, FRIDAY, SATURDAY;
 
+    /**
+     * create string from current instance state
+     * @param day the current instance state
+     * @return a string in the current language
+     */
     public static String toString(Day day) {
         String dayName = "";
         switch (day){
@@ -42,6 +47,11 @@ public enum Day implements Serializable {
         return dayName;
     }
 
+    /**
+     * convert the enum value to int value
+     * @param day the enum value
+     * @return the corresponding int for the enum
+     */
     public static int daysToInt(Day day){
         int dayInt = -1;
 
@@ -71,6 +81,11 @@ public enum Day implements Serializable {
         return dayInt;
     }
 
+    /**
+     * convert int to enum
+     * @param day the day as int
+     * @return the enum for the corresponding int
+     */
     public static Day intToDays(int day){
         Day dayInt = null;
 

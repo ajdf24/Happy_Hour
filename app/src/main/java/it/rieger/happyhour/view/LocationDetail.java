@@ -15,13 +15,10 @@ import android.widget.Toast;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -29,6 +26,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
 import it.rieger.happyhour.controller.backend.BackendDatabase;
+import it.rieger.happyhour.controller.widget.BitmapSlider;
 import it.rieger.happyhour.controller.widget.FavoriteButton;
 import it.rieger.happyhour.model.Day;
 import it.rieger.happyhour.model.HappyHour;
@@ -36,6 +34,7 @@ import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
 import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.listener.ValueEventListener;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.fragments.SlideshowDialogFragment;
 
@@ -79,31 +78,11 @@ public class LocationDetail extends AppCompatActivity  {
 
         ButterKnife.bind(this);
 
-
-
-
-
-
-//        DatabaseReference mDatabase;
-//        mDatabase = FirebaseDatabase.getInstance().getReference();
-//
-//            Query postsRef = mDatabase.child("posts").orderByChild("id").equalTo("test");
-//            postsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    currentLocation = (dataSnapshot.getChildren().iterator().loginButton().getValue(Location.class));
-//                    initializeGUI();
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -127,20 +106,6 @@ public class LocationDetail extends AppCompatActivity  {
             file_maps.put(currentLocation.getName() + " " + numberOfPicture, image);
             numberOfPicture++;
         }
-
-//        for(String name : file_maps.keySet()){
-//            BitmapSlider textSliderView = new BitmapSlider(this);
-//            textSliderView
-//                    .description(name)
-//                    .image(file_maps.get(name))
-//                    .setScaleType(BaseSliderView.ScaleType.Fit);
-//            slider.addSlider(textSliderView);
-//            slider.getCurrentSlider().setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
-//                @Override
-//                public void onSliderClick(BaseSliderView slider) {
-//                }
-//            });
-//        }
 
         new DownloadImage().execute((String[]) currentLocation.getImageKeyList().toArray(new String[]{}));
 
@@ -172,7 +137,7 @@ public class LocationDetail extends AppCompatActivity  {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
 
                 if(currentLocation.getRatedUser().contains(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                    Toast.makeText(LocationDetail.this, "Schon bewertet", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LocationDetail.this, R.string.general_already_voted, Toast.LENGTH_SHORT).show();
                     ratingBar.setRating(currentLocation.getRating());
                 }else {
                     currentLocation.setRating(calculateNewRating(currentLocation.getRating(), currentLocation.getRatedUser().size(), rating));
@@ -212,6 +177,10 @@ public class LocationDetail extends AppCompatActivity  {
         });
     }
 
+    /**
+     * calculate new rating for location
+     * @return the new rating
+     */
     private float calculateNewRating(float currentRating, int numberOfRatings, float newRating){
         if(numberOfRatings == 0){
             return newRating;
@@ -223,8 +192,14 @@ public class LocationDetail extends AppCompatActivity  {
         }
     }
 
+    /**
+     * task for downloading images
+     */
     private class DownloadImage extends AsyncTask<String, Integer, Bitmap> {
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected Bitmap doInBackground(final String... params) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -248,11 +223,6 @@ public class LocationDetail extends AppCompatActivity  {
                                 }
                             });
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
                     }
                 });
             }

@@ -54,7 +54,6 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
     ImageButton buttonGetLocation;
 
     public GeneralFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -71,6 +70,9 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
         return fragment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -81,12 +83,18 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
         return view;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void initializeGui() {
         locationName.setText(location.getName());
         place.setText(location.getAddressName());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void initializeActiveElements() {
 
@@ -107,7 +115,6 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
                             String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                             String city = addresses.get(0).getLocality();
 
-//                            place.setError(null);
                             place.setText(String.format(getResources().getString(R.string.general_adress_placeholder_adrees_city), address, city));
 
                             //TODO: Places API Implementieren
@@ -125,31 +132,14 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
                     }
                 });
 
-                if (ActivityCompat.checkSelfPermission(view.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(view.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-
-                }
             }
         });
 
-        place.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-//                place.setError(null);
-            }
-        });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected boolean checkReadyToSave() {
         Address addressLocation = null;
@@ -183,18 +173,23 @@ public class GeneralFragment extends AbstractChangeLocationFragment implements A
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (NullPointerException e) {
+        } catch (NullPointerException e){
             e.printStackTrace();
         }
-//        place.setError("Adresse nicht gefunden");
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onDetach() {
         super.onDetach();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onFragmentInteraction(Uri uri) {
 

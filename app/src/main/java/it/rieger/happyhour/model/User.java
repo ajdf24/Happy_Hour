@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * model class for a user
  * Created by sebastian on 26.02.17.
  */
 

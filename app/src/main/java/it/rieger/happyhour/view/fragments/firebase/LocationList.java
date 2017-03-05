@@ -1,24 +1,12 @@
 package it.rieger.happyhour.view.fragments.firebase;
 
-import android.Manifest;
-import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -26,12 +14,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Locale;
 
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
@@ -39,15 +24,15 @@ import it.rieger.happyhour.R;
 import it.rieger.happyhour.model.HappyHour;
 import it.rieger.happyhour.model.Image;
 import it.rieger.happyhour.model.Location;
-import it.rieger.happyhour.model.ThumbnailHolderClass;
 import it.rieger.happyhour.model.Time;
 import it.rieger.happyhour.util.AppConstants;
+import it.rieger.happyhour.util.listener.ValueEventListener;
 import it.rieger.happyhour.util.standard.CreateContextForResource;
 import it.rieger.happyhour.view.LocationDetail;
 import it.rieger.happyhour.view.viewholder.LocationViewHolder;
-import it.rieger.happyhour.view.viewholder.ThumbnailViewHolder;
 
 /**
+ * abstract class for showing locations from firebase
  * Created by sebastian on 11.12.16.
  */
 
@@ -55,43 +40,49 @@ public abstract class LocationList extends AppCompatActivity {
 
     private final String LOG_TAG = getClass().getSimpleName();
 
-    // [START define_database_reference]
-    private DatabaseReference mDatabase;
-    // [END define_database_reference]
+    private DatabaseReference database;
 
-    private FirebaseRecyclerAdapter<Location, LocationViewHolder> mAdapter;
-    private RecyclerView mRecycler;
-    private LinearLayoutManager mManager;
+    private RecyclerView recycler;
 
     public LocationList() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_list);
 
-        // [START create_database_reference]
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        // [END create_database_reference]
+        database = FirebaseDatabase.getInstance().getReference();
 
-        mRecycler = (RecyclerView) findViewById(R.id.activity_location_list_recycler_view);
-        mRecycler.setHasFixedSize(true);
+        recycler = (RecyclerView) findViewById(R.id.activity_location_list_recycler_view);
+        recycler.setHasFixedSize(true);
 
-        // Set up Layout Manager, reverse layout
-        mManager = new LinearLayoutManager(this);
-        mManager.setReverseLayout(true);
-        mManager.setStackFromEnd(true);
-        mRecycler.setLayoutManager(mManager);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setReverseLayout(true);
+        manager.setStackFromEnd(true);
+        recycler.setLayoutManager(manager);
 
 
     }
 
+    /**
+     * get the current query for showing locations
+     * @param databaseReference a firebase reference
+     * @return the current query
+     */
     public abstract Query getQuery(DatabaseReference databaseReference);
 
-
+    /**
+     * internal task for downloading images
+     */
     private class DownloadImage extends AsyncTask<HolderContainerClass, Integer, HolderContainerClass>{
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         protected HolderContainerClass doInBackground(final HolderContainerClass... params) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -99,6 +90,10 @@ public abstract class LocationList extends AppCompatActivity {
             DatabaseReference images = database.getReference(AppConstants.Firebase.IMAGES_PATH);
 
             images.orderByKey().equalTo(params[0].getImageKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                /**
+                 * {@inheritDoc}
+                 */
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
@@ -108,55 +103,53 @@ public abstract class LocationList extends AppCompatActivity {
                     }
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
             });
 
             return null;
         }
     }
 
+    /**
+     * internal container for view holder a image key
+     */
     private class HolderContainerClass {
 
         private LocationViewHolder thumbnailViewHolder = null;
 
         private String imageKey = null;
 
-        public HolderContainerClass(LocationViewHolder thumbnailViewHolder, String imageKey) {
+        HolderContainerClass(LocationViewHolder thumbnailViewHolder, String imageKey) {
             this.thumbnailViewHolder = thumbnailViewHolder;
             this.imageKey = imageKey;
         }
 
-        public LocationViewHolder getThumbnailViewHolder() {
+        LocationViewHolder getThumbnailViewHolder() {
             return thumbnailViewHolder;
         }
 
-        public void setThumbnailViewHolder(LocationViewHolder thumbnailViewHolder) {
-            this.thumbnailViewHolder = thumbnailViewHolder;
-        }
-
-        public String getImageKey() {
+        String getImageKey() {
             return imageKey;
         }
 
-        public void setImageKey(String imageKey) {
-            this.imageKey = imageKey;
-        }
     }
 
+    /**
+     * callback method which is called when the current user city is loaded
+     */
     protected void cityLoaded(){
 
-        // Set up FirebaseRecyclerAdapter with the Query
-        Query locationQuery = getQuery(mDatabase);
-        mAdapter = new FirebaseRecyclerAdapter<it.rieger.happyhour.model.Location, LocationViewHolder>(it.rieger.happyhour.model.Location.class, R.layout.list_item_location, LocationViewHolder.class, locationQuery) {
+        Query locationQuery = getQuery(database);
+        FirebaseRecyclerAdapter<Location, LocationViewHolder> adapter = new FirebaseRecyclerAdapter<Location, LocationViewHolder>(Location.class, R.layout.list_item_location, LocationViewHolder.class, locationQuery) {
+
+            /**
+             * {@inheritDoc}
+             */
             @Override
-            protected void populateViewHolder(final LocationViewHolder holder, final it.rieger.happyhour.model.Location location, int position) {
+            protected void populateViewHolder(final LocationViewHolder holder, final Location location, int position) {
                 holder.getView().setOnClickListener(new View.OnClickListener() {
+
                     /**
                      * {@inheritDoc}
-                     * Clicklistener which opens the detail view of the location
                      */
                     @Override
                     public void onClick(View v) {
@@ -182,6 +175,10 @@ public abstract class LocationList extends AppCompatActivity {
                 }
 
                 SmartLocation.with(holder.getView().getContext()).location().oneFix().start(new OnLocationUpdatedListener() {
+
+                    /**
+                     * {@inheritDoc}
+                     */
                     @Override
                     public void onLocationUpdated(android.location.Location currentlocation) {
                         android.location.Location myLocation = currentlocation;
@@ -236,16 +233,14 @@ public abstract class LocationList extends AppCompatActivity {
 
                 holder.getRating().setRating(location.getRating());
 
-                //TODO:Cached Images
-
                 if (location.getImageKeyList().size() > 0) {
                     new DownloadImage().execute(new HolderContainerClass(holder, location.getImageKeyList().get(0)));
-                }else {
+                } else {
                     holder.progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         };
-        mRecycler.setAdapter(mAdapter);
+        recycler.setAdapter(adapter);
     }
 
 }

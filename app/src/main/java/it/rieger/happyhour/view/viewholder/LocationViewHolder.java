@@ -10,7 +10,6 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.rieger.happyhour.R;
-import it.rieger.happyhour.controller.widget.DynamicImageView;
 
 /**
  * Created by sebastian on 14.05.16.
