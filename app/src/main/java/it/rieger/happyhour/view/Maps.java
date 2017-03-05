@@ -99,7 +99,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-//        mapFragment.getMap().setOnMapClickListener(this);
+
 
         addNewLocation = (FloatingActionButton) findViewById(R.id.activity_maps_new_location);
 
@@ -145,7 +145,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
                 if (menuItemId == R.id.bottomBarItemOne) {
-//                    focusMapToCurrentPosition(mapFragment.getMap());
+
                 }
             }
         });
@@ -156,11 +156,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
         bottomBar.selectTabAtPosition(0, false);
 
-//        mapFragment.getMap().setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-//            @Override
-//            public void onCameraChange(CameraPosition cameraPosition) {
-//            }
-//        });
+
     }
 
     /**
@@ -179,21 +175,7 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         AppConstants.PermissionsIDs.PERMISSION_ID_FOR_ACCESS_LOCATION);
             }else {
-//                LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-//
-//                Criteria criteria = new Criteria();
-//
-//                String provider = locationManager.getBestProvider(criteria, true);
-//                try {
-//                    Location myLocation = locationManager.getLastKnownLocation(provider);
-//
-//                    LatLng currentPosition = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-//                    BackendDatabase.getInstance().loadLocations(locations, this, currentPosition, 10);
-//
-//                } catch (NullPointerException e) {
-//                    Log.w(LOG_TAG, "Can not load current position");
-//                    BackendDatabase.getInstance().loadLocations(locations, this, new LatLng(0.0, 0.0), 10);
-//                }
+                }
 
                 final List<Address> addresses = new ArrayList<>();
 
@@ -409,6 +391,6 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void locationLoaded() {
-//        onMapReady(mapFragment.getMap());
+
     }
 }

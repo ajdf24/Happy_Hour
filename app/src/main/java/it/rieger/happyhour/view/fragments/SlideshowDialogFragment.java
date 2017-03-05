@@ -125,11 +125,7 @@ public class SlideshowDialogFragment extends DialogFragment{
 
             new DownloadImage().execute(imageViewHolder);
 
-//            Glide.with(getActivity()).load(image)
-//                    .thumbnail(0.5f)
-//                    .crossFade()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .into(imageViewPreview);
+
 
             container.addView(view);
 

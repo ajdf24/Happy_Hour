@@ -184,26 +184,10 @@ public abstract class AbstractChangeLocationFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
 
-//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-//        // set title
-//        alertDialogBuilder.setTitle("Please logout after ");
-//        AlertDialog d = alertDialogBuilder.create();
-//        d.show();
 
-
-//        if(!locationSaved){
-//            if(!deleteAnyway) {
-//                throw new NotSavedException(context.toString() + " Location is not saved or deleteAnyway not set true");
-//            }
-//        }
     }
 
-//    /**
-//     * set the delete anyway flag. so the fragment can detached without save.
-//     */
-//    public void setDeleteAnyway() {
-//        this.deleteAnyway = true;
-//    }
+
 
     /**
      * This interface must be implemented by activities that contain this

@@ -101,25 +101,10 @@ public class LocationInformation extends Fragment {
 
         ButterKnife.bind(this, view);
 
-//        HashMap<String,String> file_maps = new HashMap<String, String>();
-//        int numberOfPicture = 1;
-//        for(String image : currentLocation.getImageKeyList()){
-//            file_maps.put(currentLocation.getName() + " " + numberOfPicture, image);
-//            numberOfPicture++;
-//        }
 
         new DownloadImage().execute((String[]) currentLocation.getImageKeyList().toArray(new String[]{}));
 
-//        for(String name : file_maps.keySet()){
-//            TextSliderView textSliderView = new TextSliderView(getActivity());
-//            // initialize a SliderLayout
-//            textSliderView
-//                    .description(name)
-//                    .image(file_maps.get(name))
-//                    .setScaleType(BaseSliderView.ScaleType.Fit);
-//
-//            mDemoSlider.addSlider(textSliderView);
-//        }
+
 
         mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);

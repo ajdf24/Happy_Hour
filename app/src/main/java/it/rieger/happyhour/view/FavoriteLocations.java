@@ -68,27 +68,6 @@ public class FavoriteLocations extends AppCompatActivity implements LocationLoad
 
         ButterKnife.bind(this);
 
-//        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-//
-//        database.child(AppConstants.Firebase.LOCATIONS_PATH).orderByChild("cityName").equalTo("Erfurt").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-//                    createLocationList();
-//
-//                    locationLoaded();
-//
-//                    locationList.add(dataSnapshot1.getValue(Location.class));
-//
-//                    locationAdapter.notifyDataSetChanged();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
 
         final DatabaseReference database = FirebaseDatabase.getInstance().getReference();
 

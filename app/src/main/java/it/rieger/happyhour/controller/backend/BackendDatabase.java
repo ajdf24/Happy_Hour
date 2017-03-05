@@ -129,25 +129,7 @@ public enum BackendDatabase {
 
     }
 
-//    public synchronized void loadLocationsByCity(String city){
-//        DatabaseReference mDatabase;
-//        mDatabase = FirebaseDatabase.getInstance().getReference();
-//
-//        Query postsRef = mDatabase.child("posts").orderByChild("id").equalTo("test");
-//        postsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                currentLocation = (dataSnapshot.getChildren().iterator().next().getValue(Location.class));
-//                initializeGUI();
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
+
 
     public synchronized void loadFavorites(@NonNull List<Location> locationList, @NonNull Context context) {
         if (!(context instanceof LocationLoadedCallback)) {

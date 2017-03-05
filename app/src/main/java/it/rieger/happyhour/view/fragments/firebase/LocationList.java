@@ -96,7 +96,7 @@ public abstract class LocationList extends AppCompatActivity {
         protected HolderContainerClass doInBackground(final HolderContainerClass... params) {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-            DatabaseReference images = database.getReference("images");
+            DatabaseReference images = database.getReference(AppConstants.Firebase.IMAGES_PATH);
 
             images.orderByKey().equalTo(params[0].getImageKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

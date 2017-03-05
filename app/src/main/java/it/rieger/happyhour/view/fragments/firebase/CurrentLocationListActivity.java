@@ -113,11 +113,7 @@ public class CurrentLocationListActivity extends LocationList {
 
         bottomBar.selectTabAtPosition(2, false);
 
-//        mapFragment.getMap().setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-//            @Override
-//            public void onCameraChange(CameraPosition cameraPosition) {
-//            }
-//        });
+//
     }
 
     /**
@@ -131,12 +127,5 @@ public class CurrentLocationListActivity extends LocationList {
         bottomBar.onSaveInstanceState(outState);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        Intent intent = new Intent();
 //
-//        intent.setClass(CurrentLocationListActivity.this, Maps.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//        startActivity(intent);
-//    }
 }

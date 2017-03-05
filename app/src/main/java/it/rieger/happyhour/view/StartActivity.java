@@ -229,7 +229,7 @@ public class StartActivity extends AppCompatActivity {
                 }
 
                 if(password.getText().toString().isEmpty()){
-                    password.setError("Bitte ausfüllen");
+                    password.setError(CreateContextForResource.getStringFromID(R.string.activity_start_fill));
                 }
 
                 if(!eMail.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
